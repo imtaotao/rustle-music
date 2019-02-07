@@ -1,0 +1,8 @@
+import 'web/components/root'
+import 'web/components/reset'
+import 'web/components/global'
+import { notice } from 'web/utils'
+
+window.onNetWorkError = () => {
+  notice('网络错误')
+}

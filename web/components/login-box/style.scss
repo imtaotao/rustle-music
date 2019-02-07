@@ -1,0 +1,165 @@
+$boxWidth: 350px;
+
+@function shadow ($n) {
+  @return 0 0 $n + px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
+  & .box {
+    width: $boxWidth;
+    height: 70%;
+    margin: 50px auto;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background: #fff;
+    box-shadow: shadow(30);
+  }
+}
+
+.cross {
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 10px;
+  cursor: pointer;
+  background: url('../../assets/cross.svg');
+  background-size: cover;
+}
+
+.cross:hover {
+  box-shadow: shadow(5);
+}
+
+// 手机登录
+.phone-input {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+.icon {
+  margin: 30px auto;
+  width: 100px;
+  height: 100px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 0;
+}
+
+
+
+$inputBorder: 1px solid #ddd;
+$inputHeight: 78px;
+$width: 70%;
+$color: #c4463a;
+.input-container {
+  position: relative;
+  width: $width;
+  height: $inputHeight;
+  margin: 0 auto;
+  border: $inputBorder;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.input {
+  position: absolute;
+  width: 100%;
+  height: $inputHeight / 2;
+  font-size: 13px;
+  color: #000;
+  background: #fff;
+  outline: none;
+  margin: 0;
+  padding-left: 40px;
+  background-size: 20px 20px;
+  background-position: 10px;
+  background-repeat: no-repeat;
+}
+
+.input:first-child {
+  font-weight: bold;
+  background-image: url('../../assets/phone.svg')
+}
+.input:last-child {
+  border-top: $inputBorder;
+  top: $inputHeight / 2;
+  background-image: url('../../assets/lock.svg')
+}
+
+.button-container {
+  width: $width;
+  margin: 0 auto;
+}
+
+.auto-login {
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+  & span {
+    $iconSize: 18px;
+    color: $color;
+    padding-left: $iconSize + 3px;
+    background: url('../../assets/mark.svg') no-repeat;
+    background-size: $iconSize;
+    background-position: 0 center;
+  }
+  & input {
+    display: none;
+  }
+  & label {
+    position: relative;
+    padding-left: 25px;
+    cursor: pointer;
+  }
+  & label:before {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    position: absolute;
+    left: 0;
+    top: calc(50% - 7px);
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    background: #fff;
+  }
+  & input:checked + label:before {
+    content: '\2713';
+    background: $color;
+    border-color:$color;
+    font-size: 15px;
+    color: #fff;
+    text-align: center;
+    line-height: 15px;
+  }
+}
+
+.button {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 2px;
+  background: $color;
+  cursor: pointer;
+  outline: none;
+}
+.button:hover {
+  background: #e82714;
+}
+
+.toogle {
+  font-size: 13px;
+  font-family: '方正兰亭超细黑简体';
+  text-align: center;
+  cursor: pointer;
+}

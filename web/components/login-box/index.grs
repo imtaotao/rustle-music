@@ -1,0 +1,111 @@
+<template>
+  <div styleName='container' @click.self='this.props.hideLoginBox'>
+    <div styleName='box'>
+      <i styleName='cross' @click='this.props.hideLoginBox'></i>
+      <div styleName='icon' :style='this.getIconStyle()'></div>
+      <div styleName='input-container'>
+        <input styleName='input' type='text' @change='this.accountChanged' @focus='this.clearErrorInfo' :placeholder='"请输入" + (phoneMode ? "手机号" : "邮箱")'/>
+        <input styleName='input' type='password' @change='this.passwordChanged' @focus='this.clearErrorInfo' placeholder='请输入密码'/>
+      </div>
+      <div styleName='button-container'>
+        <div styleName='auto-login'>
+          <!-- 自动登录选框 -->
+          <input type='checkbox' id='AutoLogin' @change='this.checkboxChanged'/>
+          <label for='AutoLogin' className='black'>自动登录</label>
+          <span v-show='errorInfo'>{{ errorInfo }}</span>
+        </div>
+        <button styleName='button' :style='{background: logining ? "#ddd" : ""}' @click='this.login'>登录</button>
+        <div styleName='toogle' @click='this.toggle'>
+          {{ phoneMode ? '邮箱' : '手机' }}登录
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class LoginBox extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.state = {
+        account: '',
+        password: '',
+        errorInfo: '',
+        phoneMode: true,
+        logining: false,
+        autoLogin: false,
+      }
+    }
+
+    getIconStyle () {
+      const name = this.state.phoneMode
+        ? 'phone'
+        : 'email'
+      return {
+        backgroundImage: 'url(' + require(`../../assets/${name}-login.svg`) + ')'
+      }
+    }
+
+    toggle = e => {
+      this.setState({
+        errorInfo: '',
+        phoneMode: !this.state.phoneMode,
+      })
+    }
+
+    clearErrorInfo = e => {
+      if (this.state.errorInfo) {
+        this.setState({errorInfo: ''})
+      }
+    }
+
+    checkboxChanged = e => {
+      this.state.autoLogin = e.target.checked
+    }
+
+    accountChanged = e => {
+      this.state.account = e.target.value.trim()
+    }
+
+    passwordChanged = e => {
+      this.state.password = e.target.value.trim()
+    }
+
+    login = e => {
+      if (this.state.logining) return
+      let type = 'phone'
+      const { phoneMode, account, password, autoLogin } = this.state
+      if (!account) return this.setState({errorInfo: '请输入账号'})
+      if (!password) return this.setState({errorInfo: '请输入密码'})
+
+      if (phoneMode) {
+        if (!(/^1[3|4|5|7|8]\d{9}$/g.test(account))) {
+          return this.setState({errorInfo: '请输入正确的电话号码'})
+        }
+      } else {
+        type = 'email'
+        if (!(/^(\w+)(\.\w+)*@(\w+)(\.\w+)*.(\w+)$/i.test(account))) {
+          return this.setState({errorInfo: '请输入正确的邮箱'})
+        }
+      }
+      
+      this.state.logining = true
+      this.forceUpdate()
+
+      const sfn = () => {
+        this.setState({logining: false})
+        this.props.hideLoginBox()
+      }
+      const efn = ({body = {}}) => {
+        this.setState({
+          logining: false,
+          errorInfo: body.msg || '登录失败',
+        })
+      }
+
+      // 登录
+      this.props.login(type, account, password, autoLogin).then(sfn, efn)
+    }
+  }
+</script>

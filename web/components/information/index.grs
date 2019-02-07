@@ -1,0 +1,97 @@
+<template>
+  <div styleName='container' @click.self='this.props.hideViewInfo'>
+    <div styleName='box' v-show='dataReady'>
+      <div styleName='transfer-container'>
+        <div styleName='person-info'>
+          <ul>
+            <li
+              styleName='person-value'
+              v-for='(val, key) of psersonInfo'
+              @click='this.viewPersonInfo.bind(this, key)'>
+              <span>{{ val }}</span>
+              <span>{{ key }}</span>
+            </li>
+          </ul>
+          <div
+            styleName='check-in'
+            :style='pcSign && {color: "#c2c2c2"}'
+            @click='this.checkIn'>
+            <i v-show='!pcSign'></i>
+            {{ pcSign ? '已' : '' }}签到
+          </div>
+        </div>
+        <ul styleName='set-info'>
+          <li>
+            <div styleName='info-head'><i></i>等级</div>
+            <div styleName='info-value' @click='this.viewLeval'>lv.{{ leval }}<i></i></div>
+          </li>
+          <li @click='this.exitAndLogout'>
+            <div styleName='info-head'><i></i>退出登录</div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import userManager from 'web/manager/user'
+  import { notice } from 'web/utils'
+
+  @Grass.CSSModules(style)
+  export default class PersonInfo extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.state = {
+        leval: 0,
+        pcSign: false,
+        dataReady: true,
+        psersonInfo: {
+          '动态': 0,
+          '关注': 0,
+          '粉丝': 0,
+        },
+      }
+      if (userManager.logged) {
+        userManager.getDetail().then(({body}) => {
+          this.setState({
+            dataReady: true,
+            leval: body.level || 0,
+            pcSign: body.pcSign || false,
+            psersonInfo: {
+              '动态': body.profile.eventCount || 0,
+              '关注': body.profile.follows || 0,
+              '粉丝': body.profile.followeds || 0,
+            },
+          })
+        })
+      } else {
+        this.props.hideViewInfo()
+      }
+    }
+
+    viewLeval = e => {
+      window.node.openBrowser('https://music.163.com/#/user/level')
+    }
+
+    exitAndLogout = e => {
+      this.props.logout().then(() => {
+        this.props.hideViewInfo()
+      })
+    }
+
+    checkIn = e => {
+      if (this.state.pcSign) return
+      const sfn = () => {
+        this.setState({pcSign: true})
+        notice('签到成功')
+      }
+      const efn = ({body}) => notice(body.msg)
+      window.node.request('/daily_signin').then(sfn, efn)
+    }
+
+    viewPersonInfo (key) {
+      console.log(key);
+    }
+  }
+</script>

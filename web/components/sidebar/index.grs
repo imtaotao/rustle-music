@@ -1,0 +1,15 @@
+<template>
+  <div styleName='container'>
+    <Login/>
+  </div>
+</template>
+
+<script>
+  import Login from 'web/components/login' 
+
+  @Grass.CSSModules(style)
+  export default class Sidebar extends Grass.Component {
+    // #temp
+    component = { Login }
+  }
+</script>
