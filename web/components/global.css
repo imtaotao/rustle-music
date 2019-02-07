@@ -148,12 +148,6 @@ input::-ms-input-placeholder {
 
 @font-face
 {
-  font-family: 微软雅黑;
-  src: url('../fonts/微软雅黑.ttf');
-}
-
-@font-face
-{
   font-family: 方正兰亭超细黑简体;
   src: url('../fonts/方正兰亭超细黑简体.ttf');
 }
