@@ -1,0 +1,27 @@
+<template>
+  <div>
+    <ul styleName='song-list'>
+      <li v-for='item of list'>
+        <i :style='{backgroundImage: "url("+ item.url +")"}'></i>
+        {{ item.key }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  import style from 'web/components/common'
+
+  @Grass.CSSModules(style)
+  export default class DefaultFun extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.state = {
+        list: [
+          { key: '发现音乐', val: 'found', url: require('../../assets/song.svg') },
+          { key: '私人FM', val: 'fm', url: require('../../assets/fm.svg') },
+        ]
+      }
+    }
+  }
+</script>

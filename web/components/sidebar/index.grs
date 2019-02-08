@@ -1,15 +1,46 @@
 <template>
   <div styleName='container'>
     <Login/>
+    <DefaultFun styleName='default-list' />
   </div>
 </template>
 
 <script>
-  import Login from 'web/components/login' 
+  import Login from 'web/components/login'
+  import DefaultFun from 'web/components/default-fun'
+  import UserManager from 'web/manager/user'
 
   @Grass.CSSModules(style)
   export default class Sidebar extends Grass.Component {
     // #temp
-    component = { Login }
+    component = { Login, DefaultFun }
+    beforeCreate () {
+      let defaultData = {
+        myMusic: [
+          { key: 'download', val: '下载管理', url: '' },
+        ],
+        subscribe: [],
+        collection: [],
+      }
+
+      this.state = defaultData
+      if (UserManager.logged) this.getSongList()
+
+      UserManager.on('login', this.getSongList)
+      UserManager.on('logout', () => this.setState(defaultData))
+    }
+
+    getSongList = () => {
+      UserManager.getSongList().then(({subscribe, collection}) => {
+        const myMusic = this.state.myMusic.concat([
+          { key: 'radio', val: '我的电台', url: '' },
+          { key: 'collection', val: '我的收藏', url: '' },
+        ])
+        this.setState({ myMusic, subscribe, collection })
+        setTimeout(() => {
+          console.log(this.state);
+        })
+      })
+    }
   }
 </script>

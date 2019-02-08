@@ -1,0 +1,14 @@
+<template>
+  <div>
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class MainContent extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      
+    }
+  }
+</script>

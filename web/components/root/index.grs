@@ -1,16 +1,20 @@
 <template>
   <div styleName='container'>
-    <Sidebar/>
+    <Sidebar styleName='slide-bar' />
+    <MainContent styleName='main-content' />
+    <div styleName='player'>
+    </div>
   </div>
 </template>
 
 <script>
   import Sidebar from 'web/components/sidebar'
+  import MainContent from 'web/components/main-content'
 
   @Grass.CSSModules(style)
   class Root extends Grass.Component {
     // #temp
-    component = { Sidebar }
+    component = { Sidebar, MainContent }
 
     beforeCreate () {
     }

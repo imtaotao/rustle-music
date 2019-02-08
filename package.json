@@ -5,6 +5,7 @@
   "main": "./client/main.js",
   "scripts": {
     "dev": "electron .",
+    "icon": "node ./web/assets/change.js",
     "start": "webpack-dev-server --env.dev",
     "build": "rm -rf ./dist && webpack --env.build",
     "build:an": "rm -rf ./dist && webpack --env.build --env.analyzer"

@@ -75,7 +75,8 @@ class UserManager extends Event {
     // 30s 之内避免连续自动登录，防止 ip 高频错误
     if (Date.now() - preTime < 30000) return
     this.login[type](account, password, true).catch(err => {
-      notice(err)
+      console.log(err);
+      notice(err.body.msg)
     })                                                            
   }
 
@@ -83,6 +84,14 @@ class UserManager extends Event {
     // 清空数据
     localStorage.removeItem('userAccount')
     window.node.clearCookie()
+  }
+
+  private check (cb: Function) {
+    if (!this.logged || this.id == null) {
+      notice('需要登录')
+      return Promise.reject('need login')
+    }
+    return cb()
   }
 
   public logout () {
@@ -105,16 +114,42 @@ class UserManager extends Event {
   }
 
   public getDetail () {
-    return !this.logged || this.id == null
-      ? Promise.reject('need login')
-      : window.node.request(`/user/detail?uid=${this.id}`).catch(() => notice('获取信息失败'))
+    return this.check(() => {
+      return window.node.request(`/user/detail?uid=${this.id}`)
+      .catch(() => notice('获取信息失败'))
+    })
   }
 
   public getSubcount () {
-    return !this.logged || this.id == null
-      ? Promise.reject('need login')
-      : window.node.request(`/user/subcount`).catch(() => notice('获取信息失败'))
+    return this.check(() => {
+      return window.node.request(`/user/subcount`)
+      .catch(() => notice('获取信息失败'))
+    })
+  }
+
+  public getDJList () {
+
+  }
+
+  public getSongList () {
+    return this.check(() => {
+      return window.node.request(`/user/playlist?uid=${this.id}`)
+      .then(res => {
+        const subscribe:Object[] = []
+        const collection:Object[] = []
+
+        res.body.playlist.forEach(val => {
+          val.subscribed
+            ? subscribe.push(val)
+            : collection.push(val)
+        })
+        return { subscribe, collection }
+      })
+      .catch(() => notice('获取歌单失败'))
+    })
   }
 }
 
-export default new UserManager()
+const a = new UserManager()
+export default a;
+(<any>window).a = a
