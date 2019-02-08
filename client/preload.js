@@ -1,3 +1,5 @@
+
+const opn = require('opn')
 const {
   request,
   setCookie,
@@ -16,7 +18,8 @@ process.once('loaded', function () {
         return request(router, body)
       }
       global.onNetworkError && global.onNetworkError()
-      return Promise.reject('network error')
+      const res = {body: {msg: 'network error'}}
+      return Promise.reject(res)
     },
     openBrowser (url) {
       url && opn(url)

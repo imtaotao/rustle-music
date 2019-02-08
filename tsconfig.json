@@ -10,7 +10,7 @@
     "noImplicitReturns": true,
     "removeComments": true,
     "inlineSourceMap": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "strictNullChecks": true,
     "alwaysStrict": true,
     "allowSyntheticDefaultImports": true,
@@ -20,7 +20,7 @@
     ]
   },
   "paths":{
-    "web/*": [ "web/*" ]
+    "web": [ "web" ]
   },
   "include": [
     "./web"

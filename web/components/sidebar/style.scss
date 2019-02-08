@@ -1,8 +1,29 @@
+@import '../common.scss';
+
 .container {
-  overflow: hidden;
+  padding-top: 55px;
   border-right: 1px solid #dae1e2;
+}
+
+.song-list-box {
+  width: 100%;
+  height: calc(100% - 75px);
+  overflow-x: hidden;
 }
 
 .default-list {
   margin-top: 25px;
+}
+
+.list-box {
+  width: 100%;
+  margin-top: 30px;
+}
+
+.list-head {
+  display: block;
+  color: #979797;
+  font-size: 12px;
+  padding-left: 24px;
+  margin-bottom: 10px;
 }

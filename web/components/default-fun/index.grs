@@ -1,9 +1,12 @@
 <template>
   <div>
     <ul styleName='song-list'>
-      <li v-for='item of list'>
+      <li
+        v-for='(item, i) of list'
+        :className='this.props.active === item.id ? "list-active" : ""'
+        @click='this.props.viewDetailContent.bind(null, item)'>
         <i :style='{backgroundImage: "url("+ item.url +")"}'></i>
-        {{ item.key }}
+        <span>{{ item.key }}</span>
       </li>
     </ul>
   </div>
@@ -18,8 +21,18 @@
     beforeCreate () {
       this.state = {
         list: [
-          { key: '发现音乐', val: 'found', url: require('../../assets/song.svg') },
-          { key: '私人FM', val: 'fm', url: require('../../assets/fm.svg') },
+          {
+            id: 'found',
+            key: '发现音乐',
+            special: true,
+            url: require('web/assets/music.svg'),
+          },
+          {
+            id: 'fm',
+            key:'私人FM',
+            special: true,
+            url: require('web/assets/fm.svg'),
+          },
         ]
       }
     }

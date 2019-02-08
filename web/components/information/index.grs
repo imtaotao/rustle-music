@@ -85,10 +85,10 @@
       if (this.state.pcSign) return
       const sfn = () => {
         this.setState({pcSign: true})
-        notice('签到成功')
+        notice('签到成功', 1)
       }
       const efn = ({body}) => notice(body.msg)
-      window.node.request('/daily_signin').then(sfn, efn)
+      window.node.request('/daily_signin?type=1').then(sfn, efn)
     }
 
     viewPersonInfo (key) {

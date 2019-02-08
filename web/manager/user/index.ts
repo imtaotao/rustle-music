@@ -27,12 +27,16 @@ class Login {
     }))
   }
 
+  private clearAutoLoginData () {
+    localStorage.removeItem('userAccount')
+  }
+
   public phone (phone: string, password: string, autoLogin: boolean) : Promise<U.LoginData> {
     const router = `/login/cellphone?phone=${phone}&password=${password}`
     return window.node.request(router).then((res:U.LoginResponse) => {
-      if (autoLogin) {
-        this.saveRespose(phone, password, 'phone')
-      }
+      autoLogin
+        ? this.saveRespose(phone, password, 'phone')
+        : this.clearAutoLoginData()
       console.log(res);
       recordState(this.Parent, res.body)
       this.Parent.dispatch('login', res.body)

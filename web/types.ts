@@ -1,4 +1,4 @@
-declare module "*.vue" {
+declare module "*.grs" {
   import Grass from '@rustle/grass'
   export default Grass.Component
 }
@@ -16,7 +16,7 @@ type RequestResponse = {
 }
 
 interface Window {
-  onNetWorkError: () => void
+  onNetworkError: () => void
   node: {
     request: (router: string, body?: Object) => Promise<RequestResponse>
     getCookie: () => Cookie | null

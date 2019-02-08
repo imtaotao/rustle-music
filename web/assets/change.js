@@ -15,22 +15,42 @@ function getIconStr (url, cb) {
   })
 }
 
-function addColorAttr (iconStr) {
-  const splice = (string, start, newStr) => {
-    return string.slice(0, start) + newStr + string.slice(start)
-  }
+function addColorAttr (iconStr, color) {
+  return iconStr.replace(/<svg/g, `<svg fill="${color}"`)
+}
+
+function setNewIcon (originUrl, iconStr, filename) {
+  const url = path.join(originUrl, outDir, filename)
+  fs.writeFile(url, iconStr, err => {
+    err
+      ? console.log('[Err]: ' + filename)
+      : console.log('[Sus]: ' + filename)
+  })
+}
+
+function init (files) {
   let color = yarn.argv.color
   color = typeof color === 'string'
     ? color
     : '#c4463a'
 
-  return splice(iconString, 5, `style='fill:${color};' `)
+  const process = files => {
+    files.forEach(file => {
+      if (/\.svg$/.test(file)) {
+        getIconStr(path.join(__dirname, file), iconStr => {
+          setNewIcon(__dirname, addColorAttr(iconStr, color), file)
+        })
+      }
+    })
+  }
+  if (files && files.length) {
+    process(files)
+  } else {
+    fs.readdir(__dirname, (err, files) => {
+      if (err) throw err
+      process(files)
+    })
+  }
 }
 
-function setNewIcon (originUrl, iconStr, filename) {
-  const path = path.join(originUrl, outDir, filename)
-  fs.writeFile(path, iconStr, err => {
-    // console.log('[Err]: ' + filename)
-    console.log(err);
-  })
-}
+init()

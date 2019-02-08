@@ -3,8 +3,10 @@ $height: 50px;
   width: 100%;
   height: $height;
   line-height: $height;
-  margin-top: 55px;
   padding-left: 15px;
+  position: relative;
+  margin-bottom: 25px;
+  z-index: 1;
   & .chunk {
     float: left;
     cursor: pointer;

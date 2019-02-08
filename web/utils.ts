@@ -1,3 +1,5 @@
+import Notice from 'web/components/notice/index.grs'
+
 export function macOs () {
   return process.platform === 'darwin'
 }
@@ -6,20 +8,10 @@ export function windows () {
   return process.platform === 'win32'
 }
 
-export function notice (msg: string, time = 1500) {
-  const noticeCompnent = document.createElement('div')
-  noticeCompnent.innerHTML = msg
-  noticeCompnent.className = 'notice'
-
-  document.body.appendChild(noticeCompnent)
-
-  setTimeout(() => {
-    noticeCompnent.style.webkitTransition = 'transform 0.5s ease-in, opacity 0.5s ease-in'
-    noticeCompnent.style.opacity = '0'
-    setTimeout(() => document.body.removeChild(noticeCompnent), 500)
-  }, time)
-}
-
 export function enter (e: KeyboardEvent, cb:Function) {
   (e.key === 'Enter' || e.keyCode === 13) && cb()
+}
+
+export function notice (msg: any, type?: string, time?: number) {
+  Notice.show(msg, type, time)
 }

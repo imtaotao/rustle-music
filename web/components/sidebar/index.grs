@@ -1,7 +1,25 @@
 <template>
   <div styleName='container'>
     <Login/>
-    <DefaultFun styleName='default-list' />
+    <div styleName='song-list-box'>
+      <DefaultFun
+        styleName='default-list'
+        :active='this.active'
+        :viewDetailContent='this.viewDetailContent'/>
+      <!-- 歌单 -->
+      <div styleName='list-box' v-for='(val, key) of this.state'>
+        <span styleName='list-head'>{{ key }}</span>
+        <ul styleName='song-list'>
+          <li 
+            v-for='item of val'
+            :className='this.active === item.id ? "list-active" : ""'
+            @click='this.viewDetailContent.bind(null, item)'>
+            <i :style='{backgroundImage: "url("+ this.getUrl(item) + ")"}'></i>
+            <span>{{ item.name }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,14 +31,13 @@
   @Grass.CSSModules(style)
   export default class Sidebar extends Grass.Component {
     // #temp
+    active = 'found'
     component = { Login, DefaultFun }
     beforeCreate () {
       let defaultData = {
-        myMusic: [
-          { key: 'download', val: '下载管理', url: '' },
+        '我的音乐': [
+          { name: '下载管理', id: 'download', special: true, url: require('web/assets/down.svg') },
         ],
-        subscribe: [],
-        collection: [],
       }
 
       this.state = defaultData
@@ -30,17 +47,31 @@
       UserManager.on('logout', () => this.setState(defaultData))
     }
 
+    getUrl (item) {
+      if (item.url) return item.url
+      const iconName = item.name.includes(UserManager.nickname)
+        ? 'my-like'
+        : 'song-list'
+      return require(`web/assets/${iconName}.svg`)
+    }
+
     getSongList = () => {
       UserManager.getSongList().then(({subscribe, collection}) => {
-        const myMusic = this.state.myMusic.concat([
-          { key: 'radio', val: '我的电台', url: '' },
-          { key: 'collection', val: '我的收藏', url: '' },
+        const myMusic = this.state['我的音乐'].concat([
+          { name: '我的电台', id: 'radio', special: true, url: require('web/assets/radio.svg') },
+          { name: '我的收藏', id: 'collection', special: true, url: require('web/assets/my-collection.svg') },
         ])
-        this.setState({ myMusic, subscribe, collection })
-        setTimeout(() => {
-          console.log(this.state);
+        this.setState({
+          '我的音乐': myMusic,
+          '收藏的歌单': collection,
+          '创建的歌单': subscribe,
         })
       })
+    }
+
+    viewDetailContent = item => {
+      this.active = item.id
+      this.forceUpdate()
     }
   }
 </script>

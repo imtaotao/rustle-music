@@ -3,6 +3,6 @@ import 'web/components/reset'
 import 'web/components/global'
 import { notice } from 'web/utils'
 
-window.onNetWorkError = () => {
+window.onNetworkError = () => {
   notice('网络错误')
 }
