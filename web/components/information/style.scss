@@ -1,4 +1,7 @@
+@import 'web/components/common.scss';
+
 $boxHeight: 250px;
+$boxWith: 280px;
 $border: 1px solid #f3ebeb;
 .container {
   position: fixed;
@@ -8,7 +11,7 @@ $border: 1px solid #f3ebeb;
   right: 0;
   
   & .box {
-    width: 280px;
+    width: $boxWith;
     height: $boxHeight;
     margin: 60px 0 0 160px;
     border-radius: 5px;
@@ -16,6 +19,14 @@ $border: 1px solid #f3ebeb;
     font-family: '方正兰亭超细黑简体';
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
   }
+}
+
+.loading {
+  $size: 25;
+  position: relative;
+  top: ($boxHeight - $size) * 0.3;
+  left: ($boxWith - $size) / 2;
+  @include img ($size, 'loading')
 }
 
 .transfer-container {
@@ -49,6 +60,10 @@ $border: 1px solid #f3ebeb;
 
 .person-value:last-child {
   border: none;
+}
+
+.person-value span:last-child:hover {
+  color: #444;
 }
 
 @mixin commonSpan ($size, $color) {

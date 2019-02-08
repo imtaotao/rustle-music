@@ -1,6 +1,9 @@
 // 通用 mixin 和 函数
-@mixin icon ($url, $size:cover) {
-  background: url('../assets/' + $url + '.svg') no-repeat;
+@mixin img ($wah, $url, $size:cover) {
+  display: inline-block;
+  width: $wah + px;
+  height: $wah + px;
+  background: url('../../assets/' + $url + '.svg') no-repeat;
   background-size: $size;
 }
 

@@ -1,7 +1,8 @@
 <template>
   <div styleName='container' @click.self='this.props.hideViewInfo'>
-    <div styleName='box' v-show='dataReady'>
-      <div styleName='transfer-container'>
+    <div styleName='box'>
+      <i styleName='loading' v-show='!dataReady'></i>
+      <div styleName='transfer-container' v-show='dataReady'>
         <div styleName='person-info'>
           <ul>
             <li
@@ -45,7 +46,7 @@
       this.state = {
         leval: 0,
         pcSign: false,
-        dataReady: true,
+        dataReady: false,
         psersonInfo: {
           '动态': 0,
           '关注': 0,

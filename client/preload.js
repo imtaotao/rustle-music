@@ -1,4 +1,3 @@
-const opn = require('opn')
 const {
   request,
   setCookie,

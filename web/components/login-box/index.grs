@@ -4,8 +4,21 @@
       <i styleName='cross' @click='this.props.hideLoginBox'></i>
       <div styleName='icon' :style='this.getIconStyle()'></div>
       <div styleName='input-container'>
-        <input styleName='input' type='text' @change='this.accountChanged' @focus='this.clearErrorInfo' :placeholder='"请输入" + (phoneMode ? "手机号" : "邮箱")'/>
-        <input styleName='input' type='password' @change='this.passwordChanged' @focus='this.clearErrorInfo' placeholder='请输入密码'/>
+        <input
+          type='text'
+          styleName='input'
+          :value='account'
+          @change='this.accountChanged'
+          @focus='this.clearErrorInfo'
+          :placeholder='"请输入" + (phoneMode ? "手机号" : "邮箱")'/>
+        <input
+          type='password'
+          styleName='input'
+          :value='password'
+          @change='this.passwordChanged'
+          @focus='this.clearErrorInfo'
+          @keydown='this.pressEnter'
+          placeholder='请输入密码'/>
       </div>
       <div styleName='button-container'>
         <div styleName='auto-login'>
@@ -24,13 +37,17 @@
 </template>
 
 <script>
+  import { enter } from 'web/utils'
+
   @Grass.CSSModules(style)
   export default class LoginBox extends Grass.Component {
     // #temp
     beforeCreate () {
+      let data = localStorage.getItem('account')
+      data = data ? JSON.parse(data) : {}
       this.state = {
-        account: '',
-        password: '',
+        account: data.account || '',
+        password: data.password || '',
         errorInfo: '',
         phoneMode: true,
         logining: false,
@@ -58,6 +75,10 @@
       if (this.state.errorInfo) {
         this.setState({errorInfo: ''})
       }
+    }
+
+    pressEnter = e => {
+      enter(e, this.login)
     }
 
     checkboxChanged = e => {
@@ -89,7 +110,9 @@
           return this.setState({errorInfo: '请输入正确的邮箱'})
         }
       }
-      
+
+      // 保存账号
+      localStorage.setItem('account', JSON.stringify({account, password}))
       this.state.logining = true
       this.forceUpdate()
 

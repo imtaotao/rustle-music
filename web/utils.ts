@@ -1,3 +1,11 @@
+export function macOs () {
+  return process.platform === 'darwin'
+}
+
+export function windows () {
+  return process.platform === 'win32'
+}
+
 export function notice (msg: string, time = 1500) {
   const noticeCompnent = document.createElement('div')
   noticeCompnent.innerHTML = msg
@@ -10,4 +18,8 @@ export function notice (msg: string, time = 1500) {
     noticeCompnent.style.opacity = '0'
     setTimeout(() => document.body.removeChild(noticeCompnent), 500)
   }, time)
+}
+
+export function enter (e: KeyboardEvent, cb:Function) {
+  (e.key === 'Enter' || e.keyCode === 13) && cb()
 }
