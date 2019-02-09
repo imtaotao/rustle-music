@@ -1,0 +1,22 @@
+@import 'web/components/common.scss';
+.container {
+  width: 100%;
+}
+
+.head {
+  width: 100%;
+}
+
+.list-img {
+  @include img(200, 0);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.detail-info  {
+  width: 60%;
+}
+
+.main-content {
+  width: 100%;
+}

@@ -38,6 +38,7 @@ class Login {
         ? this.saveRespose(phone, password, 'phone')
         : this.clearAutoLoginData()
       console.log(res);
+      localStorage.setItem('id', String(res.body.account.id))
       recordState(this.Parent, res.body)
       this.Parent.dispatch('login', res.body)
       return res.body
@@ -73,11 +74,20 @@ class UserManager extends Event {
   }
 
   private init () {
+    const id = localStorage.getItem('id')
+    if (id) {
+      this.id = +id
+      this.logged = true
+      return
+    }
     const data = localStorage.getItem('userAccount')
     if (!data) return
     const { type, account, password, preTime } = JSON.parse(data)
     // 30s 之内避免连续自动登录，防止 ip 高频错误
-    if (Date.now() - preTime < 30000) return
+    if (Date.now() - preTime < 30000) {
+      notice('登录频率过高')
+      return
+    }
     this.login[type](account, password, true).catch(err => {
       console.log(err);
       notice(err.body.msg)
@@ -150,6 +160,13 @@ class UserManager extends Event {
         return { subscribe, collection }
       })
       .catch(() => notice('获取歌单失败'))
+    })
+  }
+
+  public getSongListDetail (id: number) {
+    return this.check(() => {
+      return window.node.request(`/playlist/detail?id=${id}`)
+      .catch(() => notice('获取歌单详情失败'))
     })
   }
 }

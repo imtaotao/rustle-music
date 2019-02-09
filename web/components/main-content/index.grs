@@ -1,14 +1,28 @@
 <template>
-  <div>
+  <div styleName='container'>
+    <SongList v-if='showSongList' :id='songListId' />
   </div>
 </template>
 
 <script>
+  import Sidebar from 'web/components/sidebar'
+  import SongList from 'web/components/song-list'
+
   @Grass.CSSModules(style)
   export default class MainContent extends Grass.Component {
     // #temp
+    component = { SongList }
     beforeCreate () {
-      
+      this.state = {
+        showSongList: false,
+        songListId: null,
+      }
+      Sidebar.on(({special, id}) => {
+        this.setState({
+          showSongList: !special,
+          songListId: id,
+        })
+      })
     }
   }
 </script>

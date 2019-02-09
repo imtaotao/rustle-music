@@ -28,6 +28,7 @@
   import DefaultFun from 'web/components/default-fun'
   import UserManager from 'web/manager/user'
 
+  @Grass.event
   @Grass.CSSModules(style)
   export default class Sidebar extends Grass.Component {
     // #temp
@@ -72,6 +73,7 @@
     viewDetailContent = item => {
       this.active = item.id
       this.forceUpdate()
+      this.next(item)
     }
   }
 </script>
