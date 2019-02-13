@@ -1,5 +1,5 @@
 <template>
-  <div styleName='container'>
+  <div styleName='container' className='drag'>
     <Login/>
     <div styleName='song-list-box'>
       <DefaultFun
@@ -13,9 +13,9 @@
           <li 
             v-for='item of val'
             :className='this.active === item.id ? "list-active" : ""'
-            @click='this.viewDetailContent.bind(null, item)'>
+            @click='this.viewDetailContent.bind(null, item, key === "收藏的歌单")'>
             <i :style='{backgroundImage: "url("+ this.getUrl(item) + ")"}'></i>
-            <span>{{ item.name }}</span>
+            <span>{{ this.getListName(item.name) }}</span>
           </li>
         </ul>
       </div>
@@ -33,7 +33,9 @@
   export default class Sidebar extends Grass.Component {
     // #temp
     active = 'found'
+    isMyLikeList = false
     component = { Login, DefaultFun }
+
     beforeCreate () {
       let defaultData = {
         '我的音乐': [
@@ -45,7 +47,13 @@
       if (UserManager.logged) this.getSongList()
 
       UserManager.on('login', this.getSongList)
-      UserManager.on('logout', () => this.setState(defaultData))
+      UserManager.on('logout', () => {
+        // 恢复未登陆的初始状态
+        this.state = defaultData
+        this.forceUpdate()
+        this.active = 'found'
+        this.next({ id: 'found', special: true})
+      })
     }
 
     getUrl (item) {
@@ -56,22 +64,30 @@
       return require(`web/assets/${iconName}.svg`)
     }
 
+    getListName (name) {
+      return name.replace(UserManager.nickname, '我')
+    }
+
     getSongList = () => {
-      UserManager.getSongList().then(({subscribe, collection}) => {
+      UserManager.getSongList().then(({subscribe, create}) => {
         const myMusic = this.state['我的音乐'].concat([
           { name: '我的电台', id: 'radio', special: true, url: require('web/assets/radio.svg') },
           { name: '我的收藏', id: 'collection', special: true, url: require('web/assets/my-collection.svg') },
         ])
         this.setState({
           '我的音乐': myMusic,
-          '收藏的歌单': collection,
-          '创建的歌单': subscribe,
+          '创建的歌单': create,
+          '收藏的歌单': subscribe,
         })
       })
     }
 
-    viewDetailContent = item => {
+    viewDetailContent = (item, isCollectList) => {
       this.active = item.id
+      item.isCollectList = isCollectList
+      // 如果是歌单，而且歌单名字包含昵称，就是"我喜欢的音乐"
+      item.isMyLikeList = item.name && item.name.includes(UserManager.nickname)
+      item.description = item.description && item.description.replace(/↵/g, '\n')
       this.forceUpdate()
       this.next(item)
     }

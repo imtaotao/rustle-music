@@ -10,6 +10,15 @@
   }
 }
 
+@mixin halfPX ($color, $with:0.5) {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  width: 1px;
+  background: $color;
+  transform: scaleX($with);
+}
+
 @function border ($color, $size:1) {
   @return $size + px solid $color;
 }

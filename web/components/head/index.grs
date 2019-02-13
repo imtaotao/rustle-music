@@ -1,0 +1,12 @@
+<template>
+  <div styleName='container' className='drag'>
+    fdsf
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class Head extends Grass.Component {
+    // #temp
+  }
+</script>

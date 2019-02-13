@@ -78,6 +78,7 @@ class UserManager extends Event {
     if (id) {
       this.id = +id
       this.logged = true
+      this.nickname = '和声_伴奏'
       return
     }
     const data = localStorage.getItem('userAccount')
@@ -150,14 +151,14 @@ class UserManager extends Event {
       return window.node.request(`/user/playlist?uid=${this.id}`)
       .then(res => {
         const subscribe:Object[] = []
-        const collection:Object[] = []
+        const create:Object[] = []
 
         res.body.playlist.forEach(val => {
           val.subscribed
             ? subscribe.push(val)
-            : collection.push(val)
+            : create.push(val)
         })
-        return { subscribe, collection }
+        return { subscribe, create }
       })
       .catch(() => notice('获取歌单失败'))
     })

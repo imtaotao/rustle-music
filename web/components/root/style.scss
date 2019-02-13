@@ -16,8 +16,10 @@ $slideWidth: 20%;
   right: 0;
   top: 0;
   width: 100% - $slideWidth;
+  min-width: 800px;
+  max-width: 1200px;
   height: 100%;
-  background: #ddd;
+  // background: #ddd;
 }
 
 .player {

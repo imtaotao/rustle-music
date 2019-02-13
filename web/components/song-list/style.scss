@@ -1,22 +1,249 @@
 @import 'web/components/common.scss';
 .container {
   width: 100%;
+  max-height: calc(100% - 70px);
+  position: relative;
+  overflow-x: hidden;
+  z-index: 0;
 }
 
 .head {
+  position: fixed;
+  z-index: 2;
+}
+
+.bg-box {
   width: 100%;
+  height: 250px;
+  left: 50px;
+  top: -15px;
+  filter: blur(20px);
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position-y: -120px;
+  background-size: cover;
+  z-index: 0;
+}
+
+$border: 1px solid #000;
+
+.list-info-box {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  margin-top: 50px;
+  margin-bottom: 30px;
+  background: rgba(255, 255, 255, 0.75);
 }
 
 .list-img {
   @include img(200, 0);
   border: 1px solid #ddd;
   border-radius: 5px;
+  float: left;
 }
 
 .detail-info  {
-  width: 60%;
+  width: calc(100% - 240px);
+  float: left;
+  margin-left: 22px;
 }
 
 .main-content {
   width: 100%;
+}
+
+@mixin flex {
+  display: flex;
+  align-items: center;
+}
+
+.list-name {
+  @include flex;
+  width: 100%;
+  height: 30px;
+  & span {
+    $c:  #cf4e40;
+    display: inline-block;
+    width: 35px;
+    height: 20px;
+    line-height: 18px;
+    text-align: center;
+    color: $c;
+    border: border($c);
+    border-radius: 3px;
+    font-size: 12px;
+    margin-right: 10px;
+  }
+  & b {
+    color: #333;
+    font-size: 21px;
+  }
+}
+
+$color: #3c6dab;
+$hoverColor: #0a3b79;
+.author {
+  @include flex;
+  width: 100%;
+  height: 25px;
+  margin: 20px 0;
+  font-size: 12px;
+  color: #777;
+  & i {
+    @include img(25, 0);
+    border-radius: 50%;
+    margin-right: 5px;
+  }
+  & .name {
+    color: $color;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  & .name:hover {
+    color: $hoverColor;
+  }
+}
+
+.operational {
+  $height: 30px;
+  width: 100%;
+  height: $height;
+  margin-bottom: 15px;
+  & ul {
+    height: 100%;
+    overflow: hidden;
+  }
+  & li {
+    @include flex;
+    height: 100%;
+    float: left;
+    margin-right: 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: #383838;
+    cursor: pointer;
+    padding: 0 10px;
+    border: border(#bbb9b1);
+    & i {
+      @include img(16, 0);
+      margin-right: 5px;
+    }
+  }
+  & li:not(:first-child):hover {
+    background: rgba(0, 0, 0, 0.05)
+  }
+}
+
+.play {
+  @include flex;
+  width: 140px;
+  overflow: hidden;
+  padding: 0 !important;
+  border: none !important;
+  background: linear-gradient(to right, #ea5e4d, #c4473a);
+}
+
+.play-all {
+  @include flex;
+  width: 70%;
+  height: 100%;
+  color: #fff;
+  position: relative;
+  padding-left: 10px;
+  & i {
+    @include img(16, 0);
+    margin-right: 5px;
+  }
+}
+.play-all:after {
+  @include halfPX(#fff, 0.15);
+  position: absolute;
+  right: 0;
+}
+
+.add-all {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  & i {
+    @include img(16, 0);
+  }
+}
+
+.play-all:hover, .add-all:hover {
+  background: #b54136;
+}
+
+.more-info-box {
+  width: 100%;
+  font-size: 12px;
+  color: #333;
+  margin-bottom: 30px;
+  & li {
+    display: flex;
+    justify-items: center;
+    margin-bottom: 20px;
+  }
+  & li:last-child {
+    margin: 0;
+  }
+}
+
+.title {
+  width: 40px;
+  text-align-last: justify;
+}
+
+.second {
+  margin-left: 15px;
+}
+
+$grayColor: #8e8e8e;
+.count {
+  color: $grayColor;
+}
+
+.description {
+  width: calc(100% - 55px);
+  color: $grayColor;
+  line-height: 25px;
+  display: inline-block;
+  margin-top: -6px;
+  max-height: 340px;
+}
+.zoom {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zoom-out {
+  white-space: pre-line;
+}
+
+.tag {
+  color: $color !important;
+}
+
+.tag:hover {
+  color: $hoverColor;
+}
+
+.array {
+  width: 14px;
+  height: 14px;
+  border: 7px solid transparent;
+  position: relative;
+  cursor: pointer;
+}
+.top {
+  top: 3px;
+  border-top-color: #999;
+}
+.bottom {
+  top: -7px;
+  border-bottom-color: #999;
 }

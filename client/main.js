@@ -13,7 +13,9 @@ function createWindow () {
     height: 670,
     resizable: false,
     fullscreen: false,
-    frame: false,
+    // frame: false,
+    hasShadow: true,
+    titleBarStyle: 'hidden',
     webPreferences: {
       // nodeIntegration: false,
       contextIsolation: false,

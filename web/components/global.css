@@ -129,6 +129,10 @@ input::-ms-input-placeholder {
   height: 100%;
 }
 
+.drag {
+  -webkit-app-region: drag;
+}
+
 @font-face
 {
   font-family: 方正兰亭超细黑简体;
