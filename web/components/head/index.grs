@@ -1,12 +1,45 @@
 <template>
   <div styleName='container' className='drag'>
-
+    <div styleName='search-box'>
+      <i styleName='search-icon'></i>
+      <input
+        styleName='search-input'
+        placeholder='搜索'
+        :value='searchValue'
+        @focus='() => this.setState({showSuggest: true})'
+        @input='this.changeInputValue'/>
+      <i styleName='remove-icon' v-show='searchValue' @click='() => this.setState({searchValue: ""})'></i>
+    </div>
+    <div styleName='set-btn'></div>
+    <SearchSuggest v-if='showSuggest' :searchValue='searchValue' :hide='this.hideSuggestBox'/>
   </div>
 </template>
 
 <script>
+  import { notice } from 'web/utils'
+  import SearchSuggest from 'web/components/search-suggest'
+
   @Grass.CSSModules(style)
   export default class Head extends Grass.Component {
     // #temp
+    component = { SearchSuggest }
+    debounced = false
+
+    hideSuggestBox = () => this.setState({showSuggest: false})
+
+    beforeCreate () {
+      this.state = {
+        showSuggest: false,
+        searchValue: '',
+      }
+    }
+
+    changeInputValue = e => {
+      if (!this.debounced) {
+        this.debounced = true
+        this.setState({searchValue: e.target.value.trim()})
+        setTimeout(() => this.debounced = false, 500)
+      }
+    }
   }
 </script>

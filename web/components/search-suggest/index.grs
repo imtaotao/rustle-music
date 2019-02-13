@@ -1,0 +1,45 @@
+<template>
+  <div styleName='container' @click.self='this.props.hide'>
+    <div styleName='content'>
+      <div styleName='hot-box' v-show='!this.props.searchValue'>
+        <p styleName='title'>热门搜索</p>
+        <ul styleName='tags'>
+          <li v-for='val of hotData'>{{ val.first }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class SearchSuggest extends Grass.Component {
+    // #temp
+    efn = err => notice(err.msg)
+
+    beforeCreate () {
+      this.state = {
+        hotData: [],
+        suggestData: [],
+      }
+      this.props.searchValue
+        ? this.getSearchSuggest()
+        : this.getDefaultRecommend()
+    }
+
+    getDefaultRecommend () {
+      window.node.request('/search/hot').then(({body}) => {
+        this.setState({hotData: body.result.hots})
+      }, this.efn)
+    }
+
+    getSearchSuggest(keyword) {
+      keyword = keyword || this.props.searchValue
+      if (keyword) {
+        window.node.request('/search/suggest?keywords=' + keyword).then(({body}) => {
+          console.log(body.result);
+        }, this.efn)
+      }
+    }
+  }
+</script>

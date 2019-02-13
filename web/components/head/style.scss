@@ -1,6 +1,55 @@
+@import 'web/components/common.scss';
+
 $height: 50px;
+$contentHeight: 25px;
+@mixin btn {
+  width: $contentHeight;
+  height: $contentHeight;
+  cursor: pointer;
+}
+
 .container {
-  width: 100%;
+  width: 765px;
   height: $height;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 10px;
   background: rgba(255, 255, 255, 0.75);
+  // background: #ddd;
+}
+
+.search-box {
+  height: $contentHeight;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  background: rgba(0, 0, 0, 0.03);
+  margin: 0 10px;
+  border-radius: 10px;
+}
+
+.search-icon {
+  @include img(13, 'search');
+}
+
+.remove-icon {
+  @include img(13, 'close');
+  cursor: pointer;
+}
+
+.search-input {
+  width: 100px;
+  height: 15px;
+  background: transparent;
+  outline: none;
+  margin: 0 5px;
+  font-size: 12px;
+  color: #656565;
+}
+
+.set-btn {
+  @include btn;
+  border-radius: 50%;
+  background: #000;
 }
