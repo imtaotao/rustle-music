@@ -57,51 +57,54 @@
         </ul>
       </div>
     </div>
-    <main styleName='main-content'>
-      list
-    </main>
+    <div styleName='loading' v-show='loading'><i></i></div>
+    <ListForm styleName='main-content' v-show='!loading' :tracks='tracks'/>
   </div>
 </template>
 
 <script>
-
-// playlist: {
-//   creator: {}, // 歌单创建者的信息
-//   tags: ['-', '-'], // 标签
-//   name: '-- --', // 歌单名字
-//   coverImgUrl: '', // 背景图片
-//   createTime: '-', // 创建时间
-//   description: '-', // 歌单描述
-//   playCount: 0, // 播放数量
-//   trackCount: 0, // 歌曲数量
-//   shareCount: 0, // 歌单分享数量
-//   commentCount: 0, // 评论数量
-//   subscribedCount: 0, // 订阅数量
-// }
+  /*
+    playlist
+      creator：歌单作者资料
+        avatarUrl: 作者头像
+        nickname: 作者昵称
+      tags: 歌单标签 string[]
+      name: 歌单名字
+      coverImgUrl: 背景图片
+      createTime: 创建时间
+      description: 歌单描述
+      playCount: 播放数量
+      trackCount: 歌曲数量
+      shareCount: 歌单分享数量
+      commentCount: 评论数量
+      subscribedCount: 订阅数量
+  */
   import Head from 'web/components/head'
-  import { timestampToTime, filterCount } from 'web/utils'
   import UserManager from 'web/manager/user'
+  import ListForm from 'web/components/song-list-form'
+  import { timestampToTime, filterCount } from 'web/utils'
 
   @Grass.CSSModules(style)
   export default class SongList extends Grass.Component {
     // #temp
-    component = { Head }
+    component = { Head, ListForm }
     filterCount = filterCount
-    didReceiveProps = () => { console.log(this.props.playlist);return this.updataSongListInfo(); }
+    // 切换歌单选项时重新获取数据
+    didReceiveProps = this.updataSongListInfo
     willReceiveProps = newProps => newProps.id !== this.props.id
     getListName = () =>  this.props.playlist.name.replace(UserManager.nickname, '我')
 
     defaultState = {
+      loading: true,
       shareCount: '---',
       extendsDesc: false,
-      privileges: [],
+      tracks: [],
       tagList: ['收藏', '分享', '下载全部'],
     }
 
     beforeCreate () {
       this.state = this.defaultState
       this.updataSongListInfo()
-      console.log(this.props.playlist);
     }
 
     extendsDescription = e => {
@@ -117,10 +120,6 @@
     canShowTag () {
       const tags = this.props.playlist.tags
       return tags && tags.length > 0
-    }
-
-    getTagImage (i) {
-
     }
 
     getTagCount (i) {
@@ -143,15 +142,18 @@
     }
 
     updataSongListInfo () {
+      // 获取当前歌单的详细数据
       const id = this.props.id
       if (id) {
-        // 切换歌单时，清空背景图片
+        // 切换歌单时，清空上一个歌单的数据
         this.setState(this.defaultState)
         UserManager.getSongListDetail(id).then(({body}) => {
           if (this.props.id === id) {
             this.setState({
+              loading: false,
+              tracks: body.playlist.tracks,
+              trackIds: body.playlist.trackIds,
               shareCount: body.playlist.shareCount,
-              privileges: body.privileges,
             })
           }
         })

@@ -19,7 +19,13 @@
   transform: scaleX($with);
 }
 
-@function border ($color, $size:1) {
+@mixin hideText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@function border ($color:#ddd, $size:1) {
   @return $size + px solid $color;
 }
 

@@ -26,6 +26,7 @@
 <script>
   import Login from 'web/components/login'
   import DefaultFun from 'web/components/default-fun'
+  import SongManager from 'web/manager/song'
   import UserManager from 'web/manager/user'
 
   @Grass.event
@@ -49,6 +50,7 @@
       UserManager.on('login', this.getSongList)
       UserManager.on('logout', () => {
         // 恢复未登陆的初始状态
+        SongManager.cleanCache()
         this.state = defaultData
         this.forceUpdate()
         this.active = 'found'
@@ -69,16 +71,28 @@
     }
 
     getSongList = () => {
+      // 获取当前用户的所有歌单
       UserManager.getSongList().then(({subscribe, create}) => {
         const myMusic = this.state['我的音乐'].concat([
           { name: '我的电台', id: 'radio', special: true, url: require('web/assets/radio.svg') },
           { name: '我的收藏', id: 'collection', special: true, url: require('web/assets/my-collection.svg') },
         ])
+
+        this.cacheMyCollectList(create)
         this.setState({
           '我的音乐': myMusic,
           '创建的歌单': create,
           '收藏的歌单': subscribe,
         })
+      })
+    }
+
+    cacheMyCollectList (list) {
+      const res = list.find(val => val.creator.userId === UserManager.id)
+      SongManager.cache(send => {
+         UserManager.getSongListDetail(res.id).then(({body}) => {
+           send(body.playlist.trackIds)
+         })
       })
     }
 
@@ -89,6 +103,7 @@
       item.isMyLikeList = item.name && item.name.includes(UserManager.nickname)
       item.description = item.description && item.description.replace(/↵/g, '\n')
       this.forceUpdate()
+      // 传递当前选中的歌单数据
       this.next(item)
     }
   }

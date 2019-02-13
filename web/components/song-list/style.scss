@@ -247,3 +247,13 @@ $grayColor: #8e8e8e;
   top: -7px;
   border-bottom-color: #999;
 }
+
+.loading {
+  width: 100%;
+  height: 200px;
+  line-height: 200px;
+  text-align: center;
+  & i {
+    @include img(30, 'loading');
+  }
+}

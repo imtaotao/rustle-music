@@ -1,0 +1,86 @@
+<template>
+  <main styleName='container'>
+    <ul>
+      <li styleName='list-head'>
+        <span styleName='title'>音乐标题</span>
+        <span styleName='singer'>歌手</span>
+        <span styleName='album'>专辑</span>
+        <span styleName='duration'>时长</span>
+      </li>
+      <li v-for='(val, i) of this.props.tracks'>
+        <span styleName='title'>
+          <a>{{ i > 8 ? i + 1 : '0' + (i + 1) }}</a>
+          <a :styleName='this.isCollectMusic(val.id) ? "like-collect-img" : "like-img"'></a>
+          <a styleName='down-img'></a>
+          <a styleName='song-name'>{{ val.name }}</a>
+        </span>
+        <span styleName='singer'>
+          <a v-for='(item, i) of val.ar' @click='this.viewAuthor.bind(this, item)'>
+            <b v-if='i > 0'> / </b>
+            {{ item.name }}
+          </a>
+        </span>
+        <span styleName='album'><a>{{ val.al.name }}</a></span>
+        <span styleName='duration'><a>{{ this.getDuration(val.dt) }}</a></span>
+      </li>
+    </ul>
+  </main>
+</template>
+
+<script>
+  /*
+    name: 歌曲名称
+    id: 歌曲id
+    dt: 歌曲时间
+    mv: mv id
+    publishTime: 发布时间
+    alia: 别名 [names]
+    al: 专辑数据
+      name: 专辑名称
+      id: 专辑id
+      picUrl: 歌曲图片
+    ar: 作者数据 [ars]
+      id: 作者id
+      name: 作者名称
+  */
+  import SongManager from 'web/manager/song'
+
+  @Grass.CSSModules(style)
+  export default class ListForm extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.state = {
+        tracks: [{
+          name: 'test',
+          id: 121,
+          dt: 121000,
+          al: {
+            name: 'tao',
+          },
+          ar: [{name:'陈涛'}, {name: '芳芳'}]
+        }],
+      }
+    }
+
+    didReceiveProps () {
+      console.log(this.props.tracks.length && this.props.tracks, 'tt');
+    }
+
+    isCollectMusic (id) {
+      return SongManager.has(id)
+    }
+
+    getDuration (time) {
+      const s = time / 1000
+      let min = Math.floor(s / 60)
+      let sec = Math.floor(s % 60)
+      min < 10 && (min = '0' + min)
+      sec < 10 && (sec = '0' + sec)
+      return min + ':' + sec
+    }
+
+    viewAuthor (item) {
+      console.log(item);
+    }
+  }
+</script>

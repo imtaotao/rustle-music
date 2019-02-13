@@ -10,7 +10,7 @@
 <script>
   import Sidebar from 'web/components/sidebar'
   import MainContent from 'web/components/main-content'
-console.log(style);
+
   @Grass.CSSModules(style)
   class Root extends Grass.Component {
     // #temp

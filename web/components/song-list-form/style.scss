@@ -1,0 +1,84 @@
+@import 'web/components/common.scss';
+
+$singeHeight: 35px;
+.container {
+  width: 100%;
+  & ul {
+    font-size: 11px;
+    margin: 20px 0;
+    color: #8e8e8e;
+  }
+  & li {
+    width: 100%;
+    height: $singeHeight;
+    cursor: pointer;
+    & span {
+      @include hideText;
+      display: inline-block;
+      text-align: center;
+      line-height: $singeHeight;
+    }
+    & a:hover {
+      color: #5d5d5d;
+    }
+  }
+  & li:nth-child(2n) {
+    background: rgba(0, 0, 0, 0.02);
+  }
+  & li:not(:first-child):hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.list-head .title {
+  padding-left: 100px;
+}
+
+.song-name {
+  color: #5d5d5d;
+}
+
+.list-head span:hover {
+  background: #f2f1f2;
+}
+
+.title {
+  width: 35%;
+  text-align: left !important;
+  padding-left: 20px;
+  line-height: $singeHeight;
+  & a {
+    @include hideText;
+    margin-left: 10px;
+  }
+}
+
+.singer {
+  width: 25%;
+}
+
+.album {
+  width: 25%;
+}
+
+.duration {
+  width: 10%;
+}
+
+@mixin iconStyle ($src) {
+  @include img(14, $src);
+  position: relative;
+  top: 3px;
+}
+
+.like-img {
+  @include iconStyle('my-like');
+}
+
+.like-collect-img {
+  @include iconStyle('active/like');
+}
+
+.down-img {
+  @include iconStyle('down');
+}
