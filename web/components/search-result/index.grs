@@ -1,17 +1,100 @@
 <template>
   <div styleName='container'>
-    search-resutl
+    <div styleName='loading' v-show='showLoading'><i></i></div>
+    <div styleName='search-result-box' v-show='!showLoading'>
+      <div styleName='head'>
+        <b styleName='search-value'>{{ this.props.searchValue || '' }}</b>
+        <span v-show='resultCount'>找到 {{ resultCount }} 个{{ selected.name }}</span>
+      </div>
+      <div styleName='types'>
+        <span
+          :styleName='selected.type === item.type ? "active" : ""'
+          v-for='item of searchTypes'
+          @click='this.toggleType.bind(this, item)'>{{ item.name }}</span>
+      </div>
+      <div styleName='content-box'>
+        <!-- 单曲 -->
+        <div>
+          <ListForm v-if='selected.type === "1"' :tracks='resultData'/>
+        </div>
+        <!-- 歌手 -->
+        <div>
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import { notice } from 'web/utils'
+  import ListForm from 'web/components/song-list-form'
+
   @Grass.CSSModules(style)
   export default class SearchResult extends Grass.Component {
     // #temp
+    component = { ListForm }
+
+    didReceiveProps = this.getSearchData
+
+    willReceiveProps = newProps => newProps.searchValue !== this.props.searchValue
 
     beforeCreate () {
-      this.state = {}
+      const searchTypes = [
+        {name: '单曲', type: '1', limit: 100 },
+        {name: '歌手', type: '100', limit: 20 },
+        {name: '专辑', type: '10', limit: 20 },
+        {name: '视频', type: '1014', limit: 21 },
+        {name: '歌单', type: '1000', limit: 20 },
+        {name: '歌词', type: '1006', limit: 20 },
+        {name: '用户', type: '1002', limit: 20 },
+        {name: '电台', type: '1009', limit: 20 },
+      ]
+      this.state = {
+        showLoading: true,
+        resultCount: null,
+        resultData: [],
+        searchTypes,
+        selected: searchTypes[0],
+      }
+      this.getSearchData()
+    }
+
+    toggleType (item) {
+      this.setState({selected: item})
+      this.getSearchData(item)
+    }
+
+    getSearchData (item) {
+      const keyword = this.props.searchValue
+      if (keyword) {
+        // 先清空数据
+        this.setState({
+          resultCount: null,
+          resultData: [],
+        })
+        const { type, limit } = item || this.state.searchTypes[0]
+        window.node.request(`/search?keywords=${keyword}&type=${type}&limit=${limit}`).then(({body}) => {
+          // result --> { xxCount: number, data: array }
+          let resultData = []
+          let resultCount = null
+
+          if (body.result) {
+            Object.getOwnPropertyNames(body.result).forEach(name => {
+              const val = body.result[name]
+              typeof val === 'number'
+                ? resultCount = val || null
+                : resultData = val || []
+            })
+          }
+
+          this.setState({
+            resultData,
+            resultCount,
+            showLoading: false,
+          })
+        }, err => notice(err.body.msg))
+      }
     }
   }
-
 </script>

@@ -1,3 +1,15 @@
 .container {
   padding-left: 35px;
 }
+
+.content {
+  width: 100%;
+  height: calc(100% - 70px);
+}
+
+.head {
+  position: fixed;
+  z-index: 2;
+  padding-right: 25% !important;
+  background: transparent !important; // 为不遮挡搜索结果
+}

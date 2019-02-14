@@ -15,17 +15,19 @@
           <a styleName='song-name'>{{ val.name }}</a>
         </span>
         <span styleName='singer'>
-          <a v-for='(item, i) of val.ar' @click='this.viewAuthor.bind(this, item)'>
+          <a v-for='(item, i) of val.ar || val.artists' @click='this.viewAuthor.bind(this, item)'>
             <b v-if='i > 0'> / </b>
             {{ item.name }}
           </a>
         </span>
-        <span styleName='album'><a>{{ val.al.name }}</a></span>
-        <span styleName='duration'><a>{{ this.getDuration(val.dt) }}</a></span>
+        <span styleName='album'><a>{{ (val.al || val.album).name }}</a></span>
+        <span styleName='duration'><a>{{ this.getDuration(val.dt || val.duration) }}</a></span>
       </li>
     </ul>
   </main>
 </template>
+
+mmp, 几个接口返回的自动不一样
 
 <script>
   /*
@@ -48,20 +50,6 @@
   @Grass.CSSModules(style)
   export default class ListForm extends Grass.Component {
     // #temp
-    beforeCreate () {
-      this.state = {
-        tracks: [{
-          name: 'test',
-          id: 121,
-          dt: 121000,
-          al: {
-            name: 'tao',
-          },
-          ar: [{name:'陈涛'}, {name: '芳芳'}]
-        }],
-      }
-    }
-
     didReceiveProps () {
       console.log(this.props.tracks.length && this.props.tracks, 'tt');
     }

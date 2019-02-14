@@ -2,10 +2,10 @@
 
 .container {
   width: 100%;
-  max-height: calc(100% - 70px);
+  max-height: calc(100% - 120px);
   position: fixed;
   z-index: 999;
-  top: 0;
+  top: 50px;
   left: 0;
   bottom: 0;
   right: 0;
@@ -14,9 +14,8 @@
 
 .content {
   position: absolute;
-  height: calc(100% - 50px);
+  height: 100%;
   width: 35.5%;
-  top: 50px;
   right: 0;
   padding: 20px 0;
   background: #fff;

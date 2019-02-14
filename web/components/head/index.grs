@@ -1,7 +1,7 @@
 <template>
-  <div styleName='container' className='drag'>
+  <div styleName='container' className='drag' @click.self='this.hideSuggestBox'>
     <div styleName='search-box'>
-      <i styleName='search-icon'></i>
+      <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
       <input
         styleName='search-input'
         placeholder='搜索'
@@ -30,7 +30,7 @@
     component = { SearchSuggest }
     debounced = false
 
-    pressEnter = e => enter(e, this.receiveRecommendValue.bind(this, e.target.value.trim()))
+    pressEnter = e => enter(e, this.receiveRecommendValue.bind(null, e.target.value.trim()))
 
     hideSuggestBox = () => this.setState({showSuggest: false})
 
@@ -57,6 +57,10 @@
     }
 
     receiveRecommendValue = searchValue => {
+      searchValue = typeof searchValue === 'string'
+        ? searchValue
+        : this.state.searchValue
+
       this.setState({
         searchValue,
         showSuggest: false,

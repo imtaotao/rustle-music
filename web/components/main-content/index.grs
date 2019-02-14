@@ -1,8 +1,8 @@
 <template>
   <div styleName='container'>
-    <Head v-if='!showSongList'/>
-    <SongList v-if='showSongList' :id='songListId' :playlist='playlist'/>
-    <SearchResult v-if='showSearchResult'/>
+    <Head styleName='head' v-if='!showSongList'/>
+    <SongList styleName='content' v-if='showSongList' :id='songListId' :playlist='playlist'/>
+    <SearchResult styleName='content' v-if='showSearchResult' :searchValue='this.searchValue'/>
   </div>
 </template>
 
@@ -17,6 +17,8 @@
     // #temp
     component = { Head, SongList, SearchResult }
 
+    searchValue = ''
+
     beforeCreate () {
       this.state = {
         showSongList: false,
@@ -27,6 +29,7 @@
 
       // 切换歌单选项
       Sidebar.on(item => {
+        this.showSpecifiedPage('all')
         this.setState({
           showSongList: !item.special,
           songListId: item.id,
@@ -41,9 +44,8 @@
             // 清空歌单数据，避免内存浪费
             state.songListId = null
             state.playlist = {}
+            this.searchValue = val
           })
-
-          console.log(val);
         }
       })
     }

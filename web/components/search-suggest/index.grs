@@ -4,7 +4,7 @@
       <div styleName='hot-box' v-show='forcedShowHot || !this.props.searchValue'>
         <p styleName='title'>热门搜索</p>
         <ul styleName='tags'>
-          <li v-for='val of hotData'  @click='this.props.receiveRecommendValue.bind(null, val.first)'>{{ val.first }}</li>
+          <li v-for='val of hotData' @click='this.props.receiveRecommendValue.bind(null, val.first)'>{{ val.first }}</li>
         </ul>
       </div>
       <div styleName='suggest-box' v-show='!forcedShowHot && this.props.searchValue'>
@@ -34,7 +34,7 @@
     // #temp
     efn = err => notice(err.msg)
 
-    didReceiveProps = this.getSearchSuggest
+    didReceiveProps = this.updateSearchResult
 
     beforeCreate () {
       this.state = {
@@ -50,6 +50,11 @@
           playlists: '歌单',
         },
       }
+      this.updateSearchResult()
+    }
+
+    // 根据输入的值判断搜索哪种结果
+    updateSearchResult () {
       this.props.searchValue
         ? this.getSearchSuggest()
         : this.getDefaultRecommend()

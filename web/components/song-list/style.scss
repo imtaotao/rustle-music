@@ -1,15 +1,14 @@
 @import 'web/components/common.scss';
 .container {
-  width: 100%;
-  max-height: calc(100% - 70px);
   position: relative;
-  overflow-x: hidden;
   z-index: 0;
+  overflow-x: hidden;
 }
 
 .head {
-  position: absolute;
+  position: fixed;
   z-index: 2;
+  padding-right: 25%;
 }
 
 .bg-box {

@@ -24,12 +24,13 @@ $contentHeight: 25px;
   align-items: center;
   padding: 0 5px;
   background: rgba(0, 0, 0, 0.03);
-  margin: 0 10px;
+  margin: 0 15px;
   border-radius: 10px;
 }
 
 .search-icon {
   @include img(13, 'search');
+  cursor: pointer;
 }
 
 .remove-icon {
