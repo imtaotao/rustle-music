@@ -15,6 +15,7 @@
   export default class MainContent extends Grass.Component {
     // #temp
     component = { Head, SongList }
+
     beforeCreate () {
       this.state = {
         showSongList: false,

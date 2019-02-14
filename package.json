@@ -4,6 +4,7 @@
   "description": "music application",
   "main": "./client/main.js",
   "scripts": {
+    "i": "rm -rf node_modules && yarn",
     "dev": "electron .",
     "icon": "node ./web/assets/change.js",
     "start": "webpack-dev-server --env.dev",

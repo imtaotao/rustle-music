@@ -9,14 +9,13 @@ $contentHeight: 25px;
 }
 
 .container {
-  width: 765px;
+  width: 100%;
   height: $height;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding: 0 10px;
   background: rgba(255, 255, 255, 0.75);
-  // background: #ddd;
 }
 
 .search-box {

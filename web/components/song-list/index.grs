@@ -88,10 +88,14 @@
   export default class SongList extends Grass.Component {
     // #temp
     component = { Head, ListForm }
+
     filterCount = filterCount
+
     // 切换歌单选项时重新获取数据
     didReceiveProps = this.updataSongListInfo
+
     willReceiveProps = newProps => newProps.id !== this.props.id
+
     getListName = () =>  this.props.playlist.name.replace(UserManager.nickname, '我')
 
     defaultState = {

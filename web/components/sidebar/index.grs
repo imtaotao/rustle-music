@@ -34,7 +34,9 @@
   export default class Sidebar extends Grass.Component {
     // #temp
     active = 'found'
+
     isMyLikeList = false
+
     component = { Login, DefaultFun }
 
     beforeCreate () {

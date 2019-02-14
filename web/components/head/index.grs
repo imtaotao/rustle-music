@@ -6,24 +6,28 @@
         styleName='search-input'
         placeholder='搜索'
         :value='searchValue'
-        @focus='() => this.setState({showSuggest: true})'
-        @input='this.changeInputValue'/>
+        @keydown='this.pressEnter'
+        @input='this.changeInputValue'
+        @focus='() => this.setState({showSuggest: true})'/>
       <i styleName='remove-icon' v-show='searchValue' @click='() => this.setState({searchValue: ""})'></i>
     </div>
     <div styleName='set-btn'></div>
-    <SearchSuggest v-if='showSuggest' :searchValue='searchValue' :hide='this.hideSuggestBox'/>
+    <SearchSuggest v-if='showSuggest' :hide='this.hideSuggestBox' :searchValue='searchValue' :receiveRecommendValue='this.receiveRecommendValue'/>
   </div>
 </template>
 
 <script>
-  import { notice } from 'web/utils'
+  import { enter, notice } from 'web/utils'
   import SearchSuggest from 'web/components/search-suggest'
 
+  @Grass.event
   @Grass.CSSModules(style)
   export default class Head extends Grass.Component {
     // #temp
     component = { SearchSuggest }
     debounced = false
+
+    pressEnter = e => enter(e, this.toSearchPage.bind(this, e.target.value.trim()))
 
     hideSuggestBox = () => this.setState({showSuggest: false})
 
@@ -40,6 +44,18 @@
         this.setState({searchValue: e.target.value.trim()})
         setTimeout(() => this.debounced = false, 500)
       }
+    }
+
+    receiveRecommendValue = searchValue => {
+      this.setState(state => {
+        state.searchValue = searchValue
+        state.showSuggest = false
+        this.toSearchPage(searchValue)
+      })
+    }
+
+    toSearchPage (val) {
+      val && this.next({type: 'toSearch', val})
     }
   }
 </script>

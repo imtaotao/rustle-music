@@ -18,7 +18,7 @@
   width: 35.5%;
   top: 50px;
   right: 0;
-  padding: 20px;
+  padding: 20px 0;
   background: #fff;
   overflow-x: hidden;
   border-top-left-radius: 5px;
@@ -32,6 +32,7 @@
 .hot-box {
   height: 100%;
   width: 100%;
+  padding: 0 20px;
 }
 
 .title {
@@ -58,5 +59,59 @@
   }
   & li:hover {
     background: #f3f3f3;
+  }
+}
+
+.suggest-box {
+  height: 100%;
+  width: 100%;
+}
+
+.loading {
+  $height: 150px;
+  height: $height;
+  width: 100%;
+  text-align: center;
+  line-height: $height;
+  & i {
+    @include img(30, 'loading');
+  }
+}
+
+.suggest-detail-box {
+  width: 100%;
+}
+
+.title.icon {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  & i {
+    @include img(14, 'music');
+    margin-right: 8px;
+  }
+}
+
+.single-type-box {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.list-content {
+  & li {
+    @include hideText;
+    width: 100%;
+    height: 35px;
+    padding: 0 40px;
+    line-height: 35px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 方正兰亭超细黑简体;
+    cursor: pointer;
+  }
+  & li:hover {
+    background: #f5f3f3;
   }
 }

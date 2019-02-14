@@ -40,6 +40,7 @@ module.exports = {
   },
   devServer: {
     port,
+    host: '192.168.1.103',
     hot: true,
     inline: true,
     progress: true,
