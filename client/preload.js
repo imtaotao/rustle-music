@@ -5,7 +5,7 @@ const {
   setCookie,
   getCookie,
   clearCookie,
-} = require('./cloud-music')
+} = require('./interface')
 
 // 暴露给渲染进程的 node api
 process.once('loaded', function () {

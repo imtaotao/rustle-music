@@ -22,9 +22,9 @@
           </div>
         </div>
         <ul styleName='set-info'>
-          <li>
+          <li @click='this.viewLeval'>
             <div styleName='info-head'><i></i>等级</div>
-            <div styleName='info-value' @click='this.viewLeval'>lv.{{ leval }}<i></i></div>
+            <div styleName='info-value'>lv.{{ leval }}<i></i></div>
           </li>
           <li @click='this.exitAndLogout'>
             <div styleName='info-head'><i></i>退出登录</div>

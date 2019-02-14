@@ -128,9 +128,8 @@ $border: 1px solid #f3ebeb;
     background: #f2f2f3;
   }
   & div {
-    $height: 50px;
     width: 50%;
-    height: $height;
+    height: 100%;
     display: flex;
     align-items: center;
     cursor: pointer;
