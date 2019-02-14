@@ -62,23 +62,24 @@
   </div>
 </template>
 
+/*
+  playlist
+    creator：歌单作者资料
+      avatarUrl: 作者头像
+      nickname: 作者昵称
+    tags: 歌单标签 string[]
+    name: 歌单名字
+    coverImgUrl: 背景图片
+    createTime: 创建时间
+    description: 歌单描述
+    playCount: 播放数量
+    trackCount: 歌曲数量
+    shareCount: 歌单分享数量
+    commentCount: 评论数量
+    subscribedCount: 订阅数量
+*/
+
 <script>
-  /*
-    playlist
-      creator：歌单作者资料
-        avatarUrl: 作者头像
-        nickname: 作者昵称
-      tags: 歌单标签 string[]
-      name: 歌单名字
-      coverImgUrl: 背景图片
-      createTime: 创建时间
-      description: 歌单描述
-      playCount: 播放数量
-      trackCount: 歌曲数量
-      shareCount: 歌单分享数量
-      commentCount: 评论数量
-      subscribedCount: 订阅数量
-  */
   import Head from 'web/components/head'
   import UserManager from 'web/manager/user'
   import ListForm from 'web/components/song-list-form'

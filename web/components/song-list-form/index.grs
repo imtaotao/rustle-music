@@ -27,24 +27,24 @@
   </main>
 </template>
 
-mmp, 几个接口返回的自动不一样
+mmp, 几个接口返回的字段不一样
+/*
+  name: 歌曲名称
+  id: 歌曲id
+  dt: 歌曲时间
+  mv: mv id
+  publishTime: 发布时间
+  alia: 别名 [names]
+  al: 专辑数据
+    name: 专辑名称
+    id: 专辑id
+    picUrl: 歌曲图片
+  ar: 作者数据 [ars]
+    id: 作者id
+    name: 作者名称
+*/
 
 <script>
-  /*
-    name: 歌曲名称
-    id: 歌曲id
-    dt: 歌曲时间
-    mv: mv id
-    publishTime: 发布时间
-    alia: 别名 [names]
-    al: 专辑数据
-      name: 专辑名称
-      id: 专辑id
-      picUrl: 歌曲图片
-    ar: 作者数据 [ars]
-      id: 作者id
-      name: 作者名称
-  */
   import SongManager from 'web/manager/song'
 
   @Grass.CSSModules(style)
