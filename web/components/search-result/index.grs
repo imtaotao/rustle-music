@@ -1,0 +1,17 @@
+<template>
+  <div styleName='container'>
+    search-resutl
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class SearchResult extends Grass.Component {
+    // #temp
+
+    beforeCreate () {
+      this.state = {}
+    }
+  }
+
+</script>

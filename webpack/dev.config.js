@@ -31,7 +31,7 @@ const plugins = [
   })
 ]
 
-module.exports = {
+module.exports = host => ({
   plugins,
   mode: 'development',
   devtool: '#cheap-module-eval-source-map',
@@ -40,11 +40,11 @@ module.exports = {
   },
   devServer: {
     port,
-    host: '192.168.1.103',
+    host: host || null, // 192.168.1.103
     hot: true,
     inline: true,
     progress: true,
     allowedHosts: [], // 白名单
     contentBase: resolve('./'),
   },
-}
+})

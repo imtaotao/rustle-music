@@ -9,7 +9,7 @@
         @keydown='this.pressEnter'
         @input='this.changeInputValue'
         @focus='() => this.setState({showSuggest: true})'/>
-      <i styleName='remove-icon' v-show='searchValue' @click='() => this.setState({searchValue: ""})'></i>
+      <i styleName='remove-icon' v-show='searchValue' @click='this.removeInputValue'></i>
     </div>
     <div styleName='set-btn'></div>
     <SearchSuggest v-if='showSuggest' :hide='this.hideSuggestBox' :searchValue='searchValue' :receiveRecommendValue='this.receiveRecommendValue'/>
@@ -20,6 +20,9 @@
   import { enter, notice } from 'web/utils'
   import SearchSuggest from 'web/components/search-suggest'
 
+  // 保证各个 Head 组件实例的 searchValue 能够共享
+  let stashSuggestValue = null
+
   @Grass.event
   @Grass.CSSModules(style)
   export default class Head extends Grass.Component {
@@ -27,35 +30,47 @@
     component = { SearchSuggest }
     debounced = false
 
-    pressEnter = e => enter(e, this.toSearchPage.bind(this, e.target.value.trim()))
+    pressEnter = e => enter(e, this.receiveRecommendValue.bind(this, e.target.value.trim()))
 
     hideSuggestBox = () => this.setState({showSuggest: false})
 
     beforeCreate () {
       this.state = {
         showSuggest: false,
-        searchValue: '',
+        searchValue: stashSuggestValue || '',
       }
     }
 
     changeInputValue = e => {
       if (!this.debounced) {
+        const val = e.target.value.trim()
         this.debounced = true
-        this.setState({searchValue: e.target.value.trim()})
+        this.setState({searchValue: val})
+        stashSuggestValue = val
         setTimeout(() => this.debounced = false, 500)
       }
     }
 
+    removeInputValue = e => {
+      this.setState({searchValue: ''})
+      stashSuggestValue = null
+    }
+
     receiveRecommendValue = searchValue => {
-      this.setState(state => {
-        state.searchValue = searchValue
-        state.showSuggest = false
-        this.toSearchPage(searchValue)
+      this.setState({
+        searchValue,
+        showSuggest: false,
       })
+      this.toSearchPage(searchValue)
     }
 
     toSearchPage (val) {
-      val && this.next({type: 'toSearch', val})
+      if (val) {
+        Promise.resolve().then(() => {
+          this.next({type: 'toSearch', val})
+          stashSuggestValue = val
+        })
+      }
     }
   }
 </script>
