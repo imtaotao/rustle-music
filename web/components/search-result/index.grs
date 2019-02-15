@@ -21,6 +21,12 @@
         <div>
 
         </div>
+        <PaginggBar
+          v-show='resultCount > selected.limit'
+          :count='resultCount'
+          :offset='selected.offset'
+          :limit='selected.limit'
+          :toGetPageingData='this.toGetPageingData' />
       </div>
     </div>
   </div>
@@ -29,11 +35,12 @@
 <script>
   import { notice } from 'web/utils'
   import ListForm from 'web/components/song-list-form'
+  import PaginggBar from 'web/components/paging-bar'
 
   @Grass.CSSModules(style)
   export default class SearchResult extends Grass.Component {
     // #temp
-    component = { ListForm }
+    component = { ListForm, PaginggBar }
 
     didReceiveProps = this.getSearchData
 
@@ -41,23 +48,30 @@
 
     beforeCreate () {
       const searchTypes = [
-        {name: '单曲', type: '1', limit: 100 },
-        {name: '歌手', type: '100', limit: 20 },
-        {name: '专辑', type: '10', limit: 20 },
-        {name: '视频', type: '1014', limit: 21 },
-        {name: '歌单', type: '1000', limit: 20 },
-        {name: '歌词', type: '1006', limit: 20 },
-        {name: '用户', type: '1002', limit: 20 },
-        {name: '电台', type: '1009', limit: 20 },
+        {name: '单曲', type: '1', limit: 100, offset: 0 },
+        {name: '歌手', type: '100', limit: 20, offset: 0 },
+        {name: '专辑', type: '10', limit: 20, offset: 0 },
+        {name: '视频', type: '1014', limit: 21, offset: 0 },
+        {name: '歌单', type: '1000', limit: 20, offset: 0 },
+        {name: '歌词', type: '1006', limit: 20, offset: 0 },
+        {name: '用户', type: '1002', limit: 20, offset: 0 },
+        {name: '电台', type: '1009', limit: 20, offset: 0 },
       ]
       this.state = {
         showLoading: true,
-        resultCount: null,
+        resultCount: 0,
         resultData: [],
         searchTypes,
         selected: searchTypes[0],
       }
       this.getSearchData()
+    }
+
+    toGetPageingData = pageNumber => {
+      this.setState(state => {
+        state.selected.offset = pageNumber
+        this.getSearchData(state.selected)
+      })
     }
 
     toggleType (item) {
@@ -70,20 +84,23 @@
       if (keyword) {
         // 先清空数据
         this.setState({
-          resultCount: null,
+          resultCount: 0,
           resultData: [],
         })
-        const { type, limit } = item || this.state.searchTypes[0]
-        window.node.request(`/search?keywords=${keyword}&type=${type}&limit=${limit}`).then(({body}) => {
+        const { type, limit, offset } = item || this.state.searchTypes[0]
+        window.node.request(`/search?keywords=${keyword}&type=${type}&limit=${limit}&offset=${offset}`)
+        .then(({body}) => {
+          if (this.state.selected.offset !== offset) return
+
           // result --> { xxCount: number, data: array }
           let resultData = []
-          let resultCount = null
+          let resultCount = 0
 
           if (body.result) {
             Object.getOwnPropertyNames(body.result).forEach(name => {
               const val = body.result[name]
               typeof val === 'number'
-                ? resultCount = val || null
+                ? resultCount = val || 0
                 : resultData = val || []
             })
           }
