@@ -1,0 +1,43 @@
+<template>
+  <div styleName='container'>
+    <div styleName='head'>
+      <span
+        :styleName='item.val === active.val && "active"'
+        @click='this.toggleTabTag.bind(this, item)'
+        v-for='item of types'>{{ item.name }}</span>
+    </div>
+    <div styleName='content-box'>
+      <PersonRecommend v-show='active.val === "recommend"'/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import PersonRecommend from 'web/components/person-recommend'
+
+  @Grass.CSSModules(style)
+  export default class DiscoverMusic extends Grass.Component {
+    // #temp
+    component = { PersonRecommend }
+
+    beforeCreate () {
+      const types = [
+        {name: '个性推荐', val: 'recommend'},
+        {name: '歌单', val: 'songList'},
+        {name: '主播电台', val: 'anchorRadio'},
+        {name: '排行榜', val: 'leaderboard'},
+        {name: '歌手', val: 'singer'},
+        {name: '最新音乐', val: 'latestMusic'},
+      ]
+
+      this.state = {
+        types,
+        active: types[0],
+      }
+    }
+
+    toggleTabTag (item) {
+      this.setState({active: item})
+    }
+  }
+</script>

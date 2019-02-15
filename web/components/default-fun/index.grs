@@ -22,7 +22,7 @@
       this.state = {
         list: [
           {
-            id: 'found',
+            id: 'discover',
             key: '发现音乐',
             special: true,
             url: require('web/assets/music.svg'),

@@ -52,10 +52,9 @@ $typeHeight:35px;
     cursor: pointer;
   }
   & .active {
-    $color: #c4463a;
     font-weight: bold;
-    color: $color;
-    border-bottom: border($color, 3)
+    color: $theme;
+    border-bottom: border($theme, 3)
   }
 }
 

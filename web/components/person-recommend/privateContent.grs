@@ -1,12 +1,12 @@
 <template>
-  <div styleName='container'>
-
+  <div>
+    privateContent
   </div>
 </template>
 
 <script>
   @Grass.CSSModules(style)
-  export default class SingerForm extends Grass.Component {
+  export default class privateContent extends Grass.Component {
     // #temp
   }
 </script>

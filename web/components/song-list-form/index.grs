@@ -54,6 +54,15 @@ mmp, 几个接口返回的字段不一样
       console.log(this.props.tracks.length && this.props.tracks, 'tt');
     }
 
+    willReceiveProps (newProps) {
+      for (const key in newProps) {
+        if (newProps[key] !== this.props[key]) {
+          return true
+        }
+      }
+      return false
+    }
+
     isCollectMusic (id) {
       return SongManager.has(id)
     }

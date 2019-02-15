@@ -1,0 +1,19 @@
+<template>
+  <div styleName='container'>
+    f
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class PersonRecommend extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.state = {}
+    }
+
+    getRecommendData () {
+
+    }
+  }
+</script>

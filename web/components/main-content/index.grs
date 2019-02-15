@@ -1,8 +1,11 @@
 <template>
   <div styleName='container'>
-    <Head styleName='head' v-if='!showSongList'/>
+    <Head styleName='head' v-if='!showSongList'>
+      <div styleName='placeholder' slot='placeholder'></div>
+    </Head>
     <SongList styleName='content' v-if='showSongList' :id='songListId' :playlist='playlist'/>
-    <SearchResult styleName='content' v-if='showSearchResult' :searchValue='this.searchValue'/>
+    <SearchResult ref='c' styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
+    <DiscoverMusic styleName='content' v-show='showDiscoverMusic'/>
   </div>
 </template>
 
@@ -11,11 +14,12 @@
   import Sidebar from 'web/components/sidebar'
   import SongList from 'web/components/song-list'
   import SearchResult from 'web/components/search-result'
+  import DiscoverMusic from 'web/components/discover-music'
 
   @Grass.CSSModules(style)
   export default class MainContent extends Grass.Component {
     // #temp
-    component = { Head, SongList, SearchResult }
+    component = { Head, SongList, SearchResult, DiscoverMusic }
 
     searchValue = ''
 
@@ -23,35 +27,45 @@
       this.state = {
         showSongList: false,
         showSearchResult: false,
+        showDiscoverMusic: false,
         songListId: null,
         playlist: {},
       }
+      window.aa = this
 
       // 切换歌单选项
       Sidebar.on(item => {
-        this.showSpecifiedPage('all')
-        this.setState({
-          showSongList: !item.special,
-          songListId: item.id,
-          playlist: item,
-        })
+        switch (item.id) {
+          case 'discover' :
+            this.showSpecifiedPage('showDiscoverMusic')
+            break
+          default :
+            this.showSpecifiedPage('hide')
+            this.setState({
+              playlist: item,
+              songListId: item.id,
+              showSongList: !item.special,
+            })
+            break
+        }
       })
 
       // 显示搜索结果
       Head.on(({type, val}) => {
-        if (type === 'toSearch') {
-          this.showSpecifiedPage('showSearchResult', state => {
-            // 清空歌单数据，避免内存浪费
-            state.songListId = null
-            state.playlist = {}
-            this.searchValue = val
+        if (type ===  'toSearch') {
+          this.showSpecifiedPage('showSearchResult')
+          // 清空歌单数据，避免内存浪费
+          this.setState({
+            playlist: {},
+            songListId: null,
           })
+          this.searchValue = val
         }
       })
     }
 
     // main content 区域显示指定页面，其余的页面都隐藏
-    showSpecifiedPage (pageKey, cb) {
+    showSpecifiedPage (pageKey) {
       this.setState(state => {
         const keys = Object.keys(state)
         for (let i = 0; i <  keys.length; i++) {
@@ -59,7 +73,6 @@
             state[keys[i]] = keys[i] === pageKey
           }
         }
-        cb && cb(state)
       })
     }
   }

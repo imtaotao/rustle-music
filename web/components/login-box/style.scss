@@ -1,3 +1,5 @@
+@import 'web/components/common.scss';
+
 $boxWidth: 350px;
 
 @function shadow ($n) {
@@ -57,7 +59,6 @@ $boxWidth: 350px;
 $inputBorder: 1px solid #ddd;
 $inputHeight: 78px;
 $width: 70%;
-$color: #c4463a;
 .input-container {
   position: relative;
   width: $width;
@@ -104,7 +105,7 @@ $color: #c4463a;
   justify-content: space-between;
   & span {
     $iconSize: 18px;
-    color: $color;
+    color: $theme;
     padding-left: $iconSize + 3px;
     background: url('../../assets/mark.svg') no-repeat;
     background-size: $iconSize;
@@ -132,8 +133,8 @@ $color: #c4463a;
   }
   & input:checked + label:before {
     content: '\2713';
-    background: $color;
-    border-color:$color;
+    background: $theme;
+    border-color: $theme;
     font-size: 15px;
     color: #fff;
     text-align: center;
@@ -149,7 +150,7 @@ $color: #c4463a;
   color: #fff;
   font-size: 16px;
   letter-spacing: 2px;
-  background: $color;
+  background: $theme;
   cursor: pointer;
   outline: none;
 }

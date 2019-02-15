@@ -97,7 +97,7 @@
 
     willReceiveProps = newProps => newProps.id !== this.props.id
 
-    getListName = () =>  this.props.playlist.name.replace(UserManager.nickname, '我')
+    getListName = () => this.props.playlist.name.replace(UserManager.nickname, '我')
 
     defaultState = {
       loading: true,
@@ -149,7 +149,8 @@
     updataSongListInfo () {
       // 获取当前歌单的详细数据
       const id = this.props.id
-      if (id) {
+
+      if (typeof id === 'number') {
         // 切换歌单时，清空上一个歌单的数据
         this.setState(this.defaultState)
         UserManager.getSongListDetail(id).then(({body}) => {

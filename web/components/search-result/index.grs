@@ -44,8 +44,6 @@
 
     didReceiveProps = this.getSearchData
 
-    willReceiveProps = newProps => newProps.searchValue !== this.props.searchValue
-
     beforeCreate () {
       const searchTypes = [
         {name: '单曲', type: '1', limit: 100, offset: 0 },

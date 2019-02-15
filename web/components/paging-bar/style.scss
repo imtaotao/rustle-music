@@ -30,8 +30,8 @@ $height: 25px;
   }
   & span.active {
     color: #fff;
-    background: #c4463a;
-    border-color: #c4463a;
+    background: $theme;
+    border-color: $theme;
   }
 }
 

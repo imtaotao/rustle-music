@@ -1,5 +1,6 @@
 <template>
   <div styleName='container' className='drag' @click.self='this.hideSuggestBox'>
+    <slot></slot>
     <div styleName='search-box'>
       <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
       <input
@@ -11,7 +12,7 @@
         @focus='() => this.setState({showSuggest: true})'/>
       <i styleName='remove-icon' v-show='searchValue' @click='this.removeInputValue'></i>
     </div>
-    <div styleName='set-btn'></div>
+    <div styleName='set-btn' @click='this.hideSuggestBox'></div>
     <SearchSuggest v-if='showSuggest' :hide='this.hideSuggestBox' :searchValue='searchValue' :receiveRecommendValue='this.receiveRecommendValue'/>
   </div>
 </template>
@@ -38,6 +39,13 @@
       this.state = {
         showSuggest: false,
         searchValue: stashSuggestValue || '',
+      }
+    }
+
+    created () {
+      // 占位符绑定事件
+      if (this.$slot && this.$slot[0]) {
+        this.$slot[0].el.onclick = this.hideSuggestBox
       }
     }
 

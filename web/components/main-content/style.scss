@@ -10,6 +10,16 @@
 .head {
   position: fixed;
   z-index: 2;
+  pointer-events: none;
   padding-right: 25% !important;
   background: transparent !important; // 为不遮挡搜索结果
+  & * {
+    pointer-events: auto;
+  }
+}
+
+.placeholder {
+  width: 23%;
+  height: 100%;
+  cursor: pointer;
 }

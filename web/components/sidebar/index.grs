@@ -33,7 +33,7 @@
   @Grass.CSSModules(style)
   export default class Sidebar extends Grass.Component {
     // #temp
-    active = 'found'
+    active = 'discover'
 
     isMyLikeList = false
 
@@ -55,9 +55,10 @@
         SongManager.cleanCache()
         this.state = defaultData
         this.forceUpdate()
-        this.active = 'found'
-        this.next({ id: 'found', special: true})
+        this.active = 'discover'
+        this.next({id: 'discover', special: true})
       })
+      this.next({id: 'discover', special: true})
     }
 
     getUrl (item) {
