@@ -2,7 +2,7 @@
   <div styleName='container' className='drag'>
     <Login/>
     <div styleName='song-list-box'>
-      <DefaultFun
+      <DefaultList
         styleName='default-list'
         :active='this.active'
         :viewDetailContent='this.viewDetailContent'/>
@@ -12,7 +12,7 @@
         <ul styleName='song-list'>
           <li 
             v-for='item of val'
-            :className='this.active === item.id ? "list-active" : ""'
+            :styleName='this.active === item.id ? "active" : ""'
             @click='this.viewDetailContent.bind(null, item, key === "收藏的歌单")'>
             <i :style='{backgroundImage: "url("+ this.getUrl(item) + ")"}'></i>
             <span>{{ this.getListName(item.name) }}</span>
@@ -25,7 +25,7 @@
 
 <script>
   import Login from 'web/components/login'
-  import DefaultFun from 'web/components/default-fun'
+  import DefaultList from './default-list'
   import SongManager from 'web/manager/song'
   import UserManager from 'web/manager/user'
 
@@ -37,7 +37,7 @@
 
     isMyLikeList = false
 
-    component = { Login, DefaultFun }
+    component = { Login, DefaultList }
 
     beforeCreate () {
       let defaultData = {

@@ -3,7 +3,7 @@
     <ul styleName='song-list'>
       <li
         v-for='(item, i) of list'
-        :className='this.props.active === item.id ? "list-active" : ""'
+        :styleName='this.props.active === item.id ? "active" : ""'
         @click='this.props.viewDetailContent.bind(null, item, false)'>
         <i :style='{backgroundImage: "url("+ item.url +")"}'></i>
         <span>{{ item.key }}</span>
@@ -13,8 +13,6 @@
 </template>
 
 <script>
-  import style from 'web/components/common'
-
   @Grass.CSSModules(style)
   export default class DefaultFun extends Grass.Component {
     // #temp

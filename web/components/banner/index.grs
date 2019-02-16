@@ -1,0 +1,12 @@
+<template>
+  <div>
+    banner
+  </div>
+</template>
+
+<script>
+   @Grass.CSSModules(style)
+  export default class Banner extends Grass.Component {
+    // #temp
+  }
+</script>
