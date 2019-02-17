@@ -1,12 +1,75 @@
 <template>
-  <div>
-    songlist
+  <div styleName='song-list'>
+    <div styleName='title'>推荐歌单<i></i></div>
+    <div styleName='content'>
+      <ul styleName='list'>
+        <li>
+          <div styleName='image'>
+          </div>
+        </li>
+        <li v-for='(val, i) of data'>
+          <div styleName='image' :style='{backgroundImage: "url("+ val.picUrl +"）"}'>
+            <div styleName='play-count'><i></i>{{ this.getPlayCount(val) }}</div>
+            <span styleName='play-btn'><i></i></span>
+          </div>
+          <div styleName='name'>{{ val.name }}</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+  import userManager from 'web/manager/user'
+
   @Grass.CSSModules(style)
   export default class SongList extends Grass.Component {
     // #temp
+    beforeCreate () {
+      this.state = {
+        data: [],
+        stashData: [],
+      }
+      userManager.logged
+        ? this.getRecommendData()
+        : this.getPersonalizedData()
+      userManager.on('login', this.getRecommendData)
+      userManager.on('logout', this.getPersonalizedData)
+    }
+
+    getPlayCount (val) {
+      const playCount = val.playCount || val.playcount
+      return playCount < 1000
+        ? Math.floor(playCount)
+        : Math.floor(playCount / 10000) + '万'
+    }
+
+    getRecommendData = () => {
+      window.node.request('/recommend/resource').then(({body}) => {
+        const data = body.recommend
+        const stashData = this.state.stashData
+        if (data.length > 9) {
+          data.length = 9
+        } else if (stashData.length > 0) {
+          const len = 9 - data.length
+          for (let i = 0; i < len; i++) {
+            if (!stashData[i]) break
+            data.unshift(stashData[i])
+          }
+        }
+        this.setState({data})
+      }, this.props.efn)
+    }
+
+    getPersonalizedData = () => {
+      window.node.request('/personalized').then(({body}) => {
+        const data = body.result
+        if (data.length > 9) data.length = 9
+        this.setState({
+          data,
+          stashData: data,
+        })
+      }, this.props.efn)
+    }
   }
 </script>

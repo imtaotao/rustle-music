@@ -74,13 +74,13 @@ class UserManager extends Event {
   }
 
   private init () {
-    const id = localStorage.getItem('id')
-    if (id) {
-      this.id = +id
-      this.logged = true
-      this.nickname = '和声_伴奏'
-      return
-    }
+    // const id = localStorage.getItem('id')
+    // if (id) {
+    //   this.id = +id
+    //   this.logged = true
+    //   this.nickname = '和声_伴奏'
+    //   return
+    // }
     const data = localStorage.getItem('userAccount')
     if (!data) return
     const { type, account, password, preTime } = JSON.parse(data)

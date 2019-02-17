@@ -31,7 +31,6 @@
         songListId: null,
         playlist: {},
       }
-      window.aa = this
 
       // 切换歌单选项
       Sidebar.on(item => {

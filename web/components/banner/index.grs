@@ -1,6 +1,24 @@
 <template>
-  <div>
-    banner
+  <div styleName='container' @mouseenter='this.mouseenter' @mouseleave='this.mouseleave'>
+    <div styleName='points'>
+      <span
+        :styleName='this.getReverseIndex(i) === active ? "active" : ""'
+        v-for='(val, i) of this.props.bannerData')
+        @mouseenter='this.appoint.bind(this, this.getReverseIndex(i))'></span>
+    </div>
+    <div styleName='click-remove' v-show='showMask'>
+      <div styleName='left' @click='this.nextImage'></div>
+      <div styleName='right' @click='this.preImage'></div>
+    </div>
+    <div
+      :styleName='"item " + this.getNextStyleName(i)'
+      :index='item.index'
+      v-for='(item, i) of this.props.bannerData'>
+        <p :style='{backgroundImage: "url("+ item.imageUrl +")"}'>
+          <span :styleName='item.titleColor'>{{ item.typeTitle }}</span>
+        </p>
+        <a :styleName='this.maskLayer(i)' @click='e => item.url && window.node.openBrowser(item.url)'></a>
+      </div>
   </div>
 </template>
 
@@ -8,5 +26,119 @@
    @Grass.CSSModules(style)
   export default class Banner extends Grass.Component {
     // #temp
+    timeout = null
+
+    getReverseIndex = i => this.props.bannerData.length - 1 - i
+
+    beforeCreate() {
+      this.state = {
+        active: 0,
+        move: false,
+        leftMove: true,
+        showMask: false,
+      }
+    }
+
+    willReceiveProps () {
+      if (this.props.bannerData.length > 0) {
+        return false
+      }
+    }
+
+    getNextStyleName (i) {
+      const { move, leftMove } = this.state
+      if (!move) return `_${i}`
+      return `animate _${leftMove ? i + 1 : i - 1}`
+    }
+
+    mouseenter = e => {
+      this.stop()
+      this.setState({showMask: true})
+    }
+
+    mouseleave = e => {
+      this.start()
+      this.setState({showMask: false})
+    }
+
+    maskLayer (i) {
+      const need = !this.state.move
+        ? i !== 0
+        : this.state.leftMove 
+          ? i !== this.props.bannerData.length - 1
+          : i !== 1
+      return need ? 'mask-layer' : ''
+    }
+
+    stop = () => {
+      if (this.timeout) {
+        clearInterval(this.timeout)
+        this.timeout = null
+      }
+    }
+
+    start = () => {
+      this.stop()
+      this.setState({leftMove: true})
+      this.nextImage()
+    }
+
+    preImage = () => {
+      const index = this.state.active + 1
+      this.setState({leftMove: false})
+      this.appoint(
+        index > this.props.bannerData.length - 1
+          ? 0
+          : index
+      )
+    }
+
+    nextImage = () =>  {
+      const index = this.state.active - 1
+      this.setState({leftMove: true})
+      this.appoint(
+        index < 0
+          ? this.props.bannerData.length - 1
+          : index
+      )
+    }
+
+    appoint (index) {
+      const bannerData = this.props.bannerData
+      if (index >= 0 && index < bannerData.length) {
+        const data = bannerData.slice()
+        let realIndex, item
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].index === index) {
+            item = data[i]
+            realIndex = i
+            break
+          }
+        }
+
+        const beforeData = data.splice(0, realIndex)
+        data.push.apply(data, beforeData)
+
+        this.stop()
+        this.updateData(data, item)
+      }
+    }
+
+    updateData (newData, item){
+      this.setState({ move: true })
+      this.timeout = setTimeout(() => {
+        this.props.bannerData = newData
+        this.setState({
+          move: false,
+          active: item ? item.index : 0,
+        })
+        // 延时
+        this.timeout = setTimeout(() => this.nextImage(), this.props.timeout || 4000)
+      }, 330) 
+    }
+
+    created = this.start
+    destroy = this.stop
+    didReceiveProps = this.start
   }
 </script>

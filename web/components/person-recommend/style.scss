@@ -2,6 +2,103 @@
 
 .container {
   color: #333;
-  background: #ddd;
+  // background: #ddd;
 }
 
+.banner {
+  width: 100%;
+  height: 250px;
+}
+
+// song list
+.song-list {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.title {
+  width: 100%;
+  color: #555;
+  margin: 10px 0 30px 0;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-content: center;
+  cursor: pointer;
+  & i {
+    @include img(18, 'right2');
+    margin: 0 5px;
+  }
+}
+
+.title:hover {
+  color: #333;
+}
+
+.content {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.list {
+  $size: 135px;
+  width: 100%;
+  overflow: hidden;
+  & li {
+    width: $size;
+    float: left;
+    margin: 0 calc((100% - #{$size * 5}) / 10);
+    cursor: pointer;
+  }
+  & .image {
+    width: 100%;
+    height: $size;
+    position: relative;
+    border-radius: 10px;
+    background-size: cover;
+  }
+
+  & .play-count {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
+    text-align: right;
+    padding: 10px 10px 0 0;
+    color: #fff;
+    font-size: 12px;
+    & i {
+      @include img(12, 'play-icon');
+      margin-right: 5px;
+    }
+  }
+
+  & .play-btn {
+    $iconSize: 13;
+    display: none;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    padding-left: $iconSize / 4 + px;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    & i {
+      @include img($iconSize, 'play-red');
+    }
+  }
+
+  & li:hover .play-btn {
+    display: flex;
+  }
+
+  & .name {
+    line-height: 20px;
+    margin: 10px 0 20px 0;
+    font-size: 13px;
+    color: #333;
+  }
+}

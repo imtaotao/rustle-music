@@ -7,7 +7,7 @@
         v-for='item of types'>{{ item.name }}</span>
     </div>
     <div styleName='content-box'>
-      <PersonRecommend v-show='active.val === "recommend"'/>
+      <PersonRecommend styleName='content' v-show='active.val === "recommend"'/>
     </div>
   </div>
 </template>

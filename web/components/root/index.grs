@@ -1,7 +1,7 @@
 <template>
   <div styleName='container'>
-    <MainContent styleName='main-content' />
-    <Sidebar styleName='slide-bar' />
+    <MainContent styleName='main-content'/>
+    <Sidebar styleName='slide-bar'/>
     <div styleName='player'>
     </div>
   </div>
