@@ -48,8 +48,40 @@ $contentHeight: 25px;
   color: #656565;
 }
 
-.set-btn {
+.btn {
   @include btn;
   border-radius: 50%;
-  background: #000;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn:not(.none):hover {
+  background: #efefef;
+}
+
+.left {
+  margin-right: 20px;
+}
+
+.left i {
+  @include img(16, 'left-move');
+  cursor: pointer;
+}
+.left.none i {
+  background-image: url('../../assets/left-move-none.svg') !important;
+}
+
+.right i {
+  @include img(16, 'right-move');
+  cursor: pointer;
+}
+.right.none i {
+  background-image: url('../../assets/right-move-none.svg') !important;
+}
+
+.set i {
+  @include img(18, 'set');
+  cursor: pointer;
 }

@@ -1,12 +1,44 @@
 <template>
-  <div>
-    privateContent
+  <div styleName='priveate-content'>
+    <div styleName='title'>独家放送<i></i></div>
+    <div styleName='content'>
+      <ul>
+        <li v-for='item of data' @click='this.viewDetail.bind(this, item)'>
+          <div styleName='bg-image' :style='{backgroundImage: "url("+ item.picUrl +")"}'></div>
+          <div styleName='name'>{{ item.name }}</div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+  import userManager from 'web/manager/user'
+
   @Grass.CSSModules(style)
   export default class privateContent extends Grass.Component {
     // #temp
+    willReceiveProps = () => false
+
+    beforeCreate () {
+      this.state = {
+        data: [],
+      }
+      this.getPriveteData() 
+      userManager.on('login', this.getPriveteData)
+      userManager.on('logout', this.getPriveteData)
+    }
+
+    getPriveteData = () => {
+      window.node.request('/personalized/privatecontent').then(({body}) => {
+        const data = body.result || []
+        if (data.length > 4) data.length = 4
+        this.setState({data})
+      }, this.props.efn)
+    }
+
+    viewDetail (item) {
+      console.log(item);
+    }
   }
 </script>

@@ -39,3 +39,17 @@ $headHeight: 55px;
     padding-right: 30px;
   }
 }
+
+.loading {
+  position: fixed;
+  width: 65%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+  & i {
+    @include img(40, 'loading');
+  }
+}

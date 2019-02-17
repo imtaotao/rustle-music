@@ -1,5 +1,6 @@
 <template>
   <div styleName='container'>
+    <div styleName='loading' v-show='showLoading'><i></i></div>
     <div styleName='head'>
       <span
         :styleName='item.val === active.val && "active"'
@@ -7,7 +8,10 @@
         v-for='item of types'>{{ item.name }}</span>
     </div>
     <div styleName='content-box'>
-      <PersonRecommend styleName='content' v-show='active.val === "recommend"'/>
+      <PersonRecommend
+        styleName='content'
+        v-show='active.val === "recommend"'
+        :showLoading='this.showLoading'/>
     </div>
   </div>
 </template>
@@ -32,8 +36,13 @@
 
       this.state = {
         types,
+        showLoading: false,
         active: types[0],
       }
+    }
+
+    showLoading = val => {
+      this.setState({showLoading: val})
     }
 
     toggleTabTag (item) {

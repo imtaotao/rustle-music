@@ -7,7 +7,7 @@
           <div styleName='image'>
           </div>
         </li>
-        <li v-for='(val, i) of data'>
+        <li v-for='val of data' @click='this.viewDetailSongList.bind(this, val)'>
           <div styleName='image' :style='{backgroundImage: "url("+ val.picUrl +"）"}'>
             <div styleName='play-count'><i></i>{{ this.getPlayCount(val) }}</div>
             <span styleName='play-btn'><i></i></span>
@@ -20,7 +20,10 @@
 </template>
 
 <script>
+  import Router from 'web/manager/router'
   import userManager from 'web/manager/user'
+
+  let currentId = ''
 
   @Grass.CSSModules(style)
   export default class SongList extends Grass.Component {
@@ -30,9 +33,11 @@
         data: [],
         stashData: [],
       }
-      userManager.logged
-        ? this.getRecommendData()
-        : this.getPersonalizedData()
+
+      // userManager.logged
+      //   ? this.getRecommendData()
+      //   : this.getPersonalizedData()
+      this.getPersonalizedData()
       userManager.on('login', this.getRecommendData)
       userManager.on('logout', this.getPersonalizedData)
     }
@@ -69,6 +74,16 @@
           data,
           stashData: data,
         })
+      }, this.props.efn)
+    }
+
+    viewDetailSongList ({id}) {
+      currentId = id
+      this.props.showLoading(true)
+      window.node.request(`/playlist/detail?id=${id}`).then(({body}) => {
+        if (id !== currentId) return
+        this.props.showLoading(false)
+        Router.to('SongList', body.playlist)
       }, this.props.efn)
     }
   }

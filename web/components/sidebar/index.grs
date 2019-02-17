@@ -24,6 +24,7 @@
 </template>
 
 <script>
+  import Router from 'web/manager/router'
   import Login from 'web/components/login'
   import DefaultList from './default-list'
   import SongManager from 'web/manager/song'
@@ -56,9 +57,9 @@
         this.state = defaultData
         this.forceUpdate()
         this.active = 'discover'
-        this.next({id: 'discover', special: true})
+        Router.to('DiscoverMusic')
       })
-      this.next({id: 'discover', special: true})
+      Router.to('DiscoverMusic')
     }
 
     getUrl (item) {
@@ -106,8 +107,18 @@
       item.isMyLikeList = item.name && item.name.includes(UserManager.nickname)
       item.description = item.description && item.description.replace(/↵/g, '\n')
       this.forceUpdate()
-      // 传递当前选中的歌单数据
-      this.next(item)
+
+      // 路由页面
+      if (item.special) {
+        switch (item.id) {
+          case 'discover' :
+            Router.to('DiscoverMusic')
+            break
+        }
+      } else {
+        // 传递当前选中的歌单数据
+        Router.to('SongList', item)
+      }
     }
   }
 </script>

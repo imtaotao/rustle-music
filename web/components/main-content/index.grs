@@ -4,18 +4,19 @@
       <div styleName='placeholder' slot='placeholder'></div>
     </Head>
     <SongList styleName='content' v-if='showSongList' :id='songListId' :playlist='playlist'/>
-    <SearchResult ref='c' styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
+    <SearchResult styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
     <DiscoverMusic styleName='content' v-show='showDiscoverMusic'/>
   </div>
 </template>
 
 <script>
   import Head from 'web/components/head'
+  import Router from 'web/manager/router'
   import Sidebar from 'web/components/sidebar'
   import SongList from 'web/components/song-list'
   import SearchResult from 'web/components/search-result'
   import DiscoverMusic from 'web/components/discover-music'
-
+  window.r = Router
   @Grass.CSSModules(style)
   export default class MainContent extends Grass.Component {
     // #temp
@@ -24,43 +25,48 @@
     searchValue = ''
 
     beforeCreate () {
-      this.state = {
+      const routerCtrs = {
         showSongList: false,
         showSearchResult: false,
         showDiscoverMusic: false,
+      }
+
+      this.state = {
+        ...routerCtrs,
         songListId: null,
         playlist: {},
       }
 
-      // 切换歌单选项
-      Sidebar.on(item => {
-        switch (item.id) {
-          case 'discover' :
-            this.showSpecifiedPage('showDiscoverMusic')
-            break
-          default :
-            this.showSpecifiedPage('hide')
-            this.setState({
-              playlist: item,
-              songListId: item.id,
-              showSongList: !item.special,
-            })
-            break
-        }
-      })
+      // 注册路由
+      this.registerRouter()
+    }
 
-      // 显示搜索结果
-      Head.on(({type, val}) => {
-        if (type ===  'toSearch') {
-          this.showSpecifiedPage('showSearchResult')
+    registerRouter () {
+      // 搜索页面
+      Router.register('Search', val => {
+         this.showSpecifiedPage('showSearchResult')
           // 清空歌单数据，避免内存浪费
           this.setState({
             playlist: {},
             songListId: null,
           })
           this.searchValue = val
-        }
       })
+
+      // 发现页面
+      Router.register('DiscoverMusic', () => {
+        this.showSpecifiedPage('showDiscoverMusic')
+      })
+
+      // 歌单详情页面
+      Router.register('SongList', item => {
+        this.showSpecifiedPage('hide')
+        this.setState({
+          playlist: item,
+          songListId: item.id,
+          showSongList: true,
+        })
+      }, true)
     }
 
     // main content 区域显示指定页面，其余的页面都隐藏

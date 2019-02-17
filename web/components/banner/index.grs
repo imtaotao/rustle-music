@@ -12,8 +12,8 @@
     </div>
     <div
       :styleName='"item " + this.getNextStyleName(i)'
-      :index='item.index'
-      v-for='(item, i) of this.props.bannerData'>
+      v-for='(item, i) of this.props.bannerData'
+      @click='this.viewBannerDetailData.bind(this, item)'>
         <p :style='{backgroundImage: "url("+ item.imageUrl +")"}'>
           <span :styleName='item.titleColor'>{{ item.typeTitle }}</span>
         </p>
@@ -135,6 +135,10 @@
         // 延时
         this.timeout = setTimeout(() => this.nextImage(), this.props.timeout || 4000)
       }, 330) 
+    }
+
+    viewBannerDetailData (item) {
+      console.log(item);
     }
 
     created = this.start

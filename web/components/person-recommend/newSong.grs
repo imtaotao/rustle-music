@@ -1,12 +1,46 @@
 <template>
-  <div>
-    newSong
+  <div styleName='new-song'>
+    <div styleName='title'>最新音乐<i></i></div>
+    <div styleName='content'>
+      <ul styleName='song-list'>
+        <li v-for='(val, i) of data'>
+          <div styleName='pic' :style='{backgroundImage: "url("+ val.song.album.picUrl +")"}'></div>
+          <span styleName='number'>{{ this.getIndex(i) }}</span>
+          <div styleName='description'>
+            <div styleName='name'>{{ val.name }}</div>
+            <div styleName='auth'>{{ val.song.artists[0].name }}</div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+  import userManager from 'web/manager/user'
+
   @Grass.CSSModules(style)
   export default class newSong extends Grass.Component {
     // #temp
+    willReceiveProps = () => false
+
+    getIndex = i => i < 9 ? '0' + (i + 1) : i + 1
+
+    beforeCreate () {
+      this.state = {
+        data: [],
+      }
+      this.getNewSongData()
+      userManager.on('login', this.getNewSongData)
+      userManager.on('logout', this.getNewSongData)
+    }
+
+    getNewSongData = () => {
+      window.node.request('/personalized/newsong').then(({body}) => {
+        const data = body.result || []
+        this.setState({data})
+        console.log(data);
+      }, this.props.efn)
+    }
   }
 </script>

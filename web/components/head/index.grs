@@ -1,6 +1,8 @@
 <template>
   <div styleName='container' className='drag' @click.self='this.hideSuggestBox'>
     <slot></slot>
+    <div :styleName='"btn left " + (this.Router.canBack() ? "" : "none")' @click='this.preRouter'><i></i></div>
+    <div :styleName='"btn right " + (this.Router.canForward() ? "" : "none")' @click='this.nextRouter'><i></i></div>
     <div styleName='search-box'>
       <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
       <input
@@ -12,12 +14,13 @@
         @focus='() => this.setState({showSuggest: true})'/>
       <i styleName='remove-icon' v-show='searchValue' @click='this.removeInputValue'></i>
     </div>
-    <div styleName='set-btn' @click='this.hideSuggestBox'></div>
+    <div styleName='btn set' @click='this.setConfig'><i></i></div>
     <SearchSuggest v-if='showSuggest' :hide='this.hideSuggestBox' :searchValue='searchValue' :receiveRecommendValue='this.receiveRecommendValue'/>
   </div>
 </template>
 
 <script>
+  import Router from 'web/manager/router'
   import { enter, notice } from 'web/utils'
   import SearchSuggest from 'web/components/search-suggest'
 
@@ -30,6 +33,7 @@
     // #temp
     component = { SearchSuggest }
     debounced = false
+    Router = Router
 
     pressEnter = e => enter(e, this.receiveRecommendValue.bind(null, e.target.value.trim()))
 
@@ -79,10 +83,24 @@
     toSearchPage (val) {
       if (val) {
         Promise.resolve().then(() => {
-          this.next({type: 'toSearch', val})
+          Router.to('Search', val)
           stashSuggestValue = val
         })
       }
+    }
+
+    nextRouter = () => {
+      this.hideSuggestBox()
+      Router.forward()
+    }
+
+    preRouter = () => {
+      this.hideSuggestBox()
+      Router.back()
+    }
+
+    setConfig = () => {
+      this.hideSuggestBox()
     }
   }
 </script>
