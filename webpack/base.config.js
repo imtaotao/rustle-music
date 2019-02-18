@@ -22,7 +22,7 @@ const grs = {
       loader: 'grass-loader',
       options: {
         needGrass: true,
-        lib: '@rustle/grass1',
+        lib: '@rustle/grass',
       },
     }
   ],
