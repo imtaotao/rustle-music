@@ -35,7 +35,7 @@
 
     getBannerData () {
       window.node.request('/banner').then(({body}) => {
-        const bannerData = body.banners
+        let bannerData = body.banners
         if (bannerData.length > 8) {
           bannerData.length = 8
         }

@@ -53,6 +53,7 @@
   & .image {
     width: 100%;
     height: $size;
+    border: border(#eee);
     position: relative;
     border-radius: 10px;
     background-size: cover;
@@ -106,7 +107,7 @@
 // 独家放送
 .priveate-content {
   & ul {
-    $size: 170px;
+    $size: 175px;
     display: flex;
     justify-content: space-around;
     & li {
@@ -116,6 +117,7 @@
       width: $size;
       height: 100px;
       border-radius: 10px;
+      border: border(#eee);
       background-size: cover;
     }
     & .name {
@@ -134,7 +136,7 @@
     position: relative;
   }
   & .content::before {
-    @include v-halfPX(#ddd);
+    @include v-halfPX(#ddd, 0.3);
     position: absolute;
     top: 0;
   }
@@ -146,7 +148,7 @@
       position: relative;
       float: left;
       margin-right: 5%;
-      padding: 10px 0;
+      padding: 10px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -187,9 +189,105 @@
       background: #f2f2f2;
     }
     & li::before {
-      @include v-halfPX(#ddd);
+      @include v-halfPX(#ddd, 0.3);
+      width: 95%;
       position: absolute;
       bottom: 0;
     }
+  }
+}
+
+// mv
+.mv-content {
+  & ul {
+    $size: 175px;
+    display: flex;
+    justify-content: space-around;
+    & li {
+      cursor: pointer;
+    }
+    & .bg-image {
+      width: $size;
+      height: 100px;
+      border-radius: 10px;
+      border: border(#eee);
+      background-size: cover;
+    }
+    & .name {
+      font-size: 13px;
+      margin: 8px 0;
+    }
+    & .auth {
+      font-size: 12px;
+      margin: 8px 0;
+      color: #929292;
+      font-family: 方正兰亭超细黑简体;
+    }
+    & .auth span:hover {
+      color: #727272;
+    }
+  }
+}
+
+// 电台
+.dj-container {
+  margin-bottom: 100px;
+  & .content {
+    position: relative;
+  }
+  & .content::before {
+    @include v-halfPX(#ddd, 0.3);
+    position: absolute;
+    top: 0;
+  }
+  & ul {
+    overflow: hidden;
+  }
+  & li {
+    width: 40%;
+    margin-right: 10%;
+    height: 115px;
+    border-radius: 5px;
+    position: relative;
+    padding: 0 10px;
+    display: flex;
+    float: left;
+    align-items: center;
+    cursor: pointer;
+  }
+  & li:hover {
+    background: #f2f2f2;
+  }
+  & li::before {
+    @include v-halfPX(#ddd, 0.3);
+    width: 95%;
+    position: absolute;
+    bottom: 0;
+  }
+  .img {
+    $size: 90px;
+    width: $size;
+    height: $size;
+    margin-right: 20px;
+    border-radius: 5px;
+    background-size: cover;
+  }
+  .desc {
+    width: 60%;
+  }
+  .name {
+    @include hideText;
+    width: 100%;
+    color: #333;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  .auth {
+    width: 100%;
+    @include hideText;
+    color: #929292;
+    font-size: 13px;
+    margin-top: 10px;
+    font-family: 方正兰亭超细黑简体;
   }
 }

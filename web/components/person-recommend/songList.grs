@@ -29,8 +29,13 @@
   export default class SongList extends Grass.Component {
     // #temp
     beforeCreate () {
+      const item = {
+        picUrl: '',
+        playCount: 0,
+        name: '-',
+      }
       this.state = {
-        data: [],
+        data: (new Array(9)).fill(item),
         stashData: [],
       }
 

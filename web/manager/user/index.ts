@@ -74,13 +74,13 @@ class UserManager extends Event {
   }
 
   private init () {
-    const id = localStorage.getItem('id')
-    if (id) {
-      this.id = +id
-      this.logged = true
-      this.nickname = '和声_伴奏'
-      return
-    }
+    // const id = localStorage.getItem('id')
+    // if (id) {
+    //   this.id = +id
+    //   this.logged = true
+    //   this.nickname = '和声_伴奏'
+    //   return
+    // }
     const data = localStorage.getItem('userAccount')
     if (!data) return
     const { type, account, password, preTime } = JSON.parse(data)
@@ -142,10 +142,6 @@ class UserManager extends Event {
     })
   }
 
-  public getDJList () {
-
-  }
-
   public getSongList () {
     return this.check(() => {
       return window.node.request(`/user/playlist?uid=${this.id}`)
@@ -160,7 +156,10 @@ class UserManager extends Event {
         })
         return { subscribe, create }
       })
-      .catch(() => notice('获取歌单失败'))
+      .catch(err => {
+        notice((err && err.body.msg) || '获取歌单失败')
+        throw Error('error')
+      })
     })
   }
 

@@ -22,7 +22,11 @@
 
     beforeCreate () {
       this.state = {
-        data: [],
+        data: [
+          {name: '-', picUrl: ''},
+          {name: '-', picUrl: ''},
+          {name: '-', picUrl: ''},
+        ],
       }
       this.getPriveteData() 
       userManager.on('login', this.getPriveteData)
@@ -31,7 +35,7 @@
 
     getPriveteData = () => {
       window.node.request('/personalized/privatecontent').then(({body}) => {
-        const data = body.result || []
+        let data = body.result || []
         if (data.length > 4) data.length = 4
         this.setState({data})
       }, this.props.efn)

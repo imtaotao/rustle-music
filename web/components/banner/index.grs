@@ -12,7 +12,7 @@
     </div>
     <div
       :styleName='"item " + this.getNextStyleName(i)'
-      v-for='(item, i) of this.props.bannerData'
+      v-for='(item, i) of this.getData()'
       @click='this.viewBannerDetailData.bind(this, item)'>
         <p :style='{backgroundImage: "url("+ item.imageUrl +")"}'>
           <span :styleName='item.titleColor'>{{ item.typeTitle }}</span>
@@ -28,6 +28,8 @@
     // #temp
     timeout = null
 
+    getData = () => this.props.bannerData.length > 0 ? this.props.bannerData : this.state.defaultData
+
     getReverseIndex = i => this.props.bannerData.length - 1 - i
 
     beforeCreate() {
@@ -36,6 +38,7 @@
         move: false,
         leftMove: true,
         showMask: false,
+        defaultData: (new Array(8).fill({imageUrl: '', typeTitle: '-'})),
       }
     }
 

@@ -8,7 +8,12 @@
           <span styleName='number'>{{ this.getIndex(i) }}</span>
           <div styleName='description'>
             <div styleName='name'>{{ val.name }}</div>
-            <div styleName='auth'>{{ val.song.artists[0].name }}</div>
+            <div styleName='auth'>
+              <span v-for='(val, i) of val.song.artists'>
+                <a v-if='i !== 0'> / </a>
+                {{ val.name }}
+              </span>
+            </div>
           </div>
         </li>
       </ul>
@@ -27,8 +32,15 @@
     getIndex = i => i < 9 ? '0' + (i + 1) : i + 1
 
     beforeCreate () {
+      const item = {
+        name: '-', 
+        song: {
+          album: {picUrl: ''},
+          artists: [{name: '-'}],
+        },
+      }
       this.state = {
-        data: [],
+        data: (new Array(10)).fill(item),
       }
       this.getNewSongData()
       userManager.on('login', this.getNewSongData)
@@ -39,7 +51,6 @@
       window.node.request('/personalized/newsong').then(({body}) => {
         const data = body.result || []
         this.setState({data})
-        console.log(data);
       }, this.props.efn)
     }
   }

@@ -18,7 +18,7 @@ process.once('loaded', function () {
         return request(router, body)
       }
       global.onNetworkError && global.onNetworkError()
-      const res = {body: {msg: 'network error'}}
+      const res = {body: {msg: '网络错误'}}
       return Promise.reject(res)
     },
     openBrowser (url) {

@@ -1,12 +1,57 @@
 <template>
-  <div>
-    MV
+  <div styleName='mv-content'>
+    <div styleName='title'>推荐MV<i></i></div>
+    <div styleName='content'>
+      <ul>
+        <li v-for='item of data' @click='this.viewDetail.bind(this, item)'>
+          <div styleName='bg-image' :style='{backgroundImage: "url("+ item.picUrl +")"}'></div>
+          <div>
+            <div styleName='name'>{{ item.name }}</div>
+            <div styleName='auth'>
+              <span v-for='(val, i) of item.artists'>
+                <a v-if='i !== 0'> / </a>
+                {{ val.name }}
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
+  import userManager from 'web/manager/user'
+
   @Grass.CSSModules(style)
   export default class MV extends Grass.Component {
     // #temp
+    willReceiveProps = () => false
+
+    beforeCreate () {
+      const item = {
+        picUrl: '',
+        name: '-',
+        artists: [{name: '-'}],
+      }
+      this.state = {
+        data: [item, item, item, item],
+      }
+      this.getMVData() 
+      userManager.on('login', this.getMVData)
+      userManager.on('logout', this.getMVData)
+    }
+
+    getMVData = () => {
+      window.node.request('/personalized/mv').then(({body}) => {
+        let data = body.result || []
+        if (data.length > 4) data.length = 4
+        this.setState({data})
+      }, this.props.efn)
+    }
+
+    viewDetail (item) {
+      console.log(item);
+    }
   }
 </script>
