@@ -5,7 +5,7 @@
     </Head>
     <SongList styleName='content' v-if='showSongList' :id='songListId' :playlist='playlist'/>
     <SearchResult styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
-    <DiscoverMusic styleName='content' v-show='showDiscoverMusic'/>
+    <DiscoverMusic styleName='fill-content ' v-show='showDiscoverMusic'/>
   </div>
 </template>
 

@@ -1,6 +1,6 @@
 <template>
   <div styleName='mv-content'>
-    <div styleName='title'>推荐MV<i></i></div>
+    <div styleName='title'>推荐 MV<i></i></div>
     <div styleName='content'>
       <ul>
         <li v-for='item of data' @click='this.viewDetail.bind(this, item)'>

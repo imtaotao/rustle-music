@@ -18,7 +18,7 @@
     "@rustle/hearken": "^0.0.1-alpha.3",
     "apicache": "^1.2.1",
     "cookie": "^0.3.1",
-    "express": "^4.16.3",
+    "input-range": "^1.2.8",
     "opn": "^5.4.0",
     "pac-proxy-agent": "^3.0.0",
     "request": "^2.85.0"

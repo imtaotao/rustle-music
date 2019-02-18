@@ -1,0 +1,72 @@
+<template>
+  <div styleName='container'>
+    <Progress/>
+    <div styleName='blur-bg'></div>
+    <div styleName='content'>
+      <div styleName='left'>
+        <div styleName='song-img'>
+          <div styleName='zoom' className='icon-zoom'></div>
+        </div>
+        <div styleName='desc'>
+          <div styleName='name'>Sky Mirrors（苍穹）</div>
+            <div styleName='auth'>
+              <span v-for='(val, i) of data'>
+                <a v-if='i !== 0'> / </a>
+                {{ val }}
+              </span>
+            </div>
+        </div>
+      </div>
+      <div styleName='center'>
+        <ul>
+          <li styleName='icon' className='icon-like1'></li>
+          <li styleName='icon play-order' className='icon-cycle'>
+            <div>顺序播放</div>
+          </li>
+          <li styleName='time'>21:21</li>
+          <li styleName='icon' className='icon-pre'></li>
+          <li styleName='play' :className='"icon-" + playState' @click='this.togglePlay'></li>
+          <li styleName='icon' className='icon-next'></li>
+          <li styleName='time'>32:12</li>
+          <li styleName='icon big' className='icon-lyrics'></li>
+          <li styleName='icon share' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
+            <div styleName='share-box' v-show='showCopyLink'>
+              <div><i></i>复制链接</div>
+              <span></span>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div styleName='right'>
+        <div styleName='icon' className='icon-list'></div>
+        <div styleName='icon' className='icon-volume'></div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Progress from 'web/components/player-progress'
+
+  @Grass.CSSModules(style)
+  export default class Player extends Grass.Component {
+    // #temp
+    component = { Progress }
+
+    beforeCreate () {
+      this.state = {
+        data: ['Jannik'],
+        showCopyLink: false,
+        playState: 'play',
+      }
+    }
+
+    togglePlay = e => {
+      this.setState({
+        playState: this.state.playState === 'play'
+          ? 'pause'
+          : 'play'
+      })
+    }
+  }
+</script>

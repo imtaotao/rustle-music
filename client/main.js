@@ -21,6 +21,7 @@ function createWindow () {
     webPreferences: {
       // nodeIntegration: false,
       contextIsolation: false,
+      experimentalFeatures: true,
       preload: path.join(__dirname, './preload.js')
     }
   })

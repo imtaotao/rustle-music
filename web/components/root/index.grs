@@ -3,22 +3,26 @@
     <MainContent styleName='main-content'/>
     <Sidebar styleName='slide-bar'/>
     <div styleName='player'>
+      <Player/>
     </div>
   </div>
 </template>
 
 <script>
+  import Player from 'web/components/player'
+  import pluging from 'web/components/pluging'
   import Sidebar from 'web/components/sidebar'
   import MainContent from 'web/components/main-content'
 
   @Grass.CSSModules(style)
   class Root extends Grass.Component {
     // #temp
-    component = { Sidebar, MainContent }
+    component = { Player, Sidebar, MainContent }
 
     beforeCreate () {
     }
   }
 
+  Grass.use(pluging, Grass)
   Root.$mount(document.getElementById('root'))
 </script>

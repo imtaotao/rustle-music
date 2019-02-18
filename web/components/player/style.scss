@@ -1,0 +1,200 @@
+@import 'web/components/common.scss';
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.content {
+  width: 100%;
+  position: absolute;
+  background: rgba(214, 106, 94, 0.85);
+  height: 100%;
+  z-index: 1;
+  padding: 10px 10px;
+  display: flex;
+}
+
+.blur-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  backdrop-filter: blur(10px);
+}
+
+$size: 50px;
+.left {
+  width: 35%;
+  height: $size;
+  padding-right: 8%;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  & .song-img {
+    width: $size;
+    height: 100%;
+    border-radius: 5px;
+    background: rgba(255,255,255,0.5);
+    font-size: $size / 1.5;
+    background-size: cover;
+    overflow: hidden;
+    & .zoom {
+      display: none;
+      width: $size;
+      height: 100%;
+      line-height: $size;
+      text-align: center;
+      backdrop-filter: blur(3px);
+      cursor: pointer;
+    }
+  }
+  & .song-img:hover .zoom {
+    display: block;
+  }
+  & .desc {
+    width: calc(100% - #{$size});
+    padding-left: 20px;
+  }
+  .name {
+    @include hideText;
+    width: 100%;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .auth {
+    $color: rgba(255,255,255,0.6);
+    width: 100%;
+    @include hideText;
+    font-size: 11px;
+    color: $color;
+    line-height: 18px;
+    font-weight: bold;
+    font-family: 方正兰亭超细黑简体;
+    & a {
+      color: $color;
+    }
+  }
+}
+
+$iconSize: 14px;
+.center {
+  display: flex;
+  height: $size;
+  width: 50%;
+  justify-content: center;
+  align-items: center;
+  & ul {
+    display: flex;
+    align-items: center;
+    color: #fff;
+  }
+  & li {
+    margin: 0 15px;
+    cursor: pointer;
+  }
+  & .icon {
+    width: $iconSize;
+    height: $iconSize;
+  }
+  & .time {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  & .play {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+  & .big {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+}
+
+.right {
+  display: flex;
+  height: $size;
+  width: 25%;
+  align-items: center;
+  justify-content: flex-end;
+  color: #fff;
+  & .icon {
+    width: $iconSize;
+    height: $iconSize;
+    margin: 0 15px;
+    cursor: pointer;
+  }
+}
+
+.play-order {
+  position: relative;
+  & div {
+    display: none;
+    position: absolute;
+    width: 60px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 5px;
+    background: #fff;
+    top: -25px;
+    left: -25px;
+    color: #333;
+    font-size: 11px;
+  }
+}
+.play-order:hover div {
+  display: block;
+}
+
+.share {
+  position: relative;
+  & .share-box {
+    position: absolute;
+    height: 70px;
+    width: 330px;
+    background: #fff;
+    border-radius: 5px;
+    text-align: center;
+    top: -85px;
+    left: -165px;
+    padding: 10px 0;
+    box-shadow: 0 2px 15px 0 rgba(0,0,0,0.5);
+    & div {
+      height: 100%;
+      width: 100%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      color: #333;
+      font-size: 15px;
+      padding: 0 15px;
+      & i {
+        @include img(35, 'link');
+        margin-right: 10px;
+      }
+    }
+    & div::before {
+      @include v-halfPX(#ddd, 0.3);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 80%;
+      margin-left: 10%;
+    }
+    & div:hover {
+      background: #f0f0f2;
+    }
+    & span {
+      $w: 8;
+      position: absolute;
+      bottom: $w * -2 + px;
+      border: border(transparent, $w);
+      border-top-color: #fff;
+    }
+  }
+}

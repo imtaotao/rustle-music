@@ -1,0 +1,36 @@
+<template>
+  <div styleName='progress'>
+    <div styleName='noloading-progress'></div>
+    <div styleName='loading-progress' :style='{width: "100%"}'></div>
+    <div styleName='playing-progress' :style='{width: "50%"}' @change='this.progressChange'>
+      <i styleName='dot' v-progress='options'></i>
+    </div>
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class Player extends Grass.Component {
+    // #temp
+    Slider = null
+
+    beforeCreate () {
+      const comp = this
+      this.state = {
+        options: {
+          component: comp,
+          direction: 'x',
+          click_el_index: 1,
+          expand_touch_area: {
+            width: 40,
+            height: 40,
+          },
+        }
+      }
+    }
+
+    progressChange = e => {
+      console.log(e.value);
+    }
+  }
+</script>

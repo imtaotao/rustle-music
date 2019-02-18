@@ -41,12 +41,21 @@ const img = {
 
 // media source
 const media = {
-  test: /\.(mp4|webm|ogg|mp3|wav|flac|aac|ttf)(\?.*)?$/,
+  test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
   loader: 'url-loader',
   options: {
     limit: 10000,
     name: assetsPath('media/[name].[hash:7].[ext]'),
   },
+}
+
+const font = {
+  test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+  loader: 'url-loader',
+  options: {
+    limit: 10000,
+    name: assetsPath('fonts/[name].[hash:7].[ext]')
+  }
 }
 
 module.exports = isDev => ({
@@ -62,7 +71,7 @@ module.exports = isDev => ({
     alias: {'web': resolve('web')},
   },
   module: {
-    rules: [js, ts, grs, img, media],
+    rules: [js, ts, grs, img, media, font],
   },
   optimization: {
     noEmitOnErrors: true,

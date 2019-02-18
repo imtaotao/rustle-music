@@ -3094,6 +3094,10 @@ ini@^1.3.4, ini@~1.3.0:
   version "1.3.5"
   resolved "http://registry.npm.taobao.org/ini/download/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
 
+input-range@^1.2.8:
+  version "1.2.8"
+  resolved "http://registry.npm.taobao.org/input-range/download/input-range-1.2.8.tgz#35f299146d4e10c2f0188134b42be10dc12be466"
+
 internal-ip@^3.0.1:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/internal-ip/download/internal-ip-3.0.1.tgz#df5c99876e1d2eb2ea2d74f520e3f669a00ece27"
