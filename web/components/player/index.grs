@@ -4,10 +4,10 @@
     <div styleName='blur-bg'></div>
     <div styleName='content'>
       <div styleName='left'>
-        <div styleName='song-img'>
+        <div styleName='song-img' v-show='showDesc'>
           <div styleName='zoom' className='icon-zoom'></div>
         </div>
-        <div styleName='desc'>
+        <div styleName='desc' v-show='showDesc'>
           <div styleName='name'>Sky Mirrors（苍穹）</div>
             <div styleName='auth'>
               <span v-for='(val, i) of data'>
@@ -42,22 +42,31 @@
         <div styleName='icon' className='icon-volume'></div>
       </div>
     </div>
+    <div styleName='play-list'>
+      <PlayList/>
+    </div>
   </div>
 </template>
 
 <script>
+  import RuntimeManager from 'web/manager/runtime'
+  import PlayList from 'web/components/play-list'
   import Progress from 'web/components/player-progress'
-
+  
   @Grass.CSSModules(style)
   export default class Player extends Grass.Component {
     // #temp
-    component = { Progress }
+    component = { Progress, PlayList }
 
     beforeCreate () {
       this.state = {
-        data: ['Jannik'],
+        data: ['-'],
+        showDesc: RuntimeManager.playList.length > 0,
+        item: RuntimeManager.current,
         showCopyLink: false,
-        playState: 'play',
+        playState: RuntimeManager.Hearken.playing()
+          ? 'pause'
+          : 'play',
       }
     }
 

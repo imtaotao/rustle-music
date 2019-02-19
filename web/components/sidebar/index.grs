@@ -14,7 +14,7 @@
             v-for='item of val'
             :styleName='this.active === item.id ? "active" : ""'
             @click='this.viewDetailContent.bind(null, item, key === "收藏的歌单")'>
-            <i :style='{backgroundImage: "url("+ this.getUrl(item) + ")"}'></i>
+            <i :className='this.getIcon(item)'></i>
             <span>{{ this.getListName(item.name) }}</span>
           </li>
         </ul>
@@ -43,7 +43,7 @@
     beforeCreate () {
       let defaultData = {
         '我的音乐': [
-          { name: '下载管理', id: 'download', special: true, url: require('web/assets/down.svg') },
+          { name: '下载管理', id: 'download', special: true, icon: 'icon-down' },
         ],
       }
 
@@ -62,12 +62,11 @@
       Router.to('DiscoverMusic')
     }
 
-    getUrl (item) {
-      if (item.url) return item.url
-      const iconName = item.name.includes(UserManager.nickname)
-        ? 'my-like'
-        : 'song-list'
-      return require(`web/assets/${iconName}.svg`)
+    getIcon (item) {
+      if (item.icon) return item.icon
+      return item.name.includes(UserManager.nickname)
+        ? 'icon-like1'
+        : 'icon-playlists'
     }
 
     getListName (name) {
@@ -78,8 +77,8 @@
       // 获取当前用户的所有歌单
       UserManager.getSongList().then(({subscribe, create}) => {
         const myMusic = this.state['我的音乐'].concat([
-          { name: '我的电台', id: 'radio', special: true, url: require('web/assets/radio.svg') },
-          { name: '我的收藏', id: 'collection', special: true, url: require('web/assets/my-collection.svg') },
+          { name: '我的电台', id: 'radio', special: true, icon: 'icon-radio' },
+          { name: '我的收藏', id: 'collection', special: true, icon: 'icon-star' },
         ])
 
         this.cacheMyCollectList(create)

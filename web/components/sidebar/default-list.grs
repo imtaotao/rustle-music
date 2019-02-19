@@ -5,7 +5,7 @@
         v-for='(item, i) of list'
         :styleName='this.props.active === item.id ? "active" : ""'
         @click='this.props.viewDetailContent.bind(null, item, false)'>
-        <i :style='{backgroundImage: "url("+ item.url +")"}'></i>
+        <i :className='item.icon'></i>
         <span>{{ item.key }}</span>
       </li>
     </ul>
@@ -23,13 +23,13 @@
             id: 'discover',
             key: '发现音乐',
             special: true,
-            url: require('web/assets/music.svg'),
+            icon: 'icon-music',
           },
           {
             id: 'fm',
             key:'私人FM',
             special: true,
-            url: require('web/assets/fm.svg'),
+            icon: 'icon-fm',
           },
         ]
       }

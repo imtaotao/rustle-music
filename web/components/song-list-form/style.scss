@@ -64,21 +64,3 @@ $singeHeight: 35px;
 .duration {
   width: 10%;
 }
-
-@mixin iconStyle ($src) {
-  @include img(14, $src);
-  position: relative;
-  top: 3px;
-}
-
-.like-img {
-  @include iconStyle('my-like');
-}
-
-.like-collect-img {
-  @include iconStyle('active/like');
-}
-
-.down-img {
-  @include iconStyle('down');
-}

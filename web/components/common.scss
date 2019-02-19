@@ -43,6 +43,12 @@ $theme: #c4463a;
   white-space: nowrap;
 }
 
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @function border ($color:#ddd, $size:1) {
   @return $size + px solid $color;
 }

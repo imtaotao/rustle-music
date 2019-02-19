@@ -1,0 +1,69 @@
+@import 'web/components/common.scss';
+
+.container {
+  $top: 56px;
+  width: 41.5%;
+  height: calc(100% - #{$top});
+  position: absolute;
+  top: $top;
+  right: 0;
+  background: #fff;
+  border-top-left-radius: 5px;
+  box-shadow: 5px 8px 15px 0 rgba(0, 0, 0, 0.5);
+}
+
+$titleHeight: 100px;
+.title {
+  width: 100%;
+  height: $titleHeight;
+  position: relative;
+  padding: 20px;
+}
+
+.title::before {
+  @include v-halfPX(#ddd, 0.3);
+  width: calc(100% - 40px);
+  position: absolute;
+  bottom: 0;
+}
+
+.btn {
+  width: 210px;
+  border: border(#ddd);
+  border-radius: 25px;
+  display: flex;
+  margin: 0 auto;
+  & div {
+    @include center;
+    padding: 8px 0;
+    width: 50%;
+    border-radius: 25px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  & div:not(.active):hover {
+    background: #eff0f2;
+    color: #686868;
+  }
+  & div.active {
+    background: #bbb;
+    color: #fff;
+  }
+}
+
+.info-desc {
+  width: 100%;
+  & .count {
+    font-size: 13px;
+    color: #999;
+  }
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - #{$titleHeight});
+}
+
+.history-list, .play-list {
+  color: #333;
+}

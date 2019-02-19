@@ -10,8 +10,8 @@
       <li v-for='(val, i) of this.props.tracks'>
         <span styleName='title'>
           <a>{{ i > 8 ? i + 1 : '0' + (i + 1) }}</a>
-          <a :styleName='this.isCollectMusic(val.id) ? "like-collect-img" : "like-img"'></a>
-          <a styleName='down-img'></a>
+          <a :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'></a>
+          <a className='icon-down'></a>
           <a styleName='song-name'>{{ val.name }}</a>
         </span>
         <span styleName='singer'>

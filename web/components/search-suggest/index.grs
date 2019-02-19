@@ -11,7 +11,7 @@
         <div styleName='loading' v-show='suggestOrder.length === 0'><i></i></div>
         <div styleName='suggest-detail-box' v-show='suggestOrder.length > 0'>
           <div styleName='single-type-box' v-for='item of suggestOrder'>
-            <p styleName='title icon'><i></i>{{ transferNames[item] }}</p>
+            <p styleName='title icon'><i :className='"icon-" + item'></i>{{ transferNames[item] }}</p>
             <ul styleName='list-content'>
               <li v-for='lists of suggestData[item]' @click='this.processSearchResult.bind(this, lists)'>
                 <span>{{ lists.name }}</span>

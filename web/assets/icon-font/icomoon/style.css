@@ -1,0 +1,119 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?yjkgdu');
+  src:  url('fonts/icomoon.eot?yjkgdu#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?yjkgdu') format('truetype'),
+    url('fonts/icomoon.woff?yjkgdu') format('woff'),
+    url('fonts/icomoon.svg?yjkgdu#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-add:before {
+  content: "\e900";
+}
+.icon-albums:before {
+  content: "\e901";
+  color: #7f7f7f;
+}
+.icon-artists:before {
+  content: "\e902";
+}
+.icon-cycle:before {
+  content: "\e903";
+}
+.icon-down:before {
+  content: "\e904";
+}
+.icon-fm:before {
+  content: "\e905";
+}
+.icon-like1:before {
+  content: "\e906";
+}
+.icon-like2:before {
+  content: "\e907";
+  color: #d81e06;
+}
+.icon-list:before {
+  content: "\e908";
+}
+.icon-lyrics-active:before {
+  content: "\e909";
+}
+.icon-lyrics:before {
+  content: "\e90a";
+}
+.icon-music:before {
+  content: "\e90b";
+}
+.icon-mute:before {
+  content: "\e90c";
+}
+.icon-mvs:before {
+  content: "\e90d";
+}
+.icon-next:before {
+  content: "\e90e";
+}
+.icon-pause:before {
+  content: "\e90f";
+  color: #707070;
+}
+.icon-play:before {
+  content: "\e910";
+}
+.icon-playlists:before {
+  content: "\e911";
+}
+.icon-pre:before {
+  content: "\e912";
+}
+.icon-radio:before {
+  content: "\e913";
+}
+.icon-random:before {
+  content: "\e914";
+}
+.icon-share:before {
+  content: "\e915";
+}
+.icon-song-cycle:before {
+  content: "\e916";
+}
+.icon-songs:before {
+  content: "\e917";
+}
+.icon-star-active:before {
+  content: "\e918";
+}
+.icon-star:before {
+  content: "\e919";
+}
+.icon-trashcan:before {
+  content: "\e91a";
+}
+.icon-volume:before {
+  content: "\e91b";
+}
+.icon-zoom-out:before {
+  content: "\e91c";
+}
+.icon-zoom:before {
+  content: "\e91d";
+}

@@ -87,7 +87,8 @@
   align-items: center;
   padding: 0 20px;
   & i {
-    @include img(14, 'music');
+    height: 14px;
+    width: 14px;
     margin-right: 8px;
   }
 }

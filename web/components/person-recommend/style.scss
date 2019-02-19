@@ -43,11 +43,11 @@
 .list {
   $size: 135px;
   width: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
   & li {
     width: $size;
-    float: left;
-    margin: 0 calc((100% - #{$size * 5}) / 10);
+    margin: 0 calc((100% - #{($size + 2) * 5}) / 10);
     cursor: pointer;
   }
   & .image {
@@ -159,6 +159,7 @@
         width: 60px;
         border-radius: 5px;
         background-size: cover;
+        border: border(#eee);
       }
       & .number {
         margin: 0 15px;
@@ -272,6 +273,7 @@
     margin-right: 20px;
     border-radius: 5px;
     background-size: cover;
+    border: border(#eee);
   }
   .desc {
     width: 60%;
