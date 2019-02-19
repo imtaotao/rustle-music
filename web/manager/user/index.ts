@@ -166,7 +166,11 @@ class UserManager extends Event {
   public getSongListDetail (id: number) {
     return this.check(() => {
       return window.node.request(`/playlist/detail?id=${id}`)
-      .catch(() => notice('获取歌单详情失败'))
+      .catch(err => {
+        notice('获取歌单详情失败')
+        console.log(err);
+        throw new Error(err)
+      })
     })
   }
 }

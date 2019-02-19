@@ -22,6 +22,15 @@ export function filterCount (n: number) {
     : n
 }
 
+export function getDuration (time: number) {
+  const s = time / 1000
+  let min = Math.floor(s / 60)
+  let sec = Math.floor(s % 60)
+  min < 10 && ((<any>min) = '0' + min)
+  sec < 10 && ((<any>sec) = '0' + sec)
+  return min + ':' + sec
+}
+
 export function timestampToTime (timestamp: number) {
   const date = new Date(Number(timestamp))
   const year = date.getFullYear()

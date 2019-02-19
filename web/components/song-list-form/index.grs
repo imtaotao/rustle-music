@@ -45,6 +45,7 @@ mmp, 几个接口返回的字段不一样
 */
 
 <script>
+  import { getDuration } from 'web/utils'
   import SongManager from 'web/manager/song'
 
   @Grass.CSSModules(style)
@@ -68,12 +69,7 @@ mmp, 几个接口返回的字段不一样
     }
 
     getDuration (time) {
-      const s = time / 1000
-      let min = Math.floor(s / 60)
-      let sec = Math.floor(s % 60)
-      min < 10 && (min = '0' + min)
-      sec < 10 && (sec = '0' + sec)
-      return min + ':' + sec
+      return getDuration(time)
     }
 
     viewAuthor (item) {

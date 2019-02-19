@@ -17,15 +17,17 @@
         <div styleName='operational'>
           <ul>
             <li styleName='play'>
-              <div styleName='play-all'>
-                <i></i>
+              <div styleName='play-all' @click='this.playAll'>
+                <i className='icon-play'></i>
                 <span>播放全部</span>
               </div>
-              <div styleName='add-all'><i></i></div>
+              <div styleName='add-all'>
+                <i className='icon-add' @click='this.addAll'></i>
+              </div>
             </li>
             <li v-for="(val, i) of tagList" :style='this.getCollectBtnStyle(i)'>
-              <i></i>
-              <span>{{ val }}{{ this.getTagCount(i) }}</span>
+              <i :className='val.icon'></i>
+              <span>{{ val.name }}{{ this.getTagCount(i) }}</span>
             </li>
           </ul>
         </div>
@@ -82,8 +84,9 @@
 <script>
   import Head from 'web/components/head'
   import UserManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'
   import ListForm from 'web/components/song-list-form'
-  import { timestampToTime, filterCount } from 'web/utils'
+  import { notice, timestampToTime, filterCount } from 'web/utils'
 
   @Grass.CSSModules(style)
   export default class SongList extends Grass.Component {
@@ -104,7 +107,11 @@
       shareCount: '---',
       extendsDesc: false,
       tracks: [],
-      tagList: ['收藏', '分享', '下载全部'],
+      tagList: [
+        {name: '收藏', icon: 'icon-star'},
+        {name: '分享', icon: 'icon-share'},
+        {name: '下载全部', icon: 'icon-down'},
+      ],
     }
 
     beforeCreate () {
@@ -164,6 +171,25 @@
           }
         })
       }
+    }
+
+    // 歌单操作
+    playAll = e => {
+      const tracks = this.state.tracks
+      if (tracks.length === 0) {
+        return notice('请等待歌单数据加载完成')
+      }
+      RuntimeManager.replaceAll(tracks) && notice('添加成功', true)
+    }
+
+    addAll = e => {
+      const tracks = this.state.tracks
+      if (tracks.length === 0) {
+        return notice('请等待歌单数据加载完成')
+      }
+      RuntimeManager.pushList(this.props.id, tracks)
+        ? notice('添加成功', true)
+        : notice('请勿重复添加')
     }
   }
 </script>

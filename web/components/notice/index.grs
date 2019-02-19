@@ -1,6 +1,6 @@
 <template>
   <div styleName='container' v-show='msg'>
-    <i styleName='icon' :style='{backgroundImage: "url("+ this.getIconUrl() + ")"}'></i>
+    <i :styleName='"icon " + (isSmiley ? "smiley" : "crying")'></i>
     <span>{{ msg }}</span>
   </div>
 </template>
@@ -12,13 +12,13 @@
     beforeCreate() {
       this.state = {
         msg: '',
-        type: '',
+        isSmiley: false,
       }
     }
 
-    show (msg, type = 'error', time = 2000) {
+    show (msg, isSmiley = false, time = 3000) {
       if (msg) {
-        this.setState({msg, type})
+        this.setState({msg, isSmiley})
         setTimeout(() => {
           if (this.state.msg === msg) {
             this.setState({msg: ''})
@@ -29,12 +29,6 @@
 
     hide () {
       this.setState({msg: ''})
-    }
-
-    getIconUrl () {
-      return this.state.type === 'error'
-          ? require('web/assets/crying-face.svg')
-          : require('web/assets/smiley-face.svg')
     }
   }
   export default Notice.$mount(document.getElementById('root'))

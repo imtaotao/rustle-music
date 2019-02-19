@@ -8,36 +8,73 @@
         <div
           :styleName='showList ? "" : "active"'
           @click='this.toggle'>历史记录</div>
-        <div styleName='info-desc'>
-          <span styleName='count'>总{{ count }}首</span>
-          <div styleName=''><i></i>清空</div>
-        </div>
       </div>
-       <div styleName='content play-list'>
-
+      <div styleName='info-desc'>
+        <span styleName='count'>总{{ count }}首</span>
+        <div styleName='collect'><i className='icon-star'></i>收藏全部</div>
+        <div @click='this.clearAll'><i className='icon-trashcan'></i>清空</div>
       </div>
-      <div styleName='content history-list'>
-      
-      </div>
+    </div>
+    <div styleName='content play-list'>
+      <List :playlist='playlist' :current='current'/>
+    </div>
+    <div styleName='content history-list'>
+    
     </div>
   </div>
 </template>
 
 <script>
+  import List from './list-form'
+  import { notice } from 'web/utils'
   import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class PlayList extends Grass.Component {
     // #temp
+    component = { List }
+
+    willReceiveProps = () => false
+
     beforeCreate () {
       this.state = {
         showList: true,
-        count: 0,
+        current: RuntimeManager.current,
+        playlist: RuntimeManager.playlist,
+        count: RuntimeManager.playlist.length,
       }
+
+      this.monitorRuntimeMagager()
+    }
+
+    monitorRuntimeMagager () {
+      RuntimeManager.on('playlistChanged', this.playlistChanged)
+      RuntimeManager.on('currentChanged', this.currentChanged)
+    }
+
+    destroy () {
+      RuntimeManager.off(this.playlistChanged)
+    }
+
+    playlistChanged = () => {
+      this.setState({
+        playlist: RuntimeManager.playlist,
+        count: RuntimeManager.playlist.length,
+      })
+    }
+
+    currentChanged = () => {
+      this.setState({current: RuntimeManager.current})
     }
 
     toggle = e => {
       this.setState({showList: !this.state.showList})
+    }
+
+    clearAll = e => {
+      RuntimeManager.clear()
+        ? notice('清除成功', true)
+        : notice('清除失败')
     }
   }
 </script>

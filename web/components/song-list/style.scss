@@ -59,7 +59,6 @@ $border: 1px solid #000;
 }
 
 .list-name {
-  @include flex;
   width: 100%;
   height: 30px;
   & span {
@@ -126,12 +125,15 @@ $hoverColor: #0a3b79;
     padding: 0 10px;
     border: border(#bbb9b1);
     & i {
-      @include img(16, 0);
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
       margin-right: 5px;
+      color: #717171;
     }
   }
   & li:not(:first-child):hover {
-    background: rgba(0, 0, 0, 0.05)
+    background: rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -141,7 +143,7 @@ $hoverColor: #0a3b79;
   overflow: hidden;
   padding: 0 !important;
   border: none !important;
-  background: linear-gradient(to right, #ea5e4d, #c4473a);
+  background: linear-gradient(to right, #ea5e4d, #c6483b);
 }
 
 .play-all {
@@ -152,8 +154,7 @@ $hoverColor: #0a3b79;
   position: relative;
   padding-left: 10px;
   & i {
-    @include img(16, 0);
-    margin-right: 5px;
+    color: #fff !important;
   }
 }
 .play-all:after {
@@ -167,9 +168,9 @@ $hoverColor: #0a3b79;
   height: 100%;
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   & i {
-    @include img(16, 0);
+    color: #fff !important;
   }
 }
 

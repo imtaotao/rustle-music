@@ -4,15 +4,18 @@
     <div styleName='blur-bg'></div>
     <div styleName='content'>
       <div styleName='left'>
-        <div styleName='song-img' v-show='showDesc'>
+        <div
+          styleName='song-img'
+          v-show='showDesc'
+          :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'>
           <div styleName='zoom' className='icon-zoom'></div>
         </div>
         <div styleName='desc' v-show='showDesc'>
-          <div styleName='name'>Sky Mirrors（苍穹）</div>
+          <div styleName='name'>{{ current.name }}</div>
             <div styleName='auth'>
-              <span v-for='(val, i) of data'>
+              <span v-for='(val, i) of current.ar || current.artists'>
                 <a v-if='i !== 0'> / </a>
-                {{ val }}
+                {{ val.name }}
               </span>
             </div>
         </div>
@@ -23,10 +26,13 @@
           <li styleName='icon play-order' className='icon-cycle'>
             <div>顺序播放</div>
           </li>
-          <li styleName='time'>21:21</li>
-          <li styleName='icon' className='icon-pre'></li>
-          <li styleName='play' :className='"icon-" + playState' @click='this.togglePlay'></li>
-          <li styleName='icon' className='icon-next'></li>
+          <li styleName='time'>{{ this.getDuration() }}</li>
+          <li styleName='icon' className='icon-pre' @click='this.preSong'></li>
+          <li
+            styleName='play'
+            :className='"icon-" + (playing ? "pause" : "play")'
+            @click='this.togglePlay'></li>
+          <li styleName='icon' className='icon-next' @click='this.nextSong'></li>
           <li styleName='time'>32:12</li>
           <li styleName='icon big' className='icon-lyrics'></li>
           <li styleName='icon share' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
@@ -38,21 +44,24 @@
         </ul>
       </div>
       <div styleName='right'>
-        <div styleName='icon' className='icon-list'></div>
+        <div styleName='icon' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
         <div styleName='icon' className='icon-volume'></div>
       </div>
     </div>
-    <div styleName='play-list'>
+    <div styleName='play-list' v-show='showPlayList' @click.self='this.hidePlayList'>
       <PlayList/>
     </div>
   </div>
 </template>
 
 <script>
+  import { notice, getDuration } from 'web/utils'
   import RuntimeManager from 'web/manager/runtime'
   import PlayList from 'web/components/play-list'
   import Progress from 'web/components/player-progress'
-  
+
+  const Hearken = RuntimeManager.Hearken
+
   @Grass.CSSModules(style)
   export default class Player extends Grass.Component {
     // #temp
@@ -60,22 +69,69 @@
 
     beforeCreate () {
       this.state = {
-        data: ['-'],
-        showDesc: RuntimeManager.playList.length > 0,
-        item: RuntimeManager.current,
+        current: RuntimeManager.current,
+        showDesc: RuntimeManager.started || RuntimeManager.playlist.length > 0,
         showCopyLink: false,
-        playState: RuntimeManager.Hearken.playing()
-          ? 'pause'
-          : 'play',
+        showPlayList: false,
+        playing: RuntimeManager.Hearken.playing(),
       }
+
+      this.monitorRuntimeMagager()
+    }
+
+    monitorRuntimeMagager () {
+      // 播放列表发送变化
+      RuntimeManager.on('playlistChanged', () => {
+        this.setState({
+          current: RuntimeManager.current,
+          showDesc: RuntimeManager.started || RuntimeManager.playlist.length > 0,
+        })
+      })
+
+      // current 发生变化
+      RuntimeManager.on('currentChanged', () => {
+        this.setState({
+          current: RuntimeManager.current,
+        })
+      })
+
+      // 音频 start
+      const fn = () => {
+        this.setState({playing: Hearken.playing()})
+      }
+      Hearken.on('start', fn)
+      Hearken.on('stop', fn)
+      Hearken.on('play', fn)
+      Hearken.on('pause', fn)
+    }
+
+    getDuration () {
+      const time = this.state.current.dt || this.state.current.duration
+      return getDuration(time)
+    }
+
+    hidePlayList = () => {
+      this.setState({showPlayList: false})
     }
 
     togglePlay = e => {
-      this.setState({
-        playState: this.state.playState === 'play'
-          ? 'pause'
-          : 'play'
-      })
+      this.state.playing
+        ? RuntimeManager.Hearken.fadePause(1.5)
+        : RuntimeManager.Hearken.fadePlay(1.5)
+    }
+
+    nextSong = e => {
+      if (RuntimeManager.playlist.length === 0) {
+        return notice('当前播放列表中没有歌曲')
+      }
+      !RuntimeManager.next() && notice('切换失败')
+    }
+
+    preSong = e => {
+      if (RuntimeManager.playlist.length === 0) {
+        return notice('当前播放列表中没有歌曲')
+      }
+      !RuntimeManager.previous() && notice('切换失败')
     }
   }
 </script>

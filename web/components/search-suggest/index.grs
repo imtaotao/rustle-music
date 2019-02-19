@@ -29,6 +29,8 @@
 </template>
 
 <script>
+  import { notice } from 'web/utils'
+
   @Grass.CSSModules(style)
   export default class SearchSuggest extends Grass.Component {
     // #temp

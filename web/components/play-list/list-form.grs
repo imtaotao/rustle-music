@@ -1,0 +1,39 @@
+<template>
+  <ul>
+    <li
+      :styleName='"song-item " + (this.isPlaying(val) ? "active" : "")'
+      v-for='val of this.props.playlist'>
+      <div styleName='name'>
+        <i :className='this.isPlaying(val) ? "icon-playing" : ""'></i>
+        <span>{{ val.name }}</span>
+      </div>
+      <div styleName='auth'>
+        {{ (val.al || val.album).name }}
+      </div>
+      <div styleName='duration'>
+        {{ this.getDuration(val.dt || val.duration) }}
+      </div>
+    </li>
+  </ul>
+</template>
+
+<script>
+  import { getDuration } from 'web/utils'
+
+  @Grass.CSSModules(style)
+  export default class List extends Grass.Component {
+    // #temp
+    willReceiveProps (newProps) {
+      // 如果小改动界面都要 diff 这么大列表，效率有点慢
+      if (newProps.current.id !== this.props.current.id) {
+        return true
+      }
+      return newProps.playlist.length !== this.props.playlist.length 
+    }
+    isPlaying = val => val.id === this.props.current.id
+
+    getDuration (time) {
+      return getDuration(time)
+    }
+  }
+</script>
