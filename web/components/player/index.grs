@@ -4,10 +4,8 @@
     <div styleName='blur-bg'></div>
     <div styleName='content'>
       <div styleName='left'>
-        <div
-          styleName='song-img'
-          v-show='showDesc'
-          :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'>
+        <div styleName='song-img' v-show='showDesc'>
+          <div styleName='img-content' :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'></div>
           <div styleName='zoom' className='icon-zoom'></div>
         </div>
         <div styleName='desc' v-show='showDesc'>
@@ -23,8 +21,8 @@
       <div styleName='center'>
         <ul>
           <li styleName='icon' className='icon-like1'></li>
-          <li styleName='icon play-order' className='icon-cycle'>
-            <div>顺序播放</div>
+          <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode'>
+            <div>{{ playOrderDesc }}</div>
           </li>
           <li styleName='time'>{{ this.getDuration() }}</li>
           <li styleName='icon' className='icon-pre' @click='this.preSong'></li>
@@ -61,6 +59,11 @@
   import Progress from 'web/components/player-progress'
 
   const Hearken = RuntimeManager.Hearken
+  const playOrderDesc = {
+    'cycle': '循环播放',
+    'random': '随机播放',
+    'song-cycle': '单曲循环',
+  }
 
   @Grass.CSSModules(style)
   export default class Player extends Grass.Component {
@@ -69,11 +72,13 @@
 
     beforeCreate () {
       this.state = {
-        current: RuntimeManager.current,
         showDesc: RuntimeManager.started || RuntimeManager.playlist.length > 0,
         showCopyLink: false,
         showPlayList: false,
+        mode: RuntimeManager.mode,
+        current: RuntimeManager.current,
         playing: RuntimeManager.Hearken.playing(),
+        playOrderDesc: playOrderDesc[RuntimeManager.mode],
       }
 
       this.monitorRuntimeMagager()
@@ -95,6 +100,14 @@
         })
       })
 
+      // 播放模式改变
+      RuntimeManager.on('modeChanged', () => {
+        this.setState({
+          mode: RuntimeManager.mode,
+          playOrderDesc: playOrderDesc[RuntimeManager.mode],
+        })
+      })
+
       // 音频 start
       const fn = () => {
         this.setState({playing: Hearken.playing()})
@@ -103,6 +116,21 @@
       Hearken.on('stop', fn)
       Hearken.on('play', fn)
       Hearken.on('pause', fn)
+      Hearken.on('ended', repeat => {
+        switch (RuntimeManager.mode) {
+          case 'cycle' :
+            this.nextSong()
+            break
+          case 'song-cycle' :
+            repeat()
+            break
+          case 'random' :
+            this.randomPlay()
+            break
+          default :
+            this.nextSong()
+        }
+      })
     }
 
     getDuration () {
@@ -114,24 +142,51 @@
       this.setState({showPlayList: false})
     }
 
+    // 暂停 / 播放
     togglePlay = e => {
       this.state.playing
         ? RuntimeManager.Hearken.fadePause(1.5)
         : RuntimeManager.Hearken.fadePlay(1.5)
     }
 
+    // 切换模式
+    setMode = e => {
+      const oldMode = RuntimeManager.mode
+      switch (RuntimeManager.mode) {
+        case 'cycle' :
+          RuntimeManager.setMode('song-cycle')
+          break
+        case 'song-cycle' :
+          RuntimeManager.setMode('random')
+          break
+        case 'random' :
+          RuntimeManager.setMode('cycle')
+          break
+        default :
+          RuntimeManager.setMode('cycle')
+      }
+    }
+
+    // 切换歌曲
     nextSong = e => {
       if (RuntimeManager.playlist.length === 0) {
-        return notice('当前播放列表中没有歌曲')
+        return notice('当前播放列表中没有歌曲了')
       }
-      !RuntimeManager.next() && notice('切换失败')
+      !RuntimeManager.next() && notice('播放失败')
     }
 
     preSong = e => {
       if (RuntimeManager.playlist.length === 0) {
-        return notice('当前播放列表中没有歌曲')
+        return notice('当前播放列表中没有歌曲了')
       }
-      !RuntimeManager.previous() && notice('切换失败')
+      !RuntimeManager.previous() && notice('播放失败')
+    }
+
+    randomPlay = () => {
+      if (RuntimeManager.playlist.length === 0) {
+        return notice('当前播放列表中没有歌曲了')
+      }
+      !RuntimeManager.randomPlay() && notice('播放失败')
     }
   }
 </script>

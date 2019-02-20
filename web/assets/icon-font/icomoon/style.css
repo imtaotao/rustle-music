@@ -40,6 +40,8 @@
 }
 .icon-cycle:before {
   content: "\e903";
+  font-size: 16px;
+  margin-top: 2px;
 }
 .icon-down:before {
   content: "\e904";
@@ -92,12 +94,14 @@
 }
 .icon-random:before {
   content: "\e914";
+  font-size: 20px;
 }
 .icon-share:before {
   content: "\e915";
 }
 .icon-song-cycle:before {
   content: "\e916";
+  font-size: 14px;
 }
 .icon-songs:before {
   content: "\e917";

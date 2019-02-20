@@ -22,6 +22,10 @@ export function filterCount (n: number) {
     : n
 }
 
+export function random (max = 1000000, min = 0, fractionDigits = 0) {
+  return Number(Math.random() * (max - min) + min).toFixed(fractionDigits)
+}
+
 export function getDuration (time: number) {
   const s = time / 1000
   let min = Math.floor(s / 60)

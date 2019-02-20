@@ -13,7 +13,7 @@ $size: 3px;
   left: 0;
   height: $size;
   width: 100%;
-  background: #dc9892;
+  background: #d1857a;
   position: absolute;
   z-index: 0;
 }
@@ -25,6 +25,7 @@ $size: 3px;
   width: 0;
   position: absolute;
   z-index: 1;
+  transition: width 0.3s ease;
   & div {
     height: 3px;
     width: 100%;
@@ -36,10 +37,11 @@ $size: 3px;
   top: 0;
   left: 0;
   height: $size;
+  width: 0;
   background: $theme;
   position: absolute;
   z-index: 2;
-  min-width: 15px;
+  min-width: 3px;
   cursor: pointer;
 }
 

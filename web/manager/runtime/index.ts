@@ -1,6 +1,6 @@
 import * as I from './type'
 import Event from 'web/share/event'
-import { notice } from 'web/utils'
+import { random, notice } from 'web/utils'
 import { Media } from '@rustle/hearken'
 
 const defaultCurrent = {
@@ -16,6 +16,7 @@ class RuntimeManager extends Event {
   current: I.Song = defaultCurrent
   addlist = new Set()
   started = false
+  mode: I.PlayMode = 'cycle'
 
   Hearken = new Media()
 
@@ -39,7 +40,6 @@ class RuntimeManager extends Event {
     return false
   }
 
-
   public clear () {
     this.playlist = []
     this.addlist.clear()
@@ -57,6 +57,7 @@ class RuntimeManager extends Event {
     return true
   }
 
+  // 指定播放
   public specifiedPlay (item: I.Song | number) {
     if (typeof item === 'number') {
       item = this.playlist[item]
@@ -105,6 +106,26 @@ class RuntimeManager extends Event {
       return true
     }
     return false
+  }
+
+  public randomPlay () {
+    const index = random(this.playlist.length - 1, 0)
+    if (typeof index === 'number') {
+      const item = this.playlist[index]
+      if (!item) return false
+      this.toStartNewSong(item).catch(msg => {
+        notice(msg)
+        this.previous()
+      })
+      return true
+    }
+    return false
+  }
+
+  // 设置模式
+  public setMode (mode: I.PlayMode) {
+    this.mode = mode
+    this.dispatch('modeChanged')
   }
 
   // 播放音乐

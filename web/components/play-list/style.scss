@@ -58,13 +58,13 @@ $titleHeight: 100px;
   align-items: center;
   justify-content: space-between;
   & .count {
-    font-size: 12px;
+    font-size: 11px;
     color: #999;
-    margin-right: 45%;
+    margin-right: 20%;
   }
   & div {
     @include center;
-    font-size: 14px;
+    font-size: 12px;
     color: #7b7b7b;
     cursor: pointer;
     & i {
@@ -83,7 +83,7 @@ $titleHeight: 100px;
     @include halfPX(#b9b9b9);
     position: absolute;
     height: 70%;
-    right: -30%;
+    right: -40%;
   }
 }
 

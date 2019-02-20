@@ -36,22 +36,33 @@ $size: 50px;
     width: $size;
     height: 100%;
     border-radius: 5px;
-    background: rgba(255,255,255,0.5);
     font-size: $size / 1.5;
-    background-size: cover;
     overflow: hidden;
+    position: relative;
+    & .img-content {
+      width: $size;
+      height: 100%;
+      background: rgba(255,255,255,0.5);
+      background-size: cover;
+      position: absolute;
+      z-index: 0;
+    }
     & .zoom {
       display: none;
       width: $size;
       height: 100%;
       line-height: $size;
       text-align: center;
-      backdrop-filter: blur(3px);
       cursor: pointer;
+      position: absolute;
+      z-index: 1;
     }
   }
   & .song-img:hover .zoom {
     display: block;
+  }
+  & .song-img:hover .img-content {
+    filter: blur(1px);
   }
   & .desc {
     width: calc(100% - #{$size});
@@ -132,6 +143,7 @@ $iconSize: 14px;
 }
 
 .play-order {
+  @include center;
   position: relative;
   & div {
     display: none;

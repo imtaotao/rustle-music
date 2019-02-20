@@ -8,3 +8,5 @@ export interface Song {
   dt?: string | number
   duration?: number
 }
+
+export type PlayMode = 'cycle' | 'song-cycle' | 'random'
