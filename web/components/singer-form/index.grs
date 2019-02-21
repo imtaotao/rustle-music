@@ -1,6 +1,6 @@
 <template>
   <div styleName='container'>
-
+      singer-form
   </div>
 </template>
 

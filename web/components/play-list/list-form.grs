@@ -2,7 +2,8 @@
   <ul>
     <li
       :styleName='"song-item " + (this.isPlaying(val) ? "active" : "")'
-      v-for='val of this.props.playlist'>
+      v-for='val of this.props.playlist'
+      @dblclick='this.play.bind(this, val)'>
       <div styleName='name'>
         <i :className='this.isPlaying(val) ? "icon-playing" : ""'></i>
         <span>{{ val.name }}</span>
@@ -19,6 +20,7 @@
 
 <script>
   import { getDuration } from 'web/utils'
+  import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class List extends Grass.Component {
@@ -34,6 +36,10 @@
 
     getDuration (time) {
       return getDuration(time)
+    }
+
+    play (item) {
+      RuntimeManager.specifiedPlay(item)
     }
   }
 </script>

@@ -7,9 +7,14 @@
         <span styleName='album'>专辑</span>
         <span styleName='duration'>时长</span>
       </li>
-      <li v-for='(val, i) of this.props.tracks'>
+      <li
+        v-for='(val, i) of this.props.tracks'
+        :styleName='this.isPlayingItem(val) ? "active" : ""'
+        @dblclick='this.play.bind(this, val)'>
         <span styleName='title'>
-          <a>{{ i > 8 ? i + 1 : '0' + (i + 1) }}</a>
+          <a :className='this.isPlayingItem(val) ? "icon-playing" : ""'>
+            {{ this.getSerialNumber(val, i) }}
+          </a>
           <a :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'></a>
           <a className='icon-down'></a>
           <a styleName='song-name'>{{ val.name }}</a>
@@ -47,12 +52,23 @@ mmp, 几个接口返回的字段不一样
 <script>
   import { getDuration } from 'web/utils'
   import SongManager from 'web/manager/song'
+  import RuntimeManager from 'web/manager/runtime'
+
+  const Hearken = RuntimeManager.Hearken
 
   @Grass.CSSModules(style)
   export default class ListForm extends Grass.Component {
     // #temp
     didReceiveProps () {
       console.log(this.props.tracks.length && this.props.tracks, 'tt');
+    }
+
+    beforeCreate () {
+      Hearken.on('start', () => {
+        if (RuntimeManager.mode !== 'song-cycle') {
+          this.setState({})
+        }
+      })
     }
 
     willReceiveProps (newProps) {
@@ -68,8 +84,22 @@ mmp, 几个接口返回的字段不一样
       return SongManager.has(id)
     }
 
+    isPlayingItem (item) {
+      return item.id === RuntimeManager.current.id
+    }
+
     getDuration (time) {
       return getDuration(time)
+    }
+
+    getSerialNumber (item, i) {
+      return this.isPlayingItem(item)
+        ? ''
+        : i > 8 ? i + 1 : '0' + (i + 1)
+    }
+
+    play (item) {
+      RuntimeManager.specifiedPlay(item)
     }
 
     viewAuthor (item) {

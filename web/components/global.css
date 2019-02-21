@@ -114,16 +114,6 @@ body {
 .lf {
   float: left !important;
 }
-.hide {
-  display: none;
-}
-.show {
-  display: block;
-}
-
-.animate {
-  transition: all .25s;
-}
 
 /*组件过度动画*/
 /*slide*/
@@ -167,36 +157,6 @@ body {
 }
 .long-fade-enter, .long-fade-leave-to {
   opacity: 0;
-}
-
-
-/*字体颜色*/
-.white   {
-  color: #fff;
-}
-.black   {
-  color: #555e72;
-}
-.blue    {
-  color: #294d65;
-}
-.gray    {
-  color: #a4b5b9;
-}
-.green   {
-  color: #53fdd6;
-}
-.silver  {
-  color: #e2e8f1;
-}
-.dark    {
-  color: #9599a0;
-}
-.blue-ash{
-  color: #d2d5da;
-}
-.bright-blue {
-  color: #a1d3f5;
 }
 
 input::-webkit-input-placeholder {

@@ -4,7 +4,6 @@ declare class RuntimeManager extends Event {
     playlist: I.Song[];
     current: I.Song;
     addlist: Set<any>;
-    started: boolean;
     mode: I.PlayMode;
     Hearken: any;
     push(item: I.Song): boolean;

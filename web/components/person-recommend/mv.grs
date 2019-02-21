@@ -4,7 +4,11 @@
     <div styleName='content'>
       <ul>
         <li v-for='item of data' @click='this.viewDetail.bind(this, item)'>
-          <div styleName='bg-image' :style='{backgroundImage: "url("+ item.picUrl +")"}'></div>
+          <div styleName='bg-image' :style='{backgroundImage: "url("+ item.picUrl +")"}'>
+            <div styleName='mask'>
+              {{ item.copywriter || '' }}
+            </div>
+          </div>
           <div>
             <div styleName='name'>{{ item.name }}</div>
             <div styleName='auth'>
@@ -46,6 +50,7 @@
       window.node.request('/personalized/mv').then(({body}) => {
         let data = body.result || []
         if (data.length > 4) data.length = 4
+        console.log(data);
         this.setState({data})
       }, this.props.efn)
     }

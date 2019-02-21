@@ -62,13 +62,15 @@ class RuntimeManager extends Event {
       item = this.playlist[item]
     } else {
       // 如果不在播放列表中，就添加到播放列表中
-      const find = this.playlist.find(val => {
-        return val.id === (<I.Song>item).id
-      })
-      if (!find) this.push(item)
-      
+      const find = this.playlist.find(val => val.id === (<I.Song>item).id)
+      if (!find) {
+        this.playlist.unshift(item)
+        this.dispatch('playlistChanged')
+      }
     }
-    this.toStartNewSong(item).catch(msg => notice(msg))
+    if (item && item !== defaultCurrent) {
+      this.toStartNewSong(item).catch(msg => notice(msg))
+    }
   }
 
   public next () {

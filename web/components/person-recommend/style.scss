@@ -13,7 +13,7 @@
 // 推荐歌单
 .song-list {
   width: 100%;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 .title {
@@ -155,11 +155,23 @@
       border-radius: 5px;
       cursor: pointer;
       & .pic {
+        @include center;
         height: 60px;
         width: 60px;
         border-radius: 5px;
         background-size: cover;
         border: border(#eee);
+      }
+      & .play-btn {
+        @include center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        padding-left: 3.25px;
+        background: rgba(255, 255, 255, 0.65);
+        & i {
+          @include img(10, 'play-red');
+        }
       }
       & .number {
         margin: 0 15px;
@@ -211,8 +223,30 @@
       width: $size;
       height: 100px;
       border-radius: 10px;
+      overflow: hidden;
       border: border(#eee);
       background-size: cover;
+      cursor: pointer;
+    }
+    & .bg-image:hover .mask {
+      height: 48px;
+      opacity: 1;
+    }
+    & .mask {
+      width: 100%;
+      height: 0;
+      opacity: 0;
+      color: #fff;
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 20px;
+      background: rgba(0,0,0,0.5);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp:2;
+      transition: height 0.2s ease;
     }
     & .name {
       font-size: 13px;

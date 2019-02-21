@@ -7,10 +7,13 @@
           <div styleName='image'>
           </div>
         </li>
-        <li v-for='val of data' @click='this.viewDetailSongList.bind(this, val)'>
-          <div styleName='image' :style='{backgroundImage: "url("+ val.picUrl +"）"}'>
+        <li v-for='val of data'>
+          <div
+            styleName='image'
+            :style='{backgroundImage: "url("+ val.picUrl +"）"}'
+            @click.self='this.viewDetailSongList.bind(this, val)'>
             <div styleName='play-count'><i></i>{{ this.getPlayCount(val) }}</div>
-            <span styleName='play-btn'><i></i></span>
+            <span styleName='play-btn' @click='this.replaceSongList.bind(this, val)'><i></i></span>
           </div>
           <div styleName='name'>{{ val.name }}</div>
         </li>
@@ -20,14 +23,18 @@
 </template>
 
 <script>
+  import { notice } from 'web/utils'
   import Router from 'web/manager/router'
   import userManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'
 
   let currentId = ''
 
   @Grass.CSSModules(style)
   export default class SongList extends Grass.Component {
     // #temp
+    requestListId = null
+
     beforeCreate () {
       const item = {
         picUrl: '',
@@ -82,14 +89,34 @@
       }, this.props.efn)
     }
 
-    viewDetailSongList ({id}) {
-      currentId = id
+    getSongList (id, cb) {
+      this.requestListId = id
       this.props.showLoading(true)
-      window.node.request(`/playlist/detail?id=${id}`).then(({body}) => {
-        if (id !== currentId) return
-        this.props.showLoading(false)
-        Router.to('SongList', body.playlist)
-      }, this.props.efn)
+      userManager.getSongListDetail(id).then(({body}) => {
+        if (this.requestListId === id) {
+          this.props.showLoading(false)
+          const data = body.playlist && body.playlist.tracks
+          cb(body.playlist && body.playlist)
+        }
+      })
+    }
+
+    viewDetailSongList ({id}) {
+      this.getSongList(id, data => {
+        if (data) {
+          Router.to('SongList', data)
+        }
+      })
+    }
+
+    // 播放歌单歌曲
+    replaceSongList ({id}) {
+      this.getSongList(id, data => {
+        data = data && data.tracks
+        if (data) {
+          RuntimeManager.replaceAll(data)
+        }
+      })
     }
   }
 </script>
