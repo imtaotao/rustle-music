@@ -1,7 +1,9 @@
 <template>
   <div styleName='progress'>
-    <div styleName='noloading-progress'></div>
-    <div id='loadingProgress' styleName='loading-progress'><div></div></div>
+    <div styleName='noloading-progress'>
+      <div></div>
+    </div>
+    <div id='loadingProgress' styleName='loading-progress'></div>
     <div id='playingProgress' styleName='playing-progress'
       @change='this.progressChange'
       @input='this.progressInput'>
@@ -32,11 +34,6 @@
         options: {
           component: comp,
           direction: 'x',
-          click_el_index: 1,
-          expand_touch_area: {
-            width: 40,
-            height: 40,
-          },
         },
       }
       this.monitorRuntimeManager()
@@ -58,7 +55,7 @@
         }
         this.playProgressTimer = setTimeout(() => {
           const progress = Hearken.getPercent()
-          if (!this.preventTimer) {
+          if (!this.preventTimer && progressNode) {
             progressNode.style.width = progress * 100 + '%'
           }
           progress >= 1
@@ -82,7 +79,9 @@
         }
         this.loadingProgressTimer = setTimeout(() => {
           const progress = Hearken.getLoading()
-          loadingNode.style.width = progress * 100 + '%'
+          if (loadingNode) {
+            loadingNode.style.width = progress * 100 + '%'
+          }
           progress === 1
             ? clearLoadingProgress()
             : getLoadingProgress()
@@ -93,6 +92,9 @@
         clearPlayingProgress()
         playingProgress()
         getLoadingProgress()
+        if (RuntimeManager.mode !== 'song-cycle' && loadingNode) {
+          loadingNode.style.width = 0
+        }
       })
       Hearken.on('stop', clearPlayingProgress)
       Hearken.on('play', playingProgress)
@@ -103,15 +105,16 @@
         if (progressNode) {
           progressNode.style.width = 0
         }
-        if (RuntimeManager.mode !== 'song-cycle' && loadingNode) {
-          loadingNode.style.width = 0
-        }
       })
     }
 
     progressChange = e => {
       this.preventTimer = false
-      Hearken.forward(Number(e.value))
+      const duration = RuntimeManager.current.dt || RuntimeManager.current.duration
+      const val = e.value * duration / 1000
+      if (!isNaN(val) && val < Hearken.getDuration()) {
+        Hearken.forward(val)
+      }
     }
 
     progressInput = e => {

@@ -31,7 +31,7 @@
             :className='"icon-" + (playing ? "pause" : "play")'
             @click='this.togglePlay'></li>
           <li styleName='icon' className='icon-next' @click='this.nextSong'></li>
-          <li styleName='time'>32:12</li>
+          <li styleName='time' id='CurrentTime'>00:00</li>
           <li styleName='icon big' className='icon-lyrics'></li>
           <li styleName='icon share' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
             <div styleName='share-box' v-show='showCopyLink'>
@@ -43,7 +43,20 @@
       </div>
       <div styleName='right'>
         <div styleName='icon' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
-        <div styleName='icon' className='icon-volume'></div>
+        <div
+          styleName='icon volume'
+          @click.self='this.mute'
+          :className='"icon-" + (mute ? "mute" : "volume")'>
+          <div styleName='volume-box'>
+            <div styleName='volume-bar-container'>
+              <div></div>
+              <div styleName='bar' @change='this.volumeChange' @input='this.volumeChange'>
+                <i v-progress='options'></i>
+              </div>
+            </div>
+            <span styleName='array'></span>
+          </div>
+        </div>
       </div>
     </div>
     <div styleName='play-list' v-show='showPlayList' @click.self='this.hidePlayList'>
@@ -68,17 +81,24 @@
   @Grass.CSSModules(style)
   export default class Player extends Grass.Component {
     // #temp
+    Slide = null
     component = { Progress, PlayList }
 
     beforeCreate () {
+      const comp = this
       this.state = {
-        showDesc: RuntimeManager.started || RuntimeManager.playlist.length > 0,
+        showDesc: RuntimeManager.current.id !== 0,
         showCopyLink: false,
         showPlayList: false,
         mode: RuntimeManager.mode,
+        mute: Hearken.options.mute,
         current: RuntimeManager.current,
-        playing: RuntimeManager.Hearken.playing(),
+        playing: Hearken.playing(),
         playOrderDesc: playOrderDesc[RuntimeManager.mode],
+        options: {
+          component: comp,
+          direction: 'y',
+        },
       }
 
       this.monitorRuntimeMagager()
@@ -89,7 +109,7 @@
       RuntimeManager.on('playlistChanged', () => {
         this.setState({
           current: RuntimeManager.current,
-          showDesc: RuntimeManager.started || RuntimeManager.playlist.length > 0,
+          showDesc: RuntimeManager.current.id !== 0,
         })
       })
 
@@ -109,26 +129,62 @@
       })
 
       // 音频 start
-      const fn = () => {
+      let node = null
+      let timer = null
+      const currentTime = () => {
+        if (!node) node = document.getElementById('CurrentTime') 
+        timer = setTimeout(() => {
+          if (node) {
+            node.textContent = this.getCurrentTime()
+          }
+          if (RuntimeManager.Hearken.playing()) {
+            currentTime()
+          } else if (timer) {
+            // 如果当前是暂停状态，清除定时器
+            clearTimeout(timer)
+            timer = null
+          }
+        }, 500)
+      }
+      const changeState = () => {
         this.setState({playing: Hearken.playing()})
       }
-      Hearken.on('start', fn)
-      Hearken.on('stop', fn)
-      Hearken.on('play', fn)
-      Hearken.on('pause', fn)
+      // 音频开始播放的时候要实时监测当前播放时间
+      const soundPlay = () => {
+        changeState()
+        currentTime()
+      }
+
+      Hearken.on('start', soundPlay)
+      Hearken.on('stop', changeState)
+      Hearken.on('play', soundPlay)
+      Hearken.on('pause', changeState)
       Hearken.on('ended', repeat => {
         switch (RuntimeManager.mode) {
           case 'cycle' :
-            this.nextSong()
+            this.setState({playing: false})
+            this.setState(() => this.nextSong())
             break
           case 'song-cycle' :
             repeat()
             break
           case 'random' :
-            this.randomPlay()
+            this.setState({playing: false})
+            this.setState(() => this.randomPlay())
             break
           default :
-            this.nextSong()
+            this.setState({playing: false})
+            this.setState(() => this.nextSong())
+        }
+      })
+
+      Hearken.on('mute', mute => {
+        this.setState({mute})
+        if (mute) {
+          this.Slide._volume = Hearken.options.volume
+          this.Slide.dispatch('change', 0)
+        } else if (this.Slide._volume != null) {
+          this.Slide.dispatch('change', this.Slide._volume)
         }
       })
     }
@@ -138,15 +194,28 @@
       return getDuration(time)
     }
 
+    getCurrentTime () {
+      const time = Hearken.getCurrentTime() || 0
+      return getDuration(time * 1000)
+    }
+
     hidePlayList = () => {
       this.setState({showPlayList: false})
     }
 
     // 暂停 / 播放
     togglePlay = e => {
-      this.state.playing
-        ? RuntimeManager.Hearken.fadePause(1.5)
-        : RuntimeManager.Hearken.fadePlay(1.5)
+      if (this.state.playing) {
+        Hearken.fadePause(0.75)
+      } else {
+        if (RuntimeManager.current.id === 0) {
+          return notice('当前没有可播放的歌曲')
+        }
+        // 如果 state 为 null 代表需要通过 start 播放
+        Hearken.state
+          ? Hearken.fadePlay(1.5)
+          : Hearken.restart(1.5)
+      }
     }
 
     // 切换模式
@@ -167,26 +236,57 @@
       }
     }
 
-    // 切换歌曲
-    nextSong = e => {
-      if (RuntimeManager.playlist.length === 0) {
-        return notice('当前播放列表中没有歌曲了')
+    // 声音变化
+    mute = e => {
+      Hearken.options.mute
+        ? Hearken.setMute(false)
+        : Hearken.setMute(true)
+    }
+
+    volumeChange = e => {
+      if (typeof e.value === 'number') {
+        Hearken.setVolume(e.value)
+        if (e.value === 0) {
+          this.setState({mute: true})
+        } else if (this.state.mute) {
+          this.setState({mute: false})
+        }
       }
-      !RuntimeManager.next() && notice('播放失败')
+    }
+
+    // 切换歌曲
+    check (cb) {
+      if (RuntimeManager.playlist.length === 0) {
+        notice('当前播放列表中没有歌曲了')
+      } else {
+        cb()
+      }
+    }
+
+    nextSong = e => {
+      this.check(() => {
+        const res = RuntimeManager.mode === 'random'
+        ? RuntimeManager.randomPlay()
+        : RuntimeManager.next()
+      
+        !res && notice('播放失败')
+      })
     }
 
     preSong = e => {
-      if (RuntimeManager.playlist.length === 0) {
-        return notice('当前播放列表中没有歌曲了')
-      }
-      !RuntimeManager.previous() && notice('播放失败')
+      this.check(() => {
+        const res = RuntimeManager.mode === 'random'
+          ? RuntimeManager.randomPlay()
+          : RuntimeManager.previous()
+      
+        !res && notice('播放失败')
+      })
     }
 
     randomPlay = () => {
-      if (RuntimeManager.playlist.length === 0) {
-        return notice('当前播放列表中没有歌曲了')
-      }
-      !RuntimeManager.randomPlay() && notice('播放失败')
+      this.check(() => {
+        !RuntimeManager.randomPlay() && notice('播放失败')
+      })
     }
   }
 </script>

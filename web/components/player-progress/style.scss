@@ -11,26 +11,28 @@ $size: 3px;
 .noloading-progress {
   top: 0;
   left: 0;
-  height: $size;
+  height: 10px;
   width: 100%;
-  background: #d1857a;
   position: absolute;
+  background: rgba(214, 106, 94, 0.85);
   z-index: 0;
+  & div {
+    height: $size;
+    width: 100%;
+    background: #d1857a;
+  }
 }
 
 .loading-progress {
   top: 0;
   left: 0;
-  height: 20px;
+  height: $size;
   width: 0;
   position: absolute;
   z-index: 1;
   transition: width 0.3s ease;
-  & div {
-    height: 3px;
-    width: 100%;
-    background: #e7b7b3;
-  }
+  pointer-events: none;
+  background: #e7b7b3;
 }
 
 .playing-progress {
@@ -43,6 +45,7 @@ $size: 3px;
   z-index: 2;
   min-width: 3px;
   cursor: pointer;
+  pointer-events: none;
 }
 
 .progress:hover .playing-progress .dot {

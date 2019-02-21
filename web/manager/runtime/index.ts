@@ -15,10 +15,9 @@ class RuntimeManager extends Event {
   playlist: I.Song[] = []
   current: I.Song = defaultCurrent
   addlist = new Set()
-  started = false
   mode: I.PlayMode = 'cycle'
 
-  Hearken = new Media()
+  Hearken = new Media({volume: 0.5})
 
   public push (item: I.Song) {
     this.playlist.push(item)
@@ -109,8 +108,8 @@ class RuntimeManager extends Event {
   }
 
   public randomPlay () {
-    const index = random(this.playlist.length - 1, 0)
-    if (typeof index === 'number') {
+    const index = Number(random(this.playlist.length - 1, 0))
+    if (typeof index === 'number' && !isNaN(index)) {
       const item = this.playlist[index]
       if (!item) return false
       this.toStartNewSong(item).catch(msg => {
@@ -167,8 +166,7 @@ class RuntimeManager extends Event {
 }
 
 const Runtime = new RuntimeManager()
-Runtime.Hearken.on('start', () => Runtime.started = true)
-Runtime.Hearken.on('stop', () => Runtime.started = false)
 export default Runtime;
 
-(window as any).h = Runtime
+(window as any).h = Runtime;
+(window as any).hh = Runtime.Hearken
