@@ -35,7 +35,7 @@
           <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
           <li styleName='icon share' title='分享' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
             <div styleName='share-box' v-show='showCopyLink'>
-              <div><i></i>复制链接</div>
+              <div @click='this.copyLink'><i></i>复制链接</div>
               <span></span>
             </div>
           </li>
@@ -237,6 +237,20 @@
           break
         default :
           RuntimeManager.setMode('cycle')
+      }
+    }
+
+    // 复制当前播放音乐 url
+    copyLink () {
+      if (RuntimeManager.current.id === 0) {
+        return notice('当前没有正在播放的歌曲')
+      }
+      const url = Hearken.audio.currentSrc
+      if (url) {
+        window.node.clipboard(url)
+        notice('复制成功', true)
+      } else {
+        notice('复制失败')
       }
     }
 

@@ -1,4 +1,3 @@
-
 const opn = require('opn')
 const {
   request,
@@ -6,6 +5,7 @@ const {
   getCookie,
   clearCookie,
 } = require('./interface')
+const clipboard = require('electron').clipboard
 
 // 暴露给渲染进程的 node api
 process.once('loaded', function () {
@@ -23,6 +23,9 @@ process.once('loaded', function () {
     },
     openBrowser (url) {
       url && opn(url)
+    },
+    clipboard (text) {
+      return clipboard.writeText(text)
     }
   }
 })

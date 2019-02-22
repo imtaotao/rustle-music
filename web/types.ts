@@ -17,6 +17,7 @@ type RequestResponse = {
 
 interface Window {
   onNetworkError: () => void
+  clipboard: (text: string) => void;
   node: {
     request: (router: string, body?: Object) => Promise<RequestResponse>
     getCookie: () => Cookie | null
