@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "declaration": true,
+    // "declaration": true,
     "experimentalDecorators": true,
     "module": "commonjs",
     "lib": ["dom", "es2016"],

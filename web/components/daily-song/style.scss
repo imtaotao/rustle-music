@@ -109,6 +109,30 @@
 
 .list {
   width: 100%;
-  height: calc(100% - 155px);
-  background: #ddd;
+  height: calc(100% - 205px);
+  overflow-x: hidden;
+  .loading {
+    @include center;
+    width: 100%;
+    height: 300px;
+    i {
+      @include img(30, 'loading');
+    }
+  }
+  .no-result {
+    @include center;
+    width: 100%;
+    height: 300px;
+    color: #333;
+    font: {
+      size: 13px;
+      weight: 700;
+      family: 方正兰亭超细黑简体;
+    }
+  }
+  .list-form {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
 }

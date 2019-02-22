@@ -1,4 +1,5 @@
 const path = require('path')
+const yarn = require('yargs')
 const { port } = require('../webpack/share')
 const { app, BrowserWindow } = require('electron')
 
@@ -27,9 +28,10 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  const url = 'http://localhost:' + port
-  // const url = 'http://192.168.1.103:' + port
-  // const url = 'file://' + path.join(__dirname, '../dist/index.html')
+  const url = yarn.argv.static
+    ? 'file://' + path.join(__dirname, '../dist/index.html')
+    : 'http://localhost:' + port
+  // const url = http://192.168.1.103:' + port
   mainWindow.loadURL(url)
 
   // Open the DevTools.

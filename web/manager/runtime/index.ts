@@ -46,12 +46,13 @@ class RuntimeManager extends Event {
     return true
   }
 
-  public replaceAll (list: I.Song[]) {
+  public replaceAll (listname: string | number, list: I.Song[]) {
     this.playlist = list
     this.addlist.clear()
     this.current = list[0]
     // 切换的时候从第一个开始播放
     this.specifiedPlay(0)
+    this.addlist.add(listname)
     this.dispatch('playlistChanged')
     return true
   }

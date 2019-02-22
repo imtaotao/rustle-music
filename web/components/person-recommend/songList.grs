@@ -122,9 +122,10 @@
     // 播放歌单歌曲
     replaceSongList ({id}) {
       this.getSongList(id, data => {
-        data = data && data.tracks
-        if (data) {
-          RuntimeManager.replaceAll(data)
+        if (data && data.tracks) {
+          RuntimeManager.replaceAll(id, data.tracks)
+            ? notice('添加成功', true)
+            : notice('请勿重复添加')
         }
       })
     }

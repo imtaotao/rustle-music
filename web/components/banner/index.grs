@@ -23,7 +23,7 @@
 </template>
 
 <script>
-   @Grass.CSSModules(style)
+  @Grass.CSSModules(style)
   export default class Banner extends Grass.Component {
     // #temp
     timeout = null

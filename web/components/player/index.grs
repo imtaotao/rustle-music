@@ -207,14 +207,18 @@
     togglePlay = e => {
       if (this.state.playing) {
         Hearken.fadePause(0.75)
+      } else if (Hearken.state) {
+        Hearken.fadePlay(1)
       } else {
         if (RuntimeManager.current.id === 0) {
           return notice('当前没有可播放的歌曲')
         }
         // 如果 state 为 null 代表需要通过 start 播放
-        Hearken.state
-          ? Hearken.fadePlay(1)
-          : Hearken.restart(1)
+        Hearken.restart(1).then(success => {
+          if (!success) {
+            RuntimeManager.specifiedPlay(RuntimeManager.current)
+          }
+        })
       }
     }
 
