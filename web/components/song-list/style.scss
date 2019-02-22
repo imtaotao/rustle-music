@@ -1,5 +1,7 @@
 @import 'web/components/common.scss';
 .container {
+  width: 100%;
+  height: 100%;
   position: relative;
   z-index: 0;
   overflow-x: hidden;

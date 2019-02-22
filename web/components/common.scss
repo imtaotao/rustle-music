@@ -2,14 +2,14 @@
 $theme: #c4463a;
 
 // 通用 mixin 和 函数
-@mixin img ($wah, $url, $size:cover) {
+@mixin img ($wah, $url, $size:cover, $type:'svg') {
   display: inline-block;
   width: $wah + px;
   height: $wah + px;
   background-size: $size;
   background-repeat: no-repeat;
   @if ($url != 0) {
-    background-image: url('../../assets/' + $url + '.svg');
+    background-image: url('../../assets/' + $url + '.' + $type);
   }
 }
 

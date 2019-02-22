@@ -3,7 +3,10 @@
     <Head styleName='head' v-if='!showSongList'>
       <div styleName='placeholder' slot='placeholder'></div>
     </Head>
-    <SongList styleName='content' v-if='showSongList' :id='songListId' :playlist='playlist'/>
+    <div styleName='content' v-show='showSongList'>
+      <SongList :id='songListId' :playlist='playlist'/>
+    </div>
+    <DailySong styleName='content' v-if='showDailySong'/>
     <SearchResult styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
     <DiscoverMusic styleName='fill-content ' v-show='showDiscoverMusic'/>
   </div>
@@ -14,19 +17,38 @@
   import Router from 'web/manager/router'
   import Sidebar from 'web/components/sidebar'
   import SongList from 'web/components/song-list'
+  import DailySong from 'web/components/daily-song'
   import SearchResult from 'web/components/search-result'
   import DiscoverMusic from 'web/components/discover-music'
   window.r = Router
+
+  const defaultPlaylist = {
+    tags: [],
+    name: '',
+    description: '',
+    coverImgUrl: '',
+    playCount: 0,
+    trackCount: 0,
+    createTime: 0,
+    shareCount: 0,
+    commentCount: 0,
+    subscribedCount: 0,
+    creator: {
+      nickname: '',
+      avatarUrl: '',
+    },
+  }
   @Grass.CSSModules(style)
   export default class MainContent extends Grass.Component {
     // #temp
-    component = { Head, SongList, SearchResult, DiscoverMusic }
+    component = { Head, SongList, DailySong, SearchResult, DiscoverMusic }
 
     searchValue = ''
 
     beforeCreate () {
       const routerCtrs = {
         showSongList: false,
+        showDailySong: false,
         showSearchResult: false,
         showDiscoverMusic: false,
       }
@@ -34,7 +56,7 @@
       this.state = {
         ...routerCtrs,
         songListId: null,
-        playlist: {},
+        playlist: defaultPlaylist,
       }
 
       // 注册路由
@@ -47,7 +69,7 @@
          this.showSpecifiedPage('showSearchResult')
           // 清空歌单数据，避免内存浪费
           this.setState({
-            playlist: {},
+            playlist: defaultPlaylist,
             songListId: null,
           })
           this.searchValue = val
@@ -67,6 +89,11 @@
           showSongList: true,
         })
       }, true)
+
+      // 歌曲推荐页面
+      Router.register('DailySong', () => {
+        this.showSpecifiedPage('showDailySong')
+      })
     }
 
     // main content 区域显示指定页面，其余的页面都隐藏

@@ -4,7 +4,12 @@
     <div styleName='content'>
       <ul styleName='list'>
         <li>
-          <div styleName='image'>
+          <div styleName='image daily-update' @click='this.toSongRecommendPage'>
+            <div styleName='bg'></div>
+            <div styleName='calendar' className='icon-calendar'>
+              <span>{{ this.getDate() }}</span>
+            </div>
+            <div styleName='mask'>根据您的音乐口味生成每日更新</div>
           </div>
         </li>
         <li v-for='val of data'>
@@ -52,6 +57,11 @@
       this.getPersonalizedData()
       userManager.on('login', this.getRecommendData)
       userManager.on('logout', this.getPersonalizedData)
+    }
+
+    getDate () {
+      const day = (new Date()).getDate()
+      return day < 10 ? '0' + day : day
     }
 
     getPlayCount (val) {
@@ -117,6 +127,13 @@
           RuntimeManager.replaceAll(data)
         }
       })
+    }
+
+    // 前往每日歌曲推荐页面
+    toSongRecommendPage = e => {
+      userManager.logged
+        ? Router.to('DailySong')
+        : notice('请先登录')
     }
   }
 </script>

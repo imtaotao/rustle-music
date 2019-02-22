@@ -1,8 +1,8 @@
 <template>
   <div styleName='container' className='drag' @click.self='this.hideSuggestBox'>
     <slot></slot>
-    <div :styleName='"btn left " + (this.Router.canBack() ? "" : "none")' @click='this.preRouter'><i></i></div>
-    <div :styleName='"btn right " + (this.Router.canForward() ? "" : "none")' @click='this.nextRouter'><i></i></div>
+    <div :styleName='"btn left " + (this.Router.canBack() ? "" : "none")' @click='this.preRouter' title='后退'><i></i></div>
+    <div :styleName='"btn right " + (this.Router.canForward() ? "" : "none")' @click='this.nextRouter' title='前进'><i></i></div>
     <div styleName='search-box'>
       <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
       <input

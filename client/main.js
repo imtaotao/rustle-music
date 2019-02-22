@@ -27,9 +27,9 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  // const url = 'http://localhost:' + port
+  const url = 'http://localhost:' + port
   // const url = 'http://192.168.1.103:' + port
-  const url = 'file://' + path.join(__dirname, '../dist/index.html')
+  // const url = 'file://' + path.join(__dirname, '../dist/index.html')
   mainWindow.loadURL(url)
 
   // Open the DevTools.

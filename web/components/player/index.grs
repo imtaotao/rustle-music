@@ -20,20 +20,20 @@
       </div>
       <div styleName='center'>
         <ul>
-          <li styleName='icon' className='icon-like1'></li>
+          <li styleName='icon' className='icon-like1' title='收藏'></li>
           <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode'>
             <div>{{ playOrderDesc }}</div>
           </li>
           <li styleName='time'>{{ this.getDuration() }}</li>
-          <li styleName='icon' className='icon-pre' @click='this.preSong'></li>
+          <li styleName='icon' className='icon-pre' @click='this.preSong' title='上一首'></li>
           <li
             styleName='play'
             :className='"icon-" + (playing ? "pause" : "play")'
             @click='this.togglePlay'></li>
-          <li styleName='icon' className='icon-next' @click='this.nextSong'></li>
+          <li styleName='icon' className='icon-next' @click='this.nextSong' title='下一首'></li>
           <li styleName='time' id='CurrentTime'>00:00</li>
-          <li styleName='icon big' className='icon-lyrics'></li>
-          <li styleName='icon share' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
+          <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
+          <li styleName='icon share' title='分享' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
             <div styleName='share-box' v-show='showCopyLink'>
               <div><i></i>复制链接</div>
               <span></span>
@@ -42,7 +42,7 @@
         </ul>
       </div>
       <div styleName='right'>
-        <div styleName='icon' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
+        <div styleName='icon' title='播放列表' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
         <div
           styleName='icon volume'
           @click.self='this.mute'
@@ -213,8 +213,8 @@
         }
         // 如果 state 为 null 代表需要通过 start 播放
         Hearken.state
-          ? Hearken.fadePlay(1.5)
-          : Hearken.restart(1.5)
+          ? Hearken.fadePlay(1)
+          : Hearken.restart(1)
       }
     }
 
