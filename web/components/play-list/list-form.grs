@@ -32,6 +32,7 @@
       }
       return newProps.playlist.length !== this.props.playlist.length 
     }
+
     isPlaying = val => val.id === this.props.current.id
 
     getDuration (time) {

@@ -62,3 +62,16 @@ $size: 3px;
   top: -6px;
   border-radius: 50%;
 }
+
+.detail {
+  $bg: rgba(255,255,255,0.4);
+  .noloading-progress {
+    background: $bg;
+    div {
+      background: $bg;
+    }
+  }
+  .loading-progress {
+    background: #b39393;
+  }
+}

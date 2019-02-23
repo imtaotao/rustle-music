@@ -43,7 +43,7 @@ $size: 50px;
     & .img-content {
       width: $size;
       height: 100%;
-      background: rgba(255,255,255,0.5);
+      background: rgba(0,0,0,0.2);
       background-size: cover;
       position: absolute;
       z-index: 0;
@@ -220,6 +220,7 @@ $iconSize: 14px;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 1;
 }
 
 .volume {
@@ -275,4 +276,42 @@ $iconSize: 14px;
 
 .volume:hover .volume-box {
   display: flex;
+}
+
+.song-detail-box {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+// 切换到歌曲详情页面，要换一堆颜色
+.detail {
+  $color: #333;
+  $bg:rgba(255,255,255,0.4);
+  .content {
+    background: $bg;
+  }
+  .img-content {
+    background: rgba(0,0,0,0.3);
+  }
+  .left {
+    color: $color;
+    .auth {
+      color: #848383;
+    }
+    .zoom {
+      color: #fff;
+    }
+  }
+  .center ul, .play {
+    color: $color;
+  }
+  .time {
+    color: rgba(0,0,0,0.5);
+  }
+  .right {
+    color: $color;
+  }
 }

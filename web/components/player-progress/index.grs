@@ -1,5 +1,5 @@
 <template>
-  <div styleName='progress'>
+  <div :styleName='"progress" + (this.props.showSongDetail ? " detail" : "")'>
     <div styleName='noloading-progress'>
       <div></div>
     </div>
@@ -19,7 +19,7 @@
   @Grass.CSSModules(style)
   export default class Player extends Grass.Component {
     // #temp
-    willReceiveProps = () => false
+    willReceiveProps = newProps => newProps.showSongDetail !== this.props.showSongDetail
 
     Slider = null
 

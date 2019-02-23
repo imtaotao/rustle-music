@@ -1,15 +1,18 @@
 <template>
-  <div styleName='container'>
-    <Progress/>
+  <div :styleName='"container" + (showSongDetail ? " detail" : "")'>
+    <Progress :showSongDetail='showSongDetail'/>
     <div styleName='blur-bg'></div>
     <div styleName='content'>
       <div styleName='left'>
         <div styleName='song-img' v-show='showDesc'>
           <div styleName='img-content' :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'></div>
-          <div styleName='zoom' className='icon-zoom'></div>
+          <div
+            styleName='zoom'
+            :className='"icon-zoom" + (showSongDetail ? "-out" : "")'
+            @click='this.showSongDetail'></div>
         </div>
         <div styleName='desc' v-show='showDesc'>
-          <div styleName='name'>{{ current.name }}</div>
+          <div styleName='name'>{{ current.name || '' }}</div>
             <div styleName='auth'>
               <span v-for='(val, i) of current.ar || current.artists'>
                 <a v-if='i !== 0'> / </a>
@@ -62,13 +65,18 @@
     <div styleName='play-list' v-show='showPlayList' @click.self='this.hidePlayList'>
       <PlayList/>
     </div>
+    <div styleName='song-detail-box' v-show='showSongDetail' v-transition='"zoom"'>
+      <SongDeatil :song='current' :playing='playing'/>
+    </div>
   </div>
 </template>
 
 <script>
+  import Router from 'web/manager/router'
   import { notice, getDuration } from 'web/utils'
   import RuntimeManager from 'web/manager/runtime'
   import PlayList from 'web/components/play-list'
+  import SongDeatil from 'web/components/song-detail'
   import Progress from 'web/components/player-progress'
 
   const Hearken = RuntimeManager.Hearken
@@ -82,14 +90,16 @@
   export default class Player extends Grass.Component {
     // #temp
     Slide = null
-    component = { Progress, PlayList }
+    component = { Progress, PlayList, SongDeatil }
 
     beforeCreate () {
       const comp = this
       this.state = {
-        showDesc: RuntimeManager.current.id !== 0,
+        // showDesc: RuntimeManager.current.id !== 0,
+        showDesc: true,
         showCopyLink: false,
         showPlayList: false,
+        showSongDetail: false,
         mode: RuntimeManager.mode,
         mute: Hearken.options.mute,
         current: RuntimeManager.current,
@@ -100,6 +110,13 @@
           direction: 'y',
         },
       }
+
+      // 注册歌曲详情页面路由
+      Router.register('SongDetail', () => {
+        this.setState({showSongDetail: true})
+      }, () => {
+        this.setState({showSongDetail: false})
+      })
 
       this.monitorRuntimeMagager()
     }
@@ -190,7 +207,7 @@
     }
 
     getDuration () {
-      const time = this.state.current.dt || this.state.current.duration
+      const time = this.state.current.dt || this.state.current.duration || 0
       return getDuration(time)
     }
 
@@ -270,6 +287,11 @@
           this.setState({mute: false})
         }
       }
+    }
+
+    // 进去退出歌曲详情页面
+    showSongDetail = e => {
+      this.setState({showSongDetail: !this.state.showSongDetail})
     }
 
     // 切换歌曲

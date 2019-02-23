@@ -101,10 +101,8 @@
 
     getSongList (id, cb) {
       this.requestListId = id
-      this.props.showLoading(true)
       userManager.getSongListDetail(id).then(({body}) => {
         if (this.requestListId === id) {
-          this.props.showLoading(false)
           const data = body.playlist && body.playlist.tracks
           cb(body.playlist && body.playlist)
         }

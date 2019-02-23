@@ -1,10 +1,121 @@
 <template>
-  <div></div>
+  <div styleName='container'>
+    <div styleName='root-box' v-if='this.song.id !== 0'>
+      <div styleName='bg' :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></div>
+      <div styleName='content-box'>
+        <div styleName='left'>
+          <div styleName='needle' id='needle'>
+            <div styleName='btn'><i></i></div>
+          </div>
+          <div styleName='disc' id='disc'>
+            <i :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></i>
+          </div>
+        </div>
+        <div styleName='right'>
+          
+        </div>
+      </div>
+      <Head styleName='head'/>
+    </div>
+  </div>
 </template>
 
 <script>
+  import { notice } from 'web/utils'
+  import Head from 'web/components/head'
+
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
     // #temp
+    timer = null
+    component = { Head }
+
+    get song () {
+      return this.props.song
+    }
+
+    beforeCreate () {
+      this.state = {
+        id: null,
+        data: [],
+      }
+      this.setAnimation()
+      this.getSongLyric()
+    }
+
+    willReceiveProps (newProps) {
+      if (newProps.song.id !== this.props.song.id || 
+        newProps.playing !== this.props.playing) {
+        return true
+      }
+      return false
+    }
+
+    didReceiveProps () {
+      const needleNode = document.getElementById('needle')
+      if (this.props.song.id !== this.state.id) {
+        this.getSongLyric()
+        const node = document.getElementById('disc')
+        node && node.style.transform = ''
+      }
+      
+      if (this.props.playing) {
+        this.setAnimation()
+      } else if (this.timer) {
+        cancelAnimationFrame(this.timer)
+        this.timer = null
+      }
+
+      setTimeout(() => {
+        if (needleNode) {
+          needleNode.style.transform = this.props.playing
+            ? ''
+            : 'rotateZ(-30deg)'
+        }
+      }, 50)
+    }
+
+    getSongLyric () {
+      console.log(this.props.song);
+      const id = this.props.song.id
+      this.setState({id})
+      window.node.request('/lyric?id=' + id).then(({body}) => {
+        if (id !== this.state.id) return
+        console.log(body);
+        const data = body.nolyric
+          ? ['当前暂无歌词']
+          : []
+        this.setState({id, data})
+      })
+    }
+
+    setAnimation () {
+      const node = document.getElementById('disc')
+      if (!node || !this.props.playing) return
+
+      let oldReg
+      const step = 0.2
+      const fn = () => {
+        this.timer = requestAnimationFrame(() => {
+          let reg
+          if (!oldReg) {
+            let rotate = node.style.transform
+            if (rotate) {
+              const res = rotate.match(/rotateZ\((.+)\)/)
+              if (res && res[1]) {
+                reg = parseInt(res[1])
+              }
+            }
+          } else {
+            reg = oldReg
+          }
+          reg = (reg || 0) + step
+          oldReg = reg
+          node.style.transform = `rotateZ(${reg}deg)`
+          fn()
+        })
+      }
+      fn()
+    }
   }
 </script>

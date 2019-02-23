@@ -3,11 +3,11 @@ import Event from 'web/share/event'
 import { random, notice } from 'web/utils'
 import { Media } from '@rustle/hearken'
 
-const defaultCurrent = {
+const defaultCurrent:I.Song = {
   id: 0,
   name: '-',
   dt: '0',
-  ar: { name: '' },
+  ar: [{name: '' }],
   al: { name: '' },
 }
 
@@ -51,14 +51,18 @@ class RuntimeManager extends Event {
     this.addlist.clear()
     this.current = list[0]
     // 切换的时候从第一个开始播放
-    this.specifiedPlay(0)
+    this.specifiedPlay(0, () => {
+      // 如果出现错误就播放下一个
+      list.length > 1 && this.next()
+    })
     this.addlist.add(listname)
     this.dispatch('playlistChanged')
     return true
   }
 
   // 指定播放
-  public specifiedPlay (item: I.Song | number) {
+  public specifiedPlay (item: I.Song | number, err?: Function) {
+    let needDispath = false
     if (typeof item === 'number') {
       item = this.playlist[item]
     } else {
@@ -66,11 +70,17 @@ class RuntimeManager extends Event {
       const find = this.playlist.find(val => val.id === (<I.Song>item).id)
       if (!find) {
         this.playlist.unshift(item)
-        this.dispatch('playlistChanged')
+        needDispath = true
       }
     }
     if (item && item !== defaultCurrent) {
-      this.toStartNewSong(item).catch(msg => notice(msg))
+      this.toStartNewSong(item).catch(msg => {
+        notice(msg)
+        err && err()
+      })
+      if (needDispath) {
+        this.dispatch('playlistChanged')
+      }
     }
   }
 
@@ -146,7 +156,7 @@ class RuntimeManager extends Event {
           this.dispatch('currentChanged')
           this.dispatch('start')
         })
-      }, err => notice(err.body.msg))
+      }, err => reject(err.body.message))
     })
   }
 

@@ -64,36 +64,34 @@
     }
 
     registerRouter () {
+      const show = key => this.setState({[key]: true})
+      const hide = key => () => this.setState({[key]: false})
+
       // 搜索页面
       Router.register('Search', val => {
-         this.showSpecifiedPage('showSearchResult')
+         show('showSearchResult')
           // 清空歌单数据，避免内存浪费
           this.setState({
             playlist: defaultPlaylist,
             songListId: null,
           })
           this.searchValue = val
-      })
-
-      // 发现页面
-      Router.register('DiscoverMusic', () => {
-        this.showSpecifiedPage('showDiscoverMusic')
-      })
+      }, hide('showSearchResult'))
 
       // 歌单详情页面
       Router.register('SongList', item => {
-        this.showSpecifiedPage('hide')
         this.setState({
           playlist: item,
           songListId: item.id,
           showSongList: true,
         })
-      }, true)
+      }, hide('showSongList'), true)
 
       // 歌曲推荐页面
-      Router.register('DailySong', () => {
-        this.showSpecifiedPage('showDailySong')
-      })
+      Router.register('DailySong', () => show('showDailySong'), hide('showDailySong'))
+
+      // 发现页面
+      Router.register('DiscoverMusic', () => show('showDiscoverMusic'), hide('showDiscoverMusic'))
     }
 
     // main content 区域显示指定页面，其余的页面都隐藏

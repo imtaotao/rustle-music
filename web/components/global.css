@@ -136,11 +136,11 @@ body {
 
 /*width*/
 .zoom-enter-active, .zoom-leave-active {
- transition: all .5s;
+ transition: all 0.2s;
 }
 .zoom-enter, .zoom-leave-to {
   opacity: 0;
-  transform: scale3d(.1, .1, 1);
+  transform: scale3d(0.1, 0.1, 1);
 }
 
 /*fade*/

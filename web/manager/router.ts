@@ -9,9 +9,13 @@ export default {
   },
 
   to (url: string, data: any, index?: number) {
-    const fn = this.routers[url]
-    if (typeof fn === 'function') {
-      if (url !== this.current.val || fn._forceDirect) {
+    const routers = this.routers
+    const show = routers[url] && routers[url].show
+    if (typeof show === 'function') {
+      // 如果将要展示的页面与当前页面不一样
+      // 或者强制更新
+      // 或者通过历史记录返回的
+      if (url !== this.current.val || show._forceDirect || index != null) {
         const item = {
           data,
           val: url,
@@ -26,17 +30,25 @@ export default {
           }
           this.history.push(item)
         }
-        fn(data)
+        // 隐藏其他的所有页面
+        for (const key in routers) {
+          if (key !== url) {
+            const hide = routers[key].hide
+            typeof hide === 'function' && hide(data)
+          }
+        }
+        // 显示当前页面
+        show(data)
       }
     } else {
-      console.error(`Router warn: "${url}" page is not register.`)
+      throw new Error(`Router warn: "${url}" page is not register.`)
     }
   },
 
-  register (url: string, fn: Function, forceDirect = false) {
-    if (typeof fn === 'function') {
-      (<any>fn)._forceDirect = forceDirect
-      this.routers[url] = fn
+  register (url: string, show: Function, hide?: Function, forceDirect = false) {
+    if (typeof show === 'function') {
+      (<any>show)._forceDirect = forceDirect
+      this.routers[url] = { show, hide }
     }
   },
 

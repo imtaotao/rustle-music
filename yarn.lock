@@ -572,10 +572,6 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@rustle/grass@^0.0.1-alpha.5":
-  version "0.0.1-alpha.5"
-  resolved "http://registry.npm.taobao.org/@rustle/grass/download/@rustle/grass-0.0.1-alpha.5.tgz#c20b01fb646c2164f17274f39e8c14fdb37c4587"
-
 "@rustle/hearken@^0.0.1-alpha.3":
   version "0.0.1-alpha.3"
   resolved "http://registry.npm.taobao.org/@rustle/hearken/download/@rustle/hearken-0.0.1-alpha.3.tgz#1b6243051ca80e8843ef60cfa517eaa247aecc00"
