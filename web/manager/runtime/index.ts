@@ -73,13 +73,29 @@ class RuntimeManager extends Event {
         needDispath = true
       }
     }
+
     if (item && item !== defaultCurrent) {
-      this.toStartNewSong(item).catch(msg => {
-        notice(msg)
-        err && err()
-      })
-      if (needDispath) {
-        this.dispatch('playlistChanged')
+      const fn = (newItem) => {
+        this.toStartNewSong(<I.Song>newItem).catch(msg => {
+          notice(msg)
+          err && err()
+        })
+        if (needDispath) {
+          this.dispatch('playlistChanged')
+        }
+      }
+
+      const al:any = item.album || item.al
+      // 如果没有歌曲背景图片，需要从专辑里面获取
+      if (!al.picUrl) {
+        window.node.request('/album?id=' + al.id).then(({body}) => {
+          const newItem = body.songs && body.songs[0]
+          newItem && newItem.id === (<any>item).id
+            ? fn(newItem)
+            : fn(item)
+        }, err => fn(item))
+      } else {
+        fn(item)
       }
     }
   }
@@ -171,10 +187,14 @@ class RuntimeManager extends Event {
 
   private findCurrentIndex () {
     if (this.current === defaultCurrent) return 0
-    const index = this.playlist.indexOf(<I.Song>this.current)
-    return index > -1
-      ? index
-      : null
+    let index: null | number = null
+    // find 函数明细快于 for
+    this.playlist.find((val:I.Song, i:number) => {
+      const res = val.id === this.current.id
+      if (res) index = i
+      return res
+    })
+    return index
   }
 }
 

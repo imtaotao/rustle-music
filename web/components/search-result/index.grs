@@ -79,6 +79,7 @@
 
     getSearchData (item) {
       const keyword = this.props.searchValue
+      console.log(keyword);
       if (keyword) {
         // 先清空数据
         this.setState({

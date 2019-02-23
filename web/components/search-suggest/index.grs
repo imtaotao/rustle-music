@@ -13,7 +13,7 @@
           <div styleName='single-type-box' v-for='item of suggestOrder'>
             <p styleName='title icon'><i :className='"icon-" + item'></i>{{ transferNames[item] }}</p>
             <ul styleName='list-content'>
-              <li v-for='lists of suggestData[item]' @click='this.processSearchResult.bind(this, lists)'>
+              <li v-for='lists of suggestData[item]' @click='this.processSearchResult.bind(this, item, lists)'>
                 <span>{{ lists.name }}</span>
                 <span
                   v-if='lists.artistName || lists.album || lists.artist'>
@@ -30,6 +30,7 @@
 
 <script>
   import { notice } from 'web/utils'
+  import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class SearchSuggest extends Grass.Component {
@@ -89,8 +90,12 @@
       }
     }
 
-    processSearchResult (item) {
-
+    processSearchResult (type, val) {
+      switch (type) {
+        case 'songs' :
+          RuntimeManager.specifiedPlay(val)
+          break
+      }
     }
   }
 </script>

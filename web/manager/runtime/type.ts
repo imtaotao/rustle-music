@@ -1,4 +1,4 @@
-export type Singer = {name: string}
+export type Singer = {name: string, picUrl?: string}
 export interface Song {
   id: number
   name: string

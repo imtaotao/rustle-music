@@ -13,10 +13,10 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    border-radius: 10px;
     filter: blur(20px);
-    background-size: 80%;
-    background-position: 50% 50px;
+    left: 30px;
+    background-size: 150%;
+    background-position: 50% -300px;
     background-repeat: no-repeat;
   }
 }
@@ -31,7 +31,8 @@
   height: 100%;
   position: absolute;
   z-index: 0;
-  background: rgba(255,255,255,0.65);
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
   padding-bottom: 50px;
   overflow-x: hidden; 
 }
@@ -98,7 +99,49 @@
 }
 
 .right {
-  background: #ddd;
   float: left;
-  margin: 90px 40px 0 20px;
+  width: 40%;
+  padding-right: 20px;
+  margin: 90px 40px 0 0;
+  .song-name {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    b {
+      @include hideText;
+      max-width: 70%;
+      height: 25px;
+      font-size: 22px;
+      margin-right: 15px;
+      color: #444;
+    }
+    span {
+      border: border($theme);
+      border-radius: 3px;
+      padding: 3px;
+      color: $theme;
+      font-size: 14px;
+    }
+  }
+  .song-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 25px;
+    margin-bottom: 20px;
+    li {
+      @include hideText;
+      width: 40%;
+      font-size: 12px;
+      color: #848488;
+      span {
+        color: #7e99c7;
+        cursor: pointer;
+      }
+      span:hover {
+        color: #374d71;
+      }
+    }
+  }
 }

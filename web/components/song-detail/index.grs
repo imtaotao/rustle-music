@@ -12,7 +12,21 @@
           </div>
         </div>
         <div styleName='right'>
-          
+          <div styleName='song-name'>
+            <b>{{ this.song.name }}</b>
+            <span>极高音质</span>
+          </div>
+          <ul styleName='song-info'>
+            <li>专辑：<span>{{ (this.song.al || this.song.album).name }}</span></li>
+            <li>
+              歌手：
+              <span v-for='(item, i) of this.song.ar || this.song.artists'>
+                <b v-if='i > 0'> / </b>
+                {{ item.name }}
+              </span>
+            </li>
+          </ul>
+          <SongLyric :lyric='lyric'/>
         </div>
       </div>
       <Head styleName='head'/>
@@ -23,12 +37,13 @@
 <script>
   import { notice } from 'web/utils'
   import Head from 'web/components/head'
+  import SongLyric from 'web/components/song-lyric'
 
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
     // #temp
     timer = null
-    component = { Head }
+    component = { Head, SongLyric }
 
     get song () {
       return this.props.song
@@ -37,7 +52,7 @@
     beforeCreate () {
       this.state = {
         id: null,
-        data: [],
+        lyric: '',
       }
       this.setAnimation()
       this.getSongLyric()
@@ -56,7 +71,7 @@
       if (this.props.song.id !== this.state.id) {
         this.getSongLyric()
         const node = document.getElementById('disc')
-        node && node.style.transform = ''
+        if (node) node.style.transform = ''
       }
       
       if (this.props.playing) {
@@ -76,16 +91,15 @@
     }
 
     getSongLyric () {
-      console.log(this.props.song);
       const id = this.props.song.id
-      this.setState({id})
+      this.setState({id, lyric: '歌词加载中...'})
       window.node.request('/lyric?id=' + id).then(({body}) => {
         if (id !== this.state.id) return
-        console.log(body);
-        const data = body.nolyric
-          ? ['当前暂无歌词']
-          : []
-        this.setState({id, data})
+
+        const lyric = body.nolyric
+          ? '纯音乐，请您欣赏'
+          : (body.lrc && body.lrc.lyric) || '当前歌曲暂无歌词'
+        this.setState({id, lyric})
       })
     }
 

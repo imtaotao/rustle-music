@@ -223,7 +223,7 @@
     // 暂停 / 播放
     togglePlay = e => {
       if (this.state.playing) {
-        Hearken.fadePause(0.75)
+        Hearken.fadePause(0.5)
       } else if (Hearken.state) {
         Hearken.fadePlay(1)
       } else {

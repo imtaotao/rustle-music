@@ -76,7 +76,7 @@
             songListId: null,
           })
           this.searchValue = val
-      }, hide('showSearchResult'))
+      }, hide('showSearchResult'), true)
 
       // 歌单详情页面
       Router.register('SongList', item => {
