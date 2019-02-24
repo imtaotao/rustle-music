@@ -1,7 +1,7 @@
-export function macOs () {
+exports.macOs = function () {
   return process.platform === 'darwin'
 }
 
-export function windows () {
+exports.windows = function () {
   return process.platform === 'win32'
 }
