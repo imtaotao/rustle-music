@@ -157,7 +157,8 @@
     }
 
     scroll = e => {
-      const node = document.getElementById('headBox')
+      if (!window.node.macOs()) return
+      const node = this.scroll.node || (this.scroll.node = document.getElementById('headBox'))
       if (node) {
         const style = node.style
         if (e.target.scrollTop > 50) {

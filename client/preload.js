@@ -13,6 +13,12 @@ process.once('loaded', function () {
     setCookie,
     getCookie,
     clearCookie,
+    macOs () {
+      return process.platform === 'darwin'
+    },
+    windows () {
+      return process.platform === 'win32'
+    },
     request (router, body) {
       if (navigator.onLine) {
         return request(router, body)
