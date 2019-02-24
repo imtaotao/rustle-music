@@ -49,7 +49,6 @@ class RuntimeManager extends Event {
   public replaceAll (listname: string | number, list: I.Song[]) {
     this.playlist = list
     this.addlist.clear()
-    this.current = list[0]
     // 切换的时候从第一个开始播放
     this.specifiedPlay(0, () => {
       // 如果出现错误就播放下一个
@@ -159,8 +158,15 @@ class RuntimeManager extends Event {
   // 播放音乐
   private toStartNewSong (item: I.Song) {
     this.Hearken.stop()
-    this.current = item
     return new Promise((_, reject) => {
+      // 如果发现和当前音乐是同一首
+      if (item.id === this.current.id && this.Hearken.audio.src) {
+        this.Hearken.restart()
+        return
+      }
+
+      this.current = item
+
       window.node.request('/check/music?id=' + item.id).then(({body}) => {
         if (item.id !== this.current.id) return
         const {success, message} = body

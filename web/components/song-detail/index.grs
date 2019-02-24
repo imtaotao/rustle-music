@@ -39,7 +39,25 @@
             </div>
             <Comments type='music' :id='this.song.id' :setCommentLen='this.setCommentLen'/>
           </div>
-          <div styleName='similar-song-list'></div>
+          <div styleName='similar-song-list'>
+            <p styleName='similar-song-title'><b>相似音乐</b></p>
+            <ul>
+              <li v-for='val of similarSongs'>
+                <div styleName='song-img' :style='{backgroundImage: "url("+ val.album.picUrl +")"}'>
+                  <div styleName='play-btn' @click='this.playSimilarSong.bind(this, val)'><i></i></div>
+                </div>
+                <div styleName='info'>
+                  <p>{{ val.name }}</p>
+                  <p>
+                    <a v-for='(item, i) of val.artists'>
+                      <b v-if='i > 0'> / </b>
+                      {{ item.name }}
+                    </a>
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
       <div id='headBox'>
@@ -54,6 +72,7 @@
   import Head from 'web/components/head'
   import SongLyric from 'web/components/song-lyric'
   import Comments from 'web/components/comment-form'
+  import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
@@ -70,9 +89,11 @@
         id: null,
         lyric: '',
         commentLen: 0,
+        similarSongs: [],
       }
       this.setAnimation()
       this.getSongLyric()
+      this.getSimilarSong()
     }
 
     willReceiveProps (newProps) {
@@ -87,6 +108,7 @@
       const needleNode = document.getElementById('needle')
       if (this.props.song.id !== this.state.id) {
         this.getSongLyric()
+        this.getSimilarSong()
         const node = document.getElementById('disc')
         if (node) node.style.transform = ''
       }
@@ -111,6 +133,12 @@
       this.setState({commentLen: len})
     }
 
+    getPlayCount (playCount) {
+      return playCount < 1000
+        ? Math.floor(playCount)
+        : Math.floor(playCount / 10000) + '万'
+    }
+
     getSongLyric () {
       const id = this.props.song.id
       this.setState({id, lyric: '歌词加载中...'})
@@ -127,6 +155,23 @@
       window.node.request('/lyric?id=' + id).then(sfn, efn)
     }
     
+    getSimilarSong () {
+      const id = this.props.song.id
+      const sfn = ({body}) => {
+        if (id !== this.state.id) return
+        if (body.songs && body.songs.length > 0) {
+          this.setState({similarSongs: body.songs})
+        }
+      }
+      const efn = err => console.error(err)
+      window.node.request('/simi/song?id=' + id).then(sfn, efn)
+    }
+
+    // 播放相似音乐
+    playSimilarSong = val => {
+      RuntimeManager.specifiedPlay(val)
+    }
+
     setAnimation () {
       const node = document.getElementById('disc')
       if (!node || !this.props.playing) return
