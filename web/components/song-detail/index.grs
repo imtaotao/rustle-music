@@ -2,7 +2,7 @@
   <div styleName='container'>
     <div styleName='root-box' v-if='this.song.id !== 0'>
       <div styleName='bg' :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></div>
-      <div styleName='content-box'>
+      <div styleName='content-box' @scroll='this.scroll'>
         <div styleName='left'>
           <div styleName='needle' id='needle'>
             <div styleName='btn'><i></i></div>
@@ -28,8 +28,23 @@
           </ul>
           <SongLyric :lyric='lyric'/>
         </div>
+        <div styleName='buttom-content-box'>
+          <div styleName='comment'>
+            <div styleName='title'>
+              <p><b>听友评论</b><span>（已有{{ commentLen }}条评论）</span></p>
+              <p>
+                <span><i className='icon-pen'></i>发表评论</span>
+                <i styleName='expression' className='icon-expression'></i>
+              </p>
+            </div>
+            <Comments type='music' :id='this.song.id' :setCommentLen='this.setCommentLen'/>
+          </div>
+          <div styleName='similar-song-list'></div>
+        </div>
       </div>
-      <Head styleName='head'/>
+      <div id='headBox'>
+        <Head styleName='head'/>
+      </div>
     </div>
   </div>
 </template>
@@ -38,12 +53,13 @@
   import { notice } from 'web/utils'
   import Head from 'web/components/head'
   import SongLyric from 'web/components/song-lyric'
+  import Comments from 'web/components/comment-form'
 
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
     // #temp
     timer = null
-    component = { Head, SongLyric }
+    component = { Head, Comments, SongLyric }
 
     get song () {
       return this.props.song
@@ -53,6 +69,7 @@
       this.state = {
         id: null,
         lyric: '',
+        commentLen: 0,
       }
       this.setAnimation()
       this.getSongLyric()
@@ -90,19 +107,26 @@
       }, 50)
     }
 
+    setCommentLen = len => {
+      this.setState({commentLen: len})
+    }
+
     getSongLyric () {
       const id = this.props.song.id
       this.setState({id, lyric: '歌词加载中...'})
-      window.node.request('/lyric?id=' + id).then(({body}) => {
+
+      const sfn = ({body}) => {
         if (id !== this.state.id) return
-
-        const lyric = body.nolyric
-          ? '纯音乐，请您欣赏'
-          : (body.lrc && body.lrc.lyric) || '当前歌曲暂无歌词'
+        let lyric = '纯音乐，请您欣赏'
+        if (!body.nolyric) {
+          lyric = (body.lrc && body.lrc.lyric) || '当前歌曲暂无歌词'
+        }
         this.setState({id, lyric})
-      })
+      }
+      const efn = err => notice('歌词加载失败')
+      window.node.request('/lyric?id=' + id).then(sfn, efn)
     }
-
+    
     setAnimation () {
       const node = document.getElementById('disc')
       if (!node || !this.props.playing) return
@@ -130,6 +154,20 @@
         })
       }
       fn()
+    }
+
+    scroll = e => {
+      const node = document.getElementById('headBox')
+      if (node) {
+        const style = node.style
+        if (e.target.scrollTop > 50) {
+          if (!style.backdropFilter) {
+            style.backdropFilter = 'blur(30px)'
+          }
+        } else if (style.backdropFilter) {
+          style.backdropFilter = ''
+        }
+      }
     }
   }
 </script>

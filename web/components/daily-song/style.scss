@@ -19,6 +19,9 @@
   color: $theme;
   position: relative;
   margin-right: 40px;
+  &::before {
+    color: $theme !important;
+  }
   span {
     position: absolute;
     font-size: 40px;

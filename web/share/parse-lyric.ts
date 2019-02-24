@@ -8,7 +8,20 @@ const tagRegMap = {
   by: 'by',
 }
 
-export default function parseLyirc (lrc) {
+interface tags {
+  [tag: string]: string
+}
+interface line {
+  txt: string
+  time: number
+}
+
+export interface LyircRes {
+  tags: tags
+  lines: line[]
+}
+
+export default function parseLyirc (lrc: string) : LyircRes {
   return {
     tags: parseTag(lrc),
     lines: parseLines(lrc),
@@ -16,7 +29,7 @@ export default function parseLyirc (lrc) {
 }
 
 function parseTag (lrc) {
-  const tags = {}
+  const tags: tags = {}
   for (let tag in tagRegMap) {
     const matches = lrc.match(new RegExp(`\\[${tagRegMap[tag]}:([^\\]]*)]`, 'i'))
     tags[tag] = matches && matches[1] || ''
@@ -25,7 +38,7 @@ function parseTag (lrc) {
 }
 
 function parseLines (lrc) {
-  const resLines = []
+  const resLines: line[]  = []
   const lines = lrc.split('\n')
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
@@ -33,7 +46,7 @@ function parseLines (lrc) {
     if (result) {
       resLines.push({
         txt: line.replace(timeExp, '').trim(),
-        time: result[1] * 60 * 1000 + result[2] * 1000 + Number((result[3] || 0)),
+        time: <any>result[1] * 60 * 1000 + <any>result[2] * 1000 + Number((result[3] || 0)),
       })
     }
   }

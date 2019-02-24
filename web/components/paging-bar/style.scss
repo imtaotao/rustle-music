@@ -13,10 +13,11 @@ $height: 25px;
   justify-content: center;
   align-items: center;
   & span {
-    width: $height;
+    min-width: $height;
     height: $height;
     line-height: $height;
     text-align: center;
+    padding: 0 5px;
     border: border(#ddd);
     border-radius: 5px;
     margin: 0 5px;

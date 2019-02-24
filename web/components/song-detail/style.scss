@@ -145,3 +145,66 @@
     }
   }
 }
+
+
+.buttom-content-box {
+  width: 100%;
+  padding: 15px 0 100px 0;
+  overflow: hidden;
+}
+
+.comment {
+  float: left;
+  width: 67%;
+  padding: 0 45px 0 55px;
+  .title {
+    width: 100%;
+    margin: 10px 0 20px 0;
+    p:first-child {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      color: #333;
+      font-size: 16px;
+      span {
+        color: #818286;
+        font-size: 12px;
+        margin-left: 10px;
+      }
+    }
+    p:last-child {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      padding: 0 10px;
+      color: #bbb;
+      border: border(#ddd);
+      width: 100%;
+      height: 32px;
+      background: #fdfdfd;
+      border-radius: 3px;
+      margin-top: 10px;
+      cursor: pointer;
+      span {
+        @include center;
+      }
+      span i {
+        font-size: 22px;
+        margin-right: 5px;
+        &:before {
+          color: #bbb;
+        }
+      }
+      .expression {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.similar-song-list {
+  float: left;
+  width: 33%;
+  border: border($theme);
+}

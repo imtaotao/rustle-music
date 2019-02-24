@@ -1,0 +1,103 @@
+@import 'web/components/common.scss';
+
+.container {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.comments {
+  margin-top: 50px;
+  width: 100%;
+}
+
+.title {
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.comments-list {
+  .single-comment {
+    display: flex;
+    margin-top: 20px;
+    .avatar {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: #fff;
+      margin-right: 20px;
+      background-size: cover;
+      border: border(#ddd);
+    }
+    .content {
+      position: relative;
+      padding-bottom: 20px;
+      font-size: 13px;
+      line-height: 20px;
+      width: calc(100% - 60px);
+      color: #333;
+      &::before {
+        @include v-halfPX(#cecece);
+        position: absolute;
+        bottom: 0;
+      }
+      .user {
+        color: #7e99c7;
+        cursor: pointer;
+        &:hover {
+          color: #374d71;
+        }
+      }
+      .info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #7b7b7b;
+        ul {
+          display: flex;
+          align-items: center;
+        }
+        li:first-child {
+          position: relative;
+          i {
+            font-size: 16px;
+          }
+          &::before {
+            @include halfPX(#949393);
+            position: absolute;
+            height: 60%;
+            right: 0;
+          }
+        }
+        li:last-child i {
+          font-size: 14px;
+        }
+        li {
+          padding: 0 10px;;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          i {
+            margin-right: 8px;
+            &::before {
+              color: #6f6f6f;
+            }
+            &.active::before {
+              color: $theme;
+            }
+          }
+        }
+      }
+    }
+    .be-replied {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      font-size: 12px;
+      color: #555;
+      border-radius: 3px;
+      background: rgba(0,0,0,0.05);
+    }
+  }
+}

@@ -1,0 +1,116 @@
+<template>
+  <div styleName='container'>
+    <div styleName='comments' v-for='(val, i) of comments'>
+      <p styleName='title'>
+        <b>
+          {{ i === 0 ? "精彩" : "最新" }}评论
+          <span v-show='i === 1'>（{{ total }}）</span>
+        </b>
+      </p>
+      <ul styleName='comments-list'>
+        <li styleName='single-comment' v-for='item of val'>
+          <div styleName='avatar' :style='{backgroundImage: "url("+ item.user.avatarUrl +")"}'></div>
+          <div styleName='content'>
+            <div>
+              <span styleName='user'>{{ item.user.nickname }}：</span>
+              {{ item.content }}
+            </div>
+            <!-- 回复的主体 -->
+            <div styleName='be-replied' v-for='replied of item.beReplied || []'>
+              <span styleName='user'>@{{ replied.user.nickname }}：</span>
+              {{ replied.content }}
+            </div>
+            <div styleName='info'>
+              <div>{{ this.getPublishTime(item.time) }}</div>
+              <ul>
+                <li>
+                  <i :styleName='item.liked ? "active" : ""' className='icon-comment-like'></i>
+                  {{ item.likedCount }}
+                </li>
+                <li><i className='icon-reply'></i></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <PaginggBar
+      v-show='total > limit'
+      :count='total'
+      :offset='offset'
+      :limit='limit'
+      :toGetPageingData='this.toGetPageingData'/>
+  </div>
+</template>
+
+<script>
+  import { timestampToTime } from 'web/utils'
+  import PaginggBar from 'web/components/paging-bar'
+
+  @Grass.CSSModules(style)
+  export default class Comments extends Grass.Component {
+    // #temp
+    component = { PaginggBar }
+
+    willReceiveProps = newProps => newProps.id !== this.props.id
+
+    beforeCreate () {
+      this.state = {
+        limit: 20,
+        offset: 0,
+        total: 0,
+        comments: [],
+      }
+      this.getSongComment(this.props.setCommentLen)
+    }
+
+    didReceiveProps () {
+      this.setState({
+        limit: 20,
+        offset: 0,
+        total: 0,
+        comments: [],
+      })
+      this.props.setCommentLen(0)
+      this.getSongComment(this.props.setCommentLen, 0)
+    }
+
+    getPublishTime (time) {
+      const { year, month, day, hour, min } = timestampToTime(time)
+      let timeStr = ''
+      year && (timeStr += `${year}年`)
+      month && (timeStr += `${month}月`)
+      day && (timeStr += `${day}日`)
+      timeStr && (timeStr += ' ')
+      return timeStr + hour + ':' + (min > 9 ? min : '0' + min)
+    }
+
+    getSongComment (cb, offset) {
+      const { id, type } = this.props
+      const limit = this.state.limit
+      if (offset == null) {
+        offset = this.state.offset
+      }
+
+      const sfn = ({body}) => {
+        if (id !== this.props.id || offset !== this.state.offset) return
+        cb && cb(body.total || 0)
+        
+        // 获取最新评论和热门评论
+        const normal = body.comments || []
+        const hotComments = body.hotComments || (this.state.comments[0] || [])
+        this.setState({
+          total: body.total || 0,
+          comments: [hotComments, normal],
+        })
+      }
+      const efn = err => notice('歌曲评论获取失败')
+      window.node.request(`/comment/${type}?id=${id}&limit=${limit}&offset=${offset}`).then(sfn, efn)
+    }
+
+    toGetPageingData = page => {
+      this.setState({offset: page})
+      this.getSongComment(null, page)
+    }
+  }
+</script>
