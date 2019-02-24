@@ -1,13 +1,17 @@
 const path = require('path')
 const yarn = require('yargs')
 const { port } = require('../webpack/share')
-const { app, BrowserWindow } = require('electron')
+const { macOs, windows } = require('../platform/utils')
+const { app, Menu, BrowserWindow } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow () {
+  if (windows()) {
+    Menu.setApplicationMenu(null)
+  }
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 1000,

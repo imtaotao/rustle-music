@@ -1,4 +1,5 @@
 const opn = require('opn')
+const { macOs, windows } = require('../platform/utils')
 const {
   request,
   setCookie,
@@ -10,15 +11,11 @@ const clipboard = require('electron').clipboard
 // 暴露给渲染进程的 node api
 process.once('loaded', function () {
   global.node = {
+    macOs,
+    windows,
     setCookie,
     getCookie,
     clearCookie,
-    macOs () {
-      return process.platform === 'darwin'
-    },
-    windows () {
-      return process.platform === 'win32'
-    },
     request (router, body) {
       if (navigator.onLine) {
         return request(router, body)
