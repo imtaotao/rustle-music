@@ -8,4 +8,4 @@
 4. start codeing
 
 # 下载
-[下载地址](https://imtaotao.github.io/rustle-music)
+安装包[下载地址](https://imtaotao.github.io/rustle-music)
