@@ -8,5 +8,4 @@
 4. start codeing
 
 # 下载
-mac版本
-<a download href='./packed/rustle-1.0.0.dmg'>下载</a>
+[下载地址](https://imtaotao.github.io/rustle-music)
