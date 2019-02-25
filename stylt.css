@@ -1,0 +1,9 @@
+.download-btn {
+  width: 100px;
+  height: 30px;
+  background: #878ff9;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 5px;
+  color: #fff;
+}
