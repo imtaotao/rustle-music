@@ -1,7 +1,9 @@
 <template>
   <div styleName='container'>
-    <div styleName='root-box' v-if='this.song.id !== 0'>
+    <div :styleName='"root-box" + (showBgStar ? " show-bg-bar" : "")' v-if='this.song.id !== 0'>
+      <PlayBackground v-show='showBgStar'/>
       <div styleName='bg' :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></div>
+      <div styleName='bg-mask'></div>
       <div styleName='content-box' @scroll='this.scroll'>
         <div styleName='left'>
           <div styleName='needle' id='needle'>
@@ -9,6 +11,10 @@
           </div>
           <div styleName='disc' id='disc'>
             <i :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></i>
+          </div>
+          <div :styleName='"pure-mode" + (showBgStar ? " turn-on" : "")'>
+            <span>纯净模式</span>
+            <div @click='this.toggleShowBgStar'><i></i></div>
           </div>
         </div>
         <div styleName='right'>
@@ -28,7 +34,7 @@
           </ul>
           <SongLyric :lyric='lyric'/>
         </div>
-        <div styleName='buttom-content-box'>
+        <div styleName='buttom-content-box' v-show='!showBgStar'>
           <div styleName='comment'>
             <div styleName='title'>
               <p><b>听友评论</b><span>（已有{{ commentLen }}条评论）</span></p>
@@ -60,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div id='headBox'>
+      <div styleName='head-box' v-show='!showBgStar'>
         <Head styleName='head'/>
       </div>
     </div>
@@ -72,13 +78,14 @@
   import Head from 'web/components/head'
   import SongLyric from 'web/components/song-lyric'
   import Comments from 'web/components/comment-form'
+  import PlayBackground from 'web/components/play-background'
   import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
     // #temp
     timer = null
-    component = { Head, Comments, SongLyric }
+    component = { Head, Comments, SongLyric, PlayBackground }
 
     get song () {
       return this.props.song
@@ -90,6 +97,7 @@
         lyric: '',
         commentLen: 0,
         similarSongs: [],
+        showBgStar: false,
       }
       this.setAnimation()
       this.getSongLyric()
@@ -170,6 +178,14 @@
     // 播放相似音乐
     playSimilarSong = val => {
       RuntimeManager.specifiedPlay(val)
+    }
+
+    toggleShowBgStar = e => {
+      this.setState({showBgStar: !this.state.showBgStar})
+      const player = document.getElementById('Player')
+      if (player) {
+        player.style.display = !this.state.showBgStar ? 'none' : ''
+      }
     }
 
     setAnimation () {

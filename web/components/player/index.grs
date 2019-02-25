@@ -1,63 +1,65 @@
 <template>
   <div :styleName='"container" + (showSongDetail ? " detail" : "")'>
-    <Progress :showSongDetail='showSongDetail'/>
-    <div styleName='blur-bg'></div>
-    <div styleName='content'>
-      <div styleName='left'>
-        <div styleName='song-img' v-show='showDesc'>
-          <div styleName='img-content' :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'></div>
-          <div
-            styleName='zoom'
-            :className='"icon-zoom" + (showSongDetail ? "-out" : "")'
-            @click='this.showSongDetail'></div>
-        </div>
-        <div styleName='desc' v-show='showDesc'>
-          <div styleName='name'>{{ current.name || '' }}</div>
-            <div styleName='auth'>
-              <span v-for='(val, i) of current.ar || current.artists'>
-                <a v-if='i !== 0'> / </a>
-                {{ val.name }}
-              </span>
-            </div>
-        </div>
-      </div>
-      <div styleName='center'>
-        <ul>
-          <li styleName='icon' className='icon-like1' title='收藏'></li>
-          <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode'>
-            <div>{{ playOrderDesc }}</div>
-          </li>
-          <li styleName='time'>{{ this.getDuration() }}</li>
-          <li styleName='icon' className='icon-pre' @click='this.preSong' title='上一首'></li>
-          <li
-            styleName='play'
-            :className='"icon-" + (playing ? "pause" : "play")'
-            @click='this.togglePlay'></li>
-          <li styleName='icon' className='icon-next' @click='this.nextSong' title='下一首'></li>
-          <li styleName='time' id='CurrentTime'>00:00</li>
-          <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
-          <li styleName='icon share' title='分享' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
-            <div styleName='share-box' v-show='showCopyLink'>
-              <div @click='this.copyLink'><i></i>复制链接</div>
-              <span></span>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div styleName='right'>
-        <div styleName='icon' title='播放列表' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
-        <div
-          styleName='icon volume'
-          @click.self='this.mute'
-          :className='"icon-" + (mute ? "mute" : "volume")'>
-          <div styleName='volume-box'>
-            <div styleName='volume-bar-container'>
-              <div></div>
-              <div styleName='bar' @change='this.volumeChange' @input='this.volumeChange'>
-                <i v-progress='options'></i>
+    <div styleName='player-box' id='Player'>
+      <Progress :showSongDetail='showSongDetail'/>
+      <div styleName='blur-bg'></div>
+      <div styleName='content'>
+        <div styleName='left'>
+          <div styleName='song-img' v-show='showDesc'>
+            <div styleName='img-content' :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'></div>
+            <div
+              styleName='zoom'
+              :className='"icon-zoom" + (showSongDetail ? "-out" : "")'
+              @click='this.showSongDetail'></div>
+          </div>
+          <div styleName='desc' v-show='showDesc'>
+            <div styleName='name'>{{ current.name || '' }}</div>
+              <div styleName='auth'>
+                <span v-for='(val, i) of current.ar || current.artists'>
+                  <a v-if='i !== 0'> / </a>
+                  {{ val.name }}
+                </span>
               </div>
+          </div>
+        </div>
+        <div styleName='center'>
+          <ul>
+            <li styleName='icon' className='icon-like1' title='收藏'></li>
+            <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode'>
+              <div>{{ playOrderDesc }}</div>
+            </li>
+            <li styleName='time'>{{ this.getDuration() }}</li>
+            <li styleName='icon' className='icon-pre' @click='this.preSong' title='上一首'></li>
+            <li
+              styleName='play'
+              :className='"icon-" + (playing ? "pause" : "play")'
+              @click='this.togglePlay'></li>
+            <li styleName='icon' className='icon-next' @click='this.nextSong' title='下一首'></li>
+            <li styleName='time' id='CurrentTime'>00:00</li>
+            <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
+            <li styleName='icon share' title='分享' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
+              <div styleName='share-box' v-show='showCopyLink'>
+                <div @click='this.copyLink'><i></i>复制链接</div>
+                <span></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div styleName='right'>
+          <div styleName='icon' title='播放列表' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
+          <div
+            styleName='icon volume'
+            @click.self='this.mute'
+            :className='"icon-" + (mute ? "mute" : "volume")'>
+            <div styleName='volume-box'>
+              <div styleName='volume-bar-container'>
+                <div></div>
+                <div styleName='bar' @change='this.volumeChange' @input='this.volumeChange'>
+                  <i v-progress='options'></i>
+                </div>
+              </div>
+              <span styleName='array'></span>
             </div>
-            <span styleName='array'></span>
           </div>
         </div>
       </div>

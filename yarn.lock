@@ -5809,6 +5809,10 @@ terser@^3.16.1:
     source-map "~0.6.1"
     source-map-support "~0.5.9"
 
+three@^0.101.1:
+  version "0.101.1"
+  resolved "http://registry.npm.taobao.org/three/download/three-0.101.1.tgz#e7681ef52f4e572cb84f307f16f540c457030ec6"
+
 throttleit@0.0.2:
   version "0.0.2"
   resolved "http://registry.npm.taobao.org/throttleit/download/throttleit-0.0.2.tgz#cfedf88e60c00dd9697b61fdd2a8343a9b680eaf"
