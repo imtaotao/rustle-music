@@ -8,4 +8,5 @@
 4. start codeing
 
 # 下载
-mac版本<a download='rustle' src='./packed/rustle-1.0.0.dmg'>下载</a>
+mac版本
+<a download='rustle' href='./packed/rustle-1.0.0.dmg'>下载</a>

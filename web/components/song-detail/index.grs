@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div styleName='head-box' v-show='!showBgStar'>
+      <div styleName='head-box' id='headBox' v-show='!showBgStar'>
         <Head styleName='head'/>
       </div>
     </div>

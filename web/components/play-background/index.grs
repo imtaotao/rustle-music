@@ -20,7 +20,7 @@
       [[0.80, 1, 0.5], 3],
     ]
 
-    created() {
+    beforeCreate () {
       setTimeout(() => {
         this.init(document.getElementById('particalesBox')).animate()
         window.onresize = e => {

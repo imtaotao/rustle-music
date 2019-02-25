@@ -6,7 +6,7 @@
   position: relative;
   overflow-x: hidden;
   &::before {
-    @include halfPX(#d6d6d6);
+    @include halfPX(#868686);
     position: absolute;
     right: 0;
   }
