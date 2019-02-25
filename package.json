@@ -1,27 +1,31 @@
 {
-  "name": "rustle-music",
+  "name": "rustle",
   "version": "1.0.0",
   "description": "music application",
-  "main": "./client/main.js",
+  "main": "client/main.js",
   "scripts": {
     "i": "rm -rf node_modules && yarn",
     "dev": "electron .",
     "icon": "node ./web/assets/change.js",
     "start": "webpack-dev-server --env.dev",
     "build": "rm -rf ./dist && webpack --env.build",
-    "build:an": "rm -rf ./dist && webpack --env.build --env.analyzer"
+    "build:an": "rm -rf ./dist && webpack --env.build --env.analyzer",
+    "package:mac": "yarn build && cross-env electron-builder --mac",
+    "package:win": "yarn build && cross-env electron-builder --win --ia32"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@rustle/hearken": "^0.0.1-alpha.3",
     "apicache": "^1.2.1",
+    "asar": "^1.0.0",
     "cookie": "^0.3.1",
     "input-range": "^1.2.8",
     "opn": "^5.4.0",
     "pac-proxy-agent": "^3.0.0",
     "request": "^2.85.0",
-    "three": "^0.101.1"
+    "three": "^0.101.1",
+    "yargs": "^13.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -32,8 +36,10 @@
     "@babel/runtime": "^7.1.5",
     "NeteaseCloudMusicApi": "^3.4.0",
     "babel-loader": "^8.0.5",
+    "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
     "electron": "^4.0.1",
+    "electron-builder": "^20.38.5",
     "file-loader": "^3.0.1",
     "friendly-errors-webpack-plugin": "^1.7.0",
     "grass-loader": "^0.0.3",

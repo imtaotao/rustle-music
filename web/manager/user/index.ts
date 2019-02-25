@@ -37,7 +37,7 @@ class Login {
       autoLogin
         ? this.saveRespose(phone, password, 'phone')
         : this.clearAutoLoginData()
-      console.log(res);
+
       localStorage.setItem('id', String(res.body.account.id))
       recordState(this.Parent, res.body)
       this.Parent.dispatch('login', res.body)
@@ -74,13 +74,13 @@ class UserManager extends Event {
   }
 
   private init () {
-    const id = localStorage.getItem('id')
-    if (id) {
-      this.id = +id
-      this.logged = true
-      this.nickname = '和声_伴奏'
-      return
-    }
+    // const id = localStorage.getItem('id')
+    // if (id) {
+    //   this.id = +id
+    //   this.logged = true
+    //   this.nickname = '和声_伴奏'
+    //   return
+    // }
     const data = localStorage.getItem('userAccount')
     if (!data) return
     const { type, account, password, preTime } = JSON.parse(data)

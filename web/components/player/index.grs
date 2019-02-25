@@ -97,8 +97,7 @@
     beforeCreate () {
       const comp = this
       this.state = {
-        // showDesc: RuntimeManager.current.id !== 0,
-        showDesc: true,
+        showDesc: RuntimeManager.current.id !== 0,
         showCopyLink: false,
         showPlayList: false,
         showSongDetail: false,

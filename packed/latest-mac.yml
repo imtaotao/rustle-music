@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: rustle-1.0.0.dmg
+    sha512: Vc6T9xsaymjMGY4P1pjwSolPXmuZLHmHE+JMiXacJJJ07gj9rJviwYpHEmnENo5g3dnhKnSLRtt3M7OkKLKSIQ==
+    size: 75912251
+path: rustle-1.0.0.dmg
+sha512: Vc6T9xsaymjMGY4P1pjwSolPXmuZLHmHE+JMiXacJJJ07gj9rJviwYpHEmnENo5g3dnhKnSLRtt3M7OkKLKSIQ==
+releaseDate: '2019-02-25T11:13:42.782Z'

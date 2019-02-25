@@ -105,7 +105,7 @@
     }
 
     render () {
-      const time = Date.now() * 0.00003
+      const time = Date.now() * 0.00002
 
       for (let i = 0; i < this.scene.children.length; i++) {
         const object = this.scene.children[i]

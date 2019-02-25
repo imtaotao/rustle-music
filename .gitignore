@@ -14,3 +14,8 @@ selenium-debug.log
 *.ntvs*
 *.njsproj
 *.sln
+
+# package
+packed/mac
+packed/builder-effective-config.yaml
+packed/latest-mac.yml

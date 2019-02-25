@@ -1,0 +1,43 @@
+directories:
+  output: packed/
+  buildResources: build
+appId: cm.imtaotao.rustle.music
+artifactName: '${productName}-${version}.${ext}'
+productName: rustle
+npmRebuild: true
+files:
+  - filter:
+      - client/
+      - dist/
+      - platform/
+extraResources:
+  - from: dist/
+    to: dist/
+mac:
+  target:
+    - dmg
+pkg:
+  artifactName: '${artifactName}'
+  installLocation: /Applications
+  scripts: pkgscripts
+dmg:
+  icon: client/res/favicon.ico
+  contents:
+    - x: 410
+      'y': 170
+      type: link
+      path: /Applications
+    - x: 130
+      'y': 170
+      type: file
+win:
+  icon: client/res/favicon.ico
+  target:
+    - nsis
+  verifyUpdateCodeSignature: false
+nsis:
+  oneClick: false
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  runAfterFinish: true
+electronVersion: 4.0.3

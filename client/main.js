@@ -1,7 +1,5 @@
 const path = require('path')
 const yarn = require('yargs')
-const { port } = require('../webpack/share')
-const { macOs, windows } = require('../platform/utils')
 const { app, Menu, BrowserWindow } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -9,7 +7,7 @@ const { app, Menu, BrowserWindow } = require('electron')
 let mainWindow
 
 function createWindow () {
-  if (windows()) {
+  if (process.platform === 'win32') {
     Menu.setApplicationMenu(null)
   }
   // Create the browser window.
@@ -27,19 +25,19 @@ function createWindow () {
       // nodeIntegration: false,
       contextIsolation: false,
       experimentalFeatures: true,
-      preload: path.join(__dirname, './preload.js')
+      preload: path.join(__dirname, './preload.js'),
     }
   })
 
   // and load the index.html of the app.
-  const url = yarn.argv.static
-    ? 'file://' + path.join(__dirname, '../dist/index.html')
-    : 'http://localhost:' + port
-  // const url = http://192.168.1.103:' + port
+  const url = yarn && yarn.argv.dev
+    ? 'http://localhost:' + 2333
+    : 'file://' + path.join(__dirname, '../dist/index.html')
+
   mainWindow.loadURL(url)
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools({mode: 'bottom'})
+  // mainWindow.webContents.openDevTools({mode: 'bottom'})
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
