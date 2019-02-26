@@ -16,7 +16,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@rustle/hearken": "^0.0.1-alpha.3",
+    "@rustle/grass": "^0.0.1-alpha.6",
+    "@rustle/hearken": "^0.0.1-alpha.4",
     "apicache": "^1.2.1",
     "asar": "^1.0.0",
     "cookie": "^0.3.1",
