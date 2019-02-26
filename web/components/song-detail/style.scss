@@ -291,7 +291,7 @@
   position: absolute;
   left: 35%;
   bottom: 60px;
-  height: 28px;
+  height: 20px;
   font-size: 13px;
   display: flex;
   color: #585858;
@@ -301,15 +301,15 @@
     align-items: center;
     justify-content: flex-start;
     height: 100%;
-    width: 60px;
+    width: 50px;
     border-radius: 15px;
     margin-left: 10px;
     background: rgba(0,0,0,0.05);
     cursor: pointer;
     i {
       display: block;
-      width: 25px;
-      height: 25px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       background: rgba(0,0,0,0.1);
     }

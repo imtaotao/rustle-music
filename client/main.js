@@ -5,6 +5,7 @@ const { app, Menu, BrowserWindow } = require('electron')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+const isDev = yarn && yarn.argv.dev
 
 function createWindow () {
   if (process.platform === 'win32') {
@@ -30,14 +31,16 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  const url = yarn && yarn.argv.dev
+  const url = isDev
     ? 'http://localhost:' + 2333
     : 'file://' + path.join(__dirname, '../dist/index.html')
 
   mainWindow.loadURL(url)
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools({mode: 'bottom'})
+  if (isDev) {
+    mainWindow.webContents.openDevTools({mode: 'bottom'})
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {

@@ -23,6 +23,8 @@
     }
   }
 
+  console.time('render time')
   Grass.use(pluging, Grass)
-  window.root = Root.$mount(document.getElementById('root'))
+  Root.$mount(document.getElementById('root'))
+  console.timeEnd('render time')
 </script>
