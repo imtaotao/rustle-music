@@ -1,5 +1,6 @@
 # rustle-music
-`好看，好玩，好用`  --  来自一个帅气的小伙子
+`好看，好玩，好用`  --  来自一个帅气的小伙子<br>
+暂时只完成了部分功能，陆续更新增加模块
 
 # start
 1. `yarn add` (add dependencies package)
