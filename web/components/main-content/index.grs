@@ -1,9 +1,9 @@
 <template>
-  <div styleName='container'>
+  <div>
     <Head styleName='head' v-if='!showSongList'>
       <div styleName='placeholder' slot='placeholder'></div>
     </Head>
-    <div styleName='content' v-show='showPrivateFM'>
+    <div styleName='content no-padding' v-show='showPrivateFM'>
       <PrivateFM/>
     </div>
     <div styleName='content' v-show='showSongList'>

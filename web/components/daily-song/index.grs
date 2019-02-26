@@ -96,7 +96,7 @@
 
     playAll = e => {
       this.check(data => {
-        RuntimeManager.replaceAll('dailyRecommendList', data)
+        RuntimeManager.replaceAll('dailyRecommendList', data, 0)
           ? notice('添加成功', true)
           : notice('请勿重复添加')
       })

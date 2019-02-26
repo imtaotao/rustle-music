@@ -1,0 +1,163 @@
+@import 'web/components/common.scss';
+
+.container {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  padding-top: 100px;
+}
+
+.top {
+  width: 100%;
+  height: 90%;
+  position: relative;
+  .bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 0;
+    opacity: 0.3;
+    background: rgba(0, 0, 0, 0.15);
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: blur(15px)
+  }
+}
+
+.song-img {
+  $size: 270px;
+  width: 50%;
+  height: 100%;
+  padding: 40px 0 0 95px;
+  position: absolute;
+  perspective: 500px;
+  z-index: 1;
+  left: 0;
+  div[class^=img-box] {
+    width: $size;
+    height: $size;
+    border-radius: 10px;
+    background: url('../../assets/img/bg.png') no-repeat;
+    background-size: cover;
+    position: absolute;
+    div {
+      $s: 50px;
+      width: $s;
+      height: $s;
+      font-size: 50px;
+      border-radius: 50%;
+      position: absolute;
+      bottom: calc(50% - #{$s / 2});
+      right: calc(50% - #{$s / 2});
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: -6px 0 15px 0 rgba(0, 0, 0, 0.2);
+      &.play {
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+  }
+  .img-box-0 {
+    transform: translate3d(-70px, -7px, -80px);
+    opacity: 0.7;
+    z-index: 0;
+  }
+  .img-box-1 {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    z-index: 1;
+  }
+  .img-box-2, .img-box--1, .img-box-3 {
+    transform: translate3d($size + 5, 0, 0);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .btns {
+    $height: 40px;
+    width: 100%;
+    height: $height;
+    position: absolute;
+    left: 0;
+    top: $size + $height + 40px;
+    display: flex;
+    justify-content: space-around;
+    button {
+      @include center;
+      width: $height;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.03);
+      border: none;
+      cursor: pointer;
+      outline: none;
+      &:hover {
+        background: rgba(0,0,0,0.05);
+      }
+      i {
+        font-size: 18px;
+        color: #828282;
+      }
+    }
+  }
+}
+
+.song-content {
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  padding-right: 100px;
+  .song-name {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    b {
+      @include hideText;
+      max-width: 70%;
+      height: 25px;
+      font-size: 22px;
+      margin-right: 15px;
+      color: #444;
+    }
+    span {
+      border: border($theme);
+      border-radius: 3px;
+      padding: 3px;
+      color: $theme;
+      font-size: 14px;
+    }
+  }
+  .song-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 25px;
+    margin-bottom: 20px;
+    li {
+      @include hideText;
+      width: 40%;
+      font-size: 12px;
+      color: #848488;
+      span {
+        color: #7e99c7;
+        cursor: pointer;
+      }
+      span:hover {
+        color: #374d71;
+      }
+    }
+  }
+}
+
+.animate {
+  transition: all 0.25s ease;
+}
+
+.lyric li {
+  color: #333;
+}

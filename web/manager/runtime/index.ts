@@ -16,6 +16,8 @@ class RuntimeManager extends Event {
   current: I.Song = defaultCurrent
   addlist = new Set()
   mode: I.PlayMode = 'cycle'
+  FM: boolean = false
+  DisableSwitch: boolean = false
 
   Hearken = new Media({volume: 0.5})
 
@@ -46,14 +48,16 @@ class RuntimeManager extends Event {
     return true
   }
 
-  public replaceAll (listname: string | number, list: I.Song[]) {
+  public replaceAll (listname: string | number, list: I.Song[], index?: number) {
     this.playlist = list
     this.addlist.clear()
-    // 切换的时候从第一个开始播放
-    this.specifiedPlay(0, () => {
-      // 如果出现错误就播放下一个
-      list.length > 1 && this.next()
-    })
+    if (typeof index === 'number') {
+      // 切换的时候默认从第一个开始播放
+      this.specifiedPlay(index, () => {
+        // 如果出现错误就播放下一个
+        list.length > 1 && this.next()
+      })
+    }
     this.addlist.add(listname)
     this.dispatch('playlistChanged')
     return true
@@ -61,6 +65,7 @@ class RuntimeManager extends Event {
 
   // 指定播放
   public specifiedPlay (item: I.Song | number, err?: Function) {
+    if (this.DisableSwitch) return
     let needDispath = false
     if (typeof item === 'number') {
       item = this.playlist[item]
@@ -75,13 +80,16 @@ class RuntimeManager extends Event {
 
     if (item && item !== defaultCurrent) {
       const fn = (newItem) => {
-        this.toStartNewSong(<I.Song>newItem).catch(msg => {
+        this.toStartNewSong(<I.Song>newItem)
+        .then(() => {
+          if (needDispath) {
+            this.dispatch('playlistChanged')
+          }
+        })
+        .catch(msg => {
           notice(msg)
           err && err()
         })
-        if (needDispath) {
-          this.dispatch('playlistChanged')
-        }
       }
 
       const al:any = item.album || item.al
@@ -100,6 +108,9 @@ class RuntimeManager extends Event {
   }
 
   public next () {
+    this.dispatch('nextBefore')
+    if (this.DisableSwitch) return true
+
     let index = this.findCurrentIndex()
     if (typeof index === 'number') {
       index++
@@ -108,7 +119,11 @@ class RuntimeManager extends Event {
       }
       const item = this.playlist[index]
       if (!item) return false
-      this.toStartNewSong(item).catch(msg => {
+      this.toStartNewSong(item)
+      .then(() => {
+        this.dispatch('next')
+      })
+      .catch(msg => {
         notice(msg)
         this.next()
       })
@@ -118,6 +133,9 @@ class RuntimeManager extends Event {
   }
 
   public previous () {
+    this.dispatch('previousBefore')
+    if (this.DisableSwitch) return true
+
     let index = this.findCurrentIndex()
     if (typeof index === 'number') {
       index--
@@ -126,7 +144,11 @@ class RuntimeManager extends Event {
       }
       const item = this.playlist[index]
       if (!item) return false
-      this.toStartNewSong(item).catch(msg => {
+      this.toStartNewSong(item)
+      .then(() => {
+        this.dispatch('previous')
+      })
+      .catch(msg => {
         notice(msg)
         this.previous()
       })
@@ -136,11 +158,18 @@ class RuntimeManager extends Event {
   }
 
   public randomPlay () {
+    this.dispatch('randomBefore')
+    if (this.DisableSwitch) return true
+
     const index = Number(random(this.playlist.length - 1, 0))
     if (typeof index === 'number' && !isNaN(index)) {
       const item = this.playlist[index]
       if (!item) return false
-      this.toStartNewSong(item).catch(msg => {
+      this.toStartNewSong(item)
+      .then(() => {
+        this.dispatch('random')
+      })
+      .catch(msg => {
         notice(msg)
         this.previous()
       })
@@ -155,10 +184,20 @@ class RuntimeManager extends Event {
     this.dispatch('modeChanged')
   }
 
+  public setFM (fm: boolean) {
+    this.FM = true
+    this.dispatch('setfm')
+  }
+
+  public setDisableSwitch (isDisable: boolean) {
+    this.DisableSwitch = isDisable
+    this.dispatch('setDisable')
+  }
+
   // 播放音乐
   private toStartNewSong (item: I.Song) {
     this.Hearken.stop()
-    return new Promise((_, reject) => {
+    return new Promise((resolve, reject) => {
       // 如果发现和当前音乐是同一首
       if (item.id === this.current.id && this.Hearken.audio.src) {
         this.Hearken.restart()
@@ -171,12 +210,12 @@ class RuntimeManager extends Event {
         if (item.id !== this.current.id) return
         const {success, message} = body
         if (!success) reject(message)
-
         this.getSongDetailInfo(item.id).then(url => {
           if (item.id !== this.current.id) return
           this.Hearken.ready(h => h.start(url))
           this.dispatch('currentChanged')
           this.dispatch('start')
+          resolve()
         })
       }, err => reject(err.body.message))
     })
@@ -207,5 +246,5 @@ class RuntimeManager extends Event {
 const Runtime = new RuntimeManager()
 export default Runtime;
 
-(window as any).h = Runtime;
+(window as any).run = Runtime;
 (window as any).hh = Runtime.Hearken

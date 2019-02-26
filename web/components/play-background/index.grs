@@ -104,7 +104,6 @@
       this.renderer = new THREE.WebGLRenderer({antialias: false, alpha:true})
       this.renderer.setPixelRatio(window.devicePixelRatio)
       this.renderer.setSize(WIDTH, HEIGHT)
-      // this.renderer.setClearColor('rgb(0, 0, 0)', 1);
       this.container.appendChild(this.renderer.domElement)
     }
 
@@ -120,7 +119,7 @@
 
       for (let i = 0; i < this.materials.length; i++) {
         const color = this.parameters[i][0]
-        h = (360 * (color[0] + time) % 360) / 360
+        const h = (360 * (color[0] + time) % 360) / 360
         this.materials[i].color.setHSL(h, color[1], color[2])
       }
 

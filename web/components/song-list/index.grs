@@ -179,7 +179,7 @@
       if (tracks.length === 0) {
         return notice('请等待歌单数据加载完成')
       }
-      RuntimeManager.replaceAll(this.props.id, tracks)
+      RuntimeManager.replaceAll(this.props.id, tracks, 0)
         ? notice('添加成功', true)
         : notice('请勿重复添加')
     }

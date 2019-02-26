@@ -121,7 +121,7 @@
     replaceSongList ({id}) {
       this.getSongList(id, data => {
         if (data && data.tracks) {
-          RuntimeManager.replaceAll(id, data.tracks)
+          RuntimeManager.replaceAll(id, data.tracks, 0)
             ? notice('添加成功', true)
             : notice('请勿重复添加')
         }

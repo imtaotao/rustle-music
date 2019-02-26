@@ -1,12 +1,237 @@
 <template>
-  <div>
-    div
+  <div styleName='container'>
+    <div styleName='top'>
+      <div styleName='bg' :style='this.getPicUrl(current)'></div>
+      <div styleName='song-img'>
+        <div
+          :styleName='"img-box-" + this.getMoveStyleName(i)'
+          :style='this.getPicUrl(val)'
+          v-for='(val, i) of data'
+          @click='this.previousPlay.bind(this, i)'>
+          <div
+            :styleName='playing ? "play" : ""'
+            :className='playing ? "icon-pause" : "icon-play"'
+            v-if='i !== 2'
+            @click='this.togglePlay'>
+          </div>
+        </div>
+        <div styleName='btns'>
+          <button><i :className='"icon-like1"'></i></button>
+          <button @click='this.nextPlay'><i className='icon-next'></i></button>
+        </div>
+      </div>
+      <div styleName='song-content' v-if='current.id !== 0'>
+        <div styleName='song-name'>
+          <b>{{ current.name }}</b>
+          <span>极高音质</span>
+        </div>
+        <ul styleName='song-info'>
+          <li>专辑：<span>{{ (current.al || current.album).name }}</span></li>
+          <li>
+            歌手：
+            <span v-for='(item, i) of current.ar || current.artists'>
+              <b v-if='i > 0'> / </b>
+              {{ item.name }}
+            </span>
+          </li>
+        </ul>
+        <SongLyric styleName='lyric' :lyric='lyric'/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import { notice } from 'web/utils'
+  import Router from 'web/manager/router'
+  import UserManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'  
+  import SongLyric from 'web/components/song-lyric'
+
+  let count = 0
+  const Hearken = RuntimeManager.Hearken
+
   @Grass.CSSModules(style)
   export default class PrivateFM extends Grass.Component {
     // #temp
+    component = { SongLyric }
+
+    willReceiveProps = () => false
+
+    beforeCreate () {
+      const defaultItem = {
+        album: {},
+        id: 0,
+      }
+      this.state = {
+        id: 0,
+        lyric: '',
+        move: null,
+        current: RuntimeManager.current,
+        data: [defaultItem, defaultItem],
+        playing: Hearken.playing(),
+      }
+      window.fm = this
+      
+      UserManager.on('login', () => {
+        if (Router.current.val === 'fm' && !RuntimeManager.FM) {
+          // 获取私人fm数据并播放
+          this.getFMdata(data => {
+            this.pushNewData(data)
+            RuntimeManager.specifiedPlay(1)
+          })
+        }
+      })
+
+      Router.on('changed', url => {
+        if (url === 'fm' && !RuntimeManager.FM) {
+          // 获取私人fm数据并播放
+          this.getFMdata(data => {
+            this.pushNewData(data)
+            RuntimeManager.specifiedPlay(1)
+          })
+        }
+      })
+
+      // 阻止默认的next方法，使用自定义的
+      RuntimeManager.on('nextBefore', () => {
+        // 图片切换动画而且阻止连续切换
+        const delay = 260
+        RuntimeManager.setDisableSwitch(true)
+
+        // 如果是先往前播放在播放下一首
+        if (RuntimeManager.findCurrentIndex() === 0) {
+          this.setState({move: 'nomarl'})
+          setTimeout(() => {
+            RuntimeManager.setDisableSwitch(false)
+            RuntimeManager.specifiedPlay(1)
+            this.getSongLyric()
+            this.setState({
+              move: null,
+              current: RuntimeManager.current,
+            })
+          }, delay)
+        } else {
+          // 否则就需要获取新数据
+          this.setState({move: 'left'})
+          this.getFMdata((data, _count) => {
+            setTimeout(() => {
+              if (count !== _count) return
+              const newData = RuntimeManager.playlist.slice(1)
+              newData.push(data[data.length - 1])
+
+              // 动画切换完成后可以继续进行操作
+              this.pushNewData(newData)
+              RuntimeManager.setDisableSwitch(false)
+              RuntimeManager.specifiedPlay(1)
+              this.getSongLyric()
+              this.setState({
+                move: null,
+                current: RuntimeManager.current,
+              })
+            }, delay)
+          })
+        }
+      })
+
+      const fn = () => this.setState({playing: Hearken.playing()})
+      Hearken.on('start', fn)
+      Hearken.on('stop', fn)
+      Hearken.on('play', fn)
+      Hearken.on('pause', fn)
+    }
+
+    pushNewData = data => {
+      this.setState({data})
+      RuntimeManager.setFM(true)
+      RuntimeManager.replaceAll('_fm', data)
+    }
+
+    togglePlay = e => {
+      if (RuntimeManager.current.id === 0) return
+      if (this.state.playing) {
+        Hearken.fadePause(0.5)
+      } else if (Hearken.state) {
+        Hearken.fadePlay(1)
+      } else {
+        if (RuntimeManager.current.id === 0) {
+          return notice('播放失败')
+        }
+        // 如果 state 为 null 代表需要通过 start 播放
+        Hearken.restart(1).then(success => {
+          if (!success) {
+            RuntimeManager.specifiedPlay(RuntimeManager.current)
+          }
+        })
+      }
+    }
+
+    getFMdata (cb) {
+      if (!UserManager.logged) {
+        return notice('登录后才能使用私人fm')
+      }
+
+      count++
+
+      const sfn = ({body}) => {
+        if (body.data && body.data.length > 0) {
+          if (body.data.length > 3) {
+            body.data.length = 3
+          }
+          cb && cb(body.data, count)
+        }
+      }
+      const efn = err => notice(err.body.msg)
+      window.node.request('/personal_fm').then(sfn, efn)
+    }
+
+    getSongLyric () {
+      const id = RuntimeManager.current.id
+      if (id !== 0) {
+        this.setState({id, lyric: '歌词加载中...'})
+
+        const sfn = ({body}) => {
+          if (id !== this.state.id) return
+          let lyric = '纯音乐，请您欣赏'
+          if (!body.nolyric) {
+            lyric = (body.lrc && body.lrc.lyric) || '当前歌曲暂无歌词'
+          }
+          this.setState({id, lyric})
+        }
+        const efn = err => notice('歌词加载失败')
+        window.node.request('/lyric?id=' + id).then(sfn, efn)
+      }
+    }
+
+    getMoveStyleName (i) {
+      if (!this.state.move) return i
+      if (this.state.move === 'nomarl') {
+        return i + ' animate'
+      }
+      const baseName = this.state.move === 'left'
+        ? i - 1
+        : i + 1
+      return baseName + ' animate'
+    }
+
+    getPicUrl (item) {
+      const album = item.album || item.al
+      if (!album || !album.picUrl) return {}
+      return {backgroundImage: `url(${album.picUrl})`}
+    }
+
+    nextPlay = e => {
+      RuntimeManager.next()
+    }
+
+    previousPlay (i) {
+      if (i === 0) {
+        RuntimeManager.previous()
+        this.setState({
+          move: 'right',
+          current: RuntimeManager.current,
+        })
+      }
+    }
   }
 </script>

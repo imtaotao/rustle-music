@@ -25,11 +25,11 @@
         <div styleName='center'>
           <ul>
             <li styleName='icon' className='icon-like1' title='收藏'></li>
-            <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode'>
+            <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode' v-show='isNoFmMode'>
               <div>{{ playOrderDesc }}</div>
             </li>
             <li styleName='time'>{{ this.getDuration() }}</li>
-            <li styleName='icon' className='icon-pre' @click='this.preSong' title='上一首'></li>
+            <li styleName='icon' className='icon-pre' v-show='isNoFmMode' @click='this.preSong' title='上一首'></li>
             <li
               styleName='play'
               :className='"icon-" + (playing ? "pause" : "play")'
@@ -46,7 +46,13 @@
           </ul>
         </div>
         <div styleName='right'>
-          <div styleName='icon' title='播放列表' className='icon-list' @click='() => this.setState({showPlayList: !showPlayList})'></div>
+          <div
+            styleName='icon'
+            title='播放列表'
+            v-show='isNoFmMode'
+            className='icon-list'
+            @click='() => this.setState({showPlayList: !showPlayList})'>
+          </div>
           <div
             styleName='icon volume'
             @click.self='this.mute'
@@ -101,6 +107,7 @@
         showCopyLink: false,
         showPlayList: false,
         showSongDetail: false,
+        isNoFmMode: true,
         mode: RuntimeManager.mode,
         mute: Hearken.options.mute,
         current: RuntimeManager.current,
@@ -119,12 +126,20 @@
         this.setState({showSongDetail: false})
       })
 
+      // 如果当前路由页面是 fm，就不能有上一首的按钮
+      Router.on('changed', url => {
+        const isNoFM = url !== 'fm'
+        if (isNoFM !== this.state.isNoFmMode) {
+          this.setState({isNoFmMode: isNoFM})
+        }
+      })
+
       this.monitorRuntimeMagager()
     }
 
     monitorRuntimeMagager () {
-      // 播放列表发送变化
-      RuntimeManager.on('playlistChanged', () => {
+      // 当前播放音乐发生变化
+      RuntimeManager.on('currentChanged', () => {
         this.setState({
           current: RuntimeManager.current,
           showDesc: RuntimeManager.current.id !== 0,

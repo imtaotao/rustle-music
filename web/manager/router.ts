@@ -1,12 +1,27 @@
-export default {
-  history: [],
-  routers: {},
-  capacity: 5, // 历史纪录最多 5 个
-  current: {
+import Event from 'web/share/event'
+
+interface item {
+  data: any
+  val: string | null
+  index: number
+}
+
+interface router {
+  url: {
+    show: Function
+    hide?: Function
+  }
+}
+
+class Router extends Event {
+  history: item[] = []
+  routers: router | {} = {}
+  capacity = 5 // 历史纪录最多 5 个
+  current: item = {
     val: null,
     data: null,
     index: 0,
-  },
+  }
 
   to (url: string, data: any, index?: number) {
     const routers = this.routers
@@ -39,38 +54,39 @@ export default {
         }
         // 显示当前页面
         show(data)
+        this.dispatch('changed', this.current.val)
       }
     } else {
       throw new Error(`Router warn: "${url}" page is not register.`)
     }
-  },
+  }
 
   register (url: string, show: Function, hide?: Function, forceDirect = false) {
     if (typeof show === 'function') {
       (<any>show)._forceDirect = forceDirect
       this.routers[url] = { show, hide }
     }
-  },
+  }
 
   back () {
     const index = this._findCurrentIndex()
     if (index !== null) {
       const item = this.history[index - 1]
       if (item) {
-        this.to(item.val, item.data, item.index)
+        this.to(<string>item.val, item.data, item.index)
       }
     }
-  },
+  }
 
   forward () {
     const index = this._findCurrentIndex()
     if (index !== null) {
       const item = this.history[index + 1]
       if (item) {
-        this.to(item.val, item.data, item.index)
+        this.to(<string>item.val, item.data, item.index)
       }
     }
-  },
+  }
 
   canBack () {
     const index = this._findCurrentIndex()
@@ -78,7 +94,7 @@ export default {
       return  !!this.history[index - 1]
     }
     return false
-  },
+  }
 
   canForward () {
     const index = this._findCurrentIndex()
@@ -86,7 +102,7 @@ export default {
       return  !!this.history[index + 1]
     }
     return false
-  },
+  }
 
   _findCurrentIndex () {
     let index: null | number = null
@@ -100,3 +116,5 @@ export default {
     return index
   }
 }
+
+export default new Router()
