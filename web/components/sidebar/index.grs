@@ -113,6 +113,9 @@
           case 'discover' :
             Router.to('DiscoverMusic')
             break
+          case 'fm' :
+            Router.to('fm')
+            break
         }
       } else {
         // 传递当前选中的歌单数据

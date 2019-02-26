@@ -1,5 +1,6 @@
 const path = require('path')
 const yarn = require('yargs')
+const shortcut = require('./shortcut-register')
 const { app, Menu, BrowserWindow } = require('electron')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -30,6 +31,9 @@ function createWindow () {
     }
   })
 
+  // 注册快捷键
+  shortcut(isDev, mainWindow)
+
   // and load the index.html of the app.
   const url = isDev
     ? 'http://localhost:' + 2333
@@ -48,23 +52,23 @@ function createWindow () {
   })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+// 当Electron完成时，将调用此方法
+// 初始化并准备创建浏览器窗口。
+// 某些API只能在此事件发生后使用。
 app.on('ready', createWindow)
 
-// Quit when all windows are closed.
+// 关闭所有窗户后退出。
 app.on('window-all-closed', function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
+  // 在OS X上，应用程序及其菜单栏很常见
+  // 保持活动状态，直到用户使用Cmd + Q显式退出
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
 app.on('activate', function () {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+  // 在OS X上，通常在应用程序中重新创建一个窗口
+  // 单击停靠栏图标，没有其他窗口打开。
   if (mainWindow === null) {
     createWindow()
   }

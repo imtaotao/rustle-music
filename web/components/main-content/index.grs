@@ -3,6 +3,9 @@
     <Head styleName='head' v-if='!showSongList'>
       <div styleName='placeholder' slot='placeholder'></div>
     </Head>
+    <div styleName='content' v-show='showPrivateFM'>
+      <PrivateFM/>
+    </div>
     <div styleName='content' v-show='showSongList'>
       <SongList :id='songListId' :playlist='playlist'/>
     </div>
@@ -15,6 +18,7 @@
 <script>
   import Head from 'web/components/head'
   import Router from 'web/manager/router'
+  import PrivateFM from 'web/components/fm'
   import Sidebar from 'web/components/sidebar'
   import SongList from 'web/components/song-list'
   import DailySong from 'web/components/daily-song'
@@ -41,7 +45,7 @@
   @Grass.CSSModules(style)
   export default class MainContent extends Grass.Component {
     // #temp
-    component = { Head, SongList, DailySong, SearchResult, DiscoverMusic }
+    component = { Head, SongList, DailySong, PrivateFM, SearchResult, DiscoverMusic }
 
     searchValue = ''
 
@@ -49,6 +53,7 @@
       const routerCtrs = {
         showSongList: false,
         showDailySong: false,
+        showPrivateFM: false,
         showSearchResult: false,
         showDiscoverMusic: false,
       }
@@ -87,6 +92,9 @@
         })
       }, hide('showSongList'), true)
 
+      // 私人 fm 页面
+      Router.register('fm', () => show('showPrivateFM'), hide('showPrivateFM'))
+      
       // 歌曲推荐页面
       Router.register('DailySong', () => show('showDailySong'), hide('showDailySong'))
 

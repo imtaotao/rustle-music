@@ -1,0 +1,12 @@
+<template>
+  <div>
+    div
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class PrivateFM extends Grass.Component {
+    // #temp
+  }
+</script>
