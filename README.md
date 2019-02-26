@@ -3,7 +3,7 @@
 暂时只完成了部分功能，陆续更新增加模块
 
 # start
-1. `yarn add` (add dependencies package)
+1. `yarn` (add dependencies package)
 2. `yarn start` (start http-dev-server)
 3. `yarn dev --dev` (start electron client)
 4. start codeing
