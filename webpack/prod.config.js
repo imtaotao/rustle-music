@@ -13,7 +13,10 @@ const css = modules => ({
     },
     {
       loader: 'css-loader',
-      options: { modules }, // 配合 Grass.cssMoudles 方法
+      options: {
+        modules, // 配合 Grass.cssMoudles 方法
+        localIdentName: '[local]_[hash:base64:5]',
+      },
     }
   ],
 })

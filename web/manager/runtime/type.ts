@@ -11,3 +11,5 @@ export interface Song {
 }
 
 export type PlayMode = 'cycle' | 'song-cycle' | 'random'
+
+export type Moudles = 'normal' | 'fm' | 'dj' | 'none'

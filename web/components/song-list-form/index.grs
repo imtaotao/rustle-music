@@ -99,6 +99,10 @@ mmp, 几个接口返回的字段不一样
     }
 
     play (item) {
+      if (RuntimeManager.module !== 'normal') {
+        RuntimeManager.setModule('normal')
+        RuntimeManager.clear()
+      }
       RuntimeManager.specifiedPlay(item)
     }
 

@@ -179,12 +179,14 @@
       if (tracks.length === 0) {
         return notice('请等待歌单数据加载完成')
       }
+      RuntimeManager.setModule('normal')
       RuntimeManager.replaceAll(this.props.id, tracks, 0)
         ? notice('添加成功', true)
         : notice('请勿重复添加')
     }
 
     addAll = e => {
+      if (RuntimeManager.module !== 'normal') return
       const tracks = this.state.tracks
       if (tracks.length === 0) {
         return notice('请等待歌单数据加载完成')

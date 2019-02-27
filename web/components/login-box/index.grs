@@ -23,7 +23,7 @@
       <div styleName='button-container'>
         <div styleName='auto-login'>
           <!-- 自动登录选框 -->
-          <input type='checkbox' id='AutoLogin' @change='this.checkboxChanged'/>
+          <input type='checkbox' :checked='autoLogin' id='AutoLogin' @change='this.checkboxChanged'/>
           <label for='AutoLogin' className='black'>自动登录</label>
           <span v-show='errorInfo'>{{ errorInfo }}</span>
         </div>
@@ -51,7 +51,7 @@
         errorInfo: '',
         phoneMode: true,
         logining: false,
-        autoLogin: false,
+        autoLogin: true,
       }
     }
 

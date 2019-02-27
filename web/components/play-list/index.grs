@@ -56,15 +56,15 @@
       RuntimeManager.off(this.playlistChanged)
     }
 
-    playlistChanged = () => {
+    playlistChanged = playlist => {
       this.setState({
-        playlist: RuntimeManager.playlist,
-        count: RuntimeManager.playlist.length,
+        playlist,
+        count: playlist.length,
       })
     }
 
-    currentChanged = () => {
-      this.setState({current: RuntimeManager.current})
+    currentChanged = current => {
+      this.setState({current})
     }
 
     toggle = e => {

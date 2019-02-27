@@ -15,7 +15,7 @@ module.exports = function (isDev, mainWindow) {
         mainWindow.webContents.openDevTools({mode: 'bottom'})
       })
     }
-    globalShortcut.register('F5', () => {
+    globalShortcut.register('Alt+R', () => {
       mainWindow.webContents.reload()
     })
   }

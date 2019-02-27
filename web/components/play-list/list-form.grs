@@ -40,6 +40,10 @@
     }
 
     play (item) {
+      if (RuntimeManager.module !== 'normal') {
+        RuntimeManager.setModule('normal')
+        RuntimeManager.clear()
+      }
       RuntimeManager.specifiedPlay(item)
     }
   }

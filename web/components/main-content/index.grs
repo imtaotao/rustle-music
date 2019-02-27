@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Head styleName='head' v-if='!showSongList'>
+    <Head styleName='head' v-show='!showSongList'>
       <div styleName='placeholder' slot='placeholder'></div>
     </Head>
     <div styleName='content no-padding' v-show='showPrivateFM'>
@@ -9,7 +9,9 @@
     <div styleName='content' v-show='showSongList'>
       <SongList :id='songListId' :playlist='playlist'/>
     </div>
-    <DailySong styleName='content' v-if='showDailySong'/>
+    <div styleName='content' v-show='showDailySong'>
+      <DailySong/>
+    </div>
     <SearchResult styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
     <DiscoverMusic styleName='fill-content ' v-show='showDiscoverMusic'/>
   </div>
@@ -21,6 +23,7 @@
   import PrivateFM from 'web/components/fm'
   import Sidebar from 'web/components/sidebar'
   import SongList from 'web/components/song-list'
+  import RuntimeManager from 'web/manager/runtime'
   import DailySong from 'web/components/daily-song'
   import SearchResult from 'web/components/search-result'
   import DiscoverMusic from 'web/components/discover-music'

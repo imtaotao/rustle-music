@@ -93,6 +93,10 @@
     processSearchResult (type, val) {
       switch (type) {
         case 'songs' :
+          if (RuntimeManager.module !== 'normal') {
+            RuntimeManager.setModule('normal')
+            RuntimeManager.clear()
+          }
           RuntimeManager.specifiedPlay(val)
           break
       }

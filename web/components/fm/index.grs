@@ -35,7 +35,7 @@
             </span>
           </li>
         </ul>
-        <SongLyric styleName='lyric' :lyric='lyric'/>
+        <SongLyric styleName='lyric' :lyric='lyric' type='fm'/>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
   import { notice } from 'web/utils'
   import Router from 'web/manager/router'
   import UserManager from 'web/manager/user'
-  import RuntimeManager from 'web/manager/runtime'  
+  import RuntimeManager from 'web/manager/runtime'
   import SongLyric from 'web/components/song-lyric'
 
   let count = 0
@@ -63,38 +63,74 @@
         album: {},
         id: 0,
       }
+      window.dd = this
       this.state = {
         id: 0,
         lyric: '',
         move: null,
-        current: RuntimeManager.current,
         data: [defaultItem, defaultItem],
-        playing: Hearken.playing(),
+        current: RuntimeManager.module === 'fm' ? RuntimeManager.current : defaultItem,
+        playing: RuntimeManager.module === 'fm' ?  Hearken.playing() : false,
       }
-      window.fm = this
-      
-      UserManager.on('login', () => {
-        if (Router.current.val === 'fm' && !RuntimeManager.FM) {
-          // 获取私人fm数据并播放
-          this.getFMdata(data => {
+
+      const replaceFMdataAndPlay = () => {
+        const fn = data => {
+          if (Hearken.state === null) {
+            // 如果切换到 fm 页面，而且并没有音频播放，就可以直接播放
             this.pushNewData(data)
             RuntimeManager.specifiedPlay(1)
-          })
+            this.setState({current: data[1]})
+          } else {
+            // 否则只是更改页面数据，并不播放
+            this.setState({
+              data,
+              playing: false,
+              current: data[1],
+            })
+          }
+          this.getSongLyric()
+        }
+
+        if (this.state.data && this.state.data[0] === defaultItem) {
+          this.getFMdata(fn)
+        } else {
+          fn(this.state.data)
+        }
+      }
+
+      UserManager.on('login', () => {
+        if (Router.current.val === 'fm') {
+          replaceFMdataAndPlay()
         }
       })
 
+      UserManager.on('logout', () => {
+        this.setState({
+          id: 0,
+          lyric: '',
+          current: defaultItem,
+          playing: false,
+          data: [defaultItem, defaultItem],
+        })
+        RuntimeManager.setModule('normal')
+      })
+
       Router.on('changed', url => {
-        if (url === 'fm' && !RuntimeManager.FM) {
-          // 获取私人fm数据并播放
-          this.getFMdata(data => {
-            this.pushNewData(data)
-            RuntimeManager.specifiedPlay(1)
-          })
+        if (url === 'fm') {
+          replaceFMdataAndPlay()
+        }
+      })
+
+      RuntimeManager.on('currentChanged', current => {
+        if (current !== this.current && RuntimeManager.module === 'fm') {
+          this.setState({current})
         }
       })
 
       // 阻止默认的next方法，使用自定义的
       RuntimeManager.on('nextBefore', () => {
+        // 如果当前模式不是
+        if (RuntimeManager.module !== 'fm') return
         // 图片切换动画而且阻止连续切换
         const delay = 260
         RuntimeManager.setDisableSwitch(true)
@@ -134,7 +170,10 @@
         }
       })
 
-      const fn = () => this.setState({playing: Hearken.playing()})
+      const fn = () => {
+        if (RuntimeManager.module !== 'fm') return
+        this.setState({playing: Hearken.playing()})
+      }
       Hearken.on('start', fn)
       Hearken.on('stop', fn)
       Hearken.on('play', fn)
@@ -143,26 +182,30 @@
 
     pushNewData = data => {
       this.setState({data})
-      RuntimeManager.setFM(true)
+      RuntimeManager.setModule('fm')
       RuntimeManager.replaceAll('_fm', data)
     }
 
     togglePlay = e => {
-      if (RuntimeManager.current.id === 0) return
-      if (this.state.playing) {
-        Hearken.fadePause(0.5)
-      } else if (Hearken.state) {
-        Hearken.fadePlay(1)
+      if (RuntimeManager.module !== 'fm') {
+        this.pushNewData(this.state.data)
+        RuntimeManager.specifiedPlay(1)
       } else {
-        if (RuntimeManager.current.id === 0) {
-          return notice('播放失败')
-        }
-        // 如果 state 为 null 代表需要通过 start 播放
-        Hearken.restart(1).then(success => {
-          if (!success) {
-            RuntimeManager.specifiedPlay(RuntimeManager.current)
+        if (this.state.playing) {
+          Hearken.fadePause(0.5)
+        } else if (Hearken.state) {
+          Hearken.fadePlay(1)
+        } else {
+          if (RuntimeManager.current.id === 0) {
+            return notice('播放失败')
           }
-        })
+          // 如果 state 为 null 代表需要通过 start 播放
+          Hearken.restart(1).then(success => {
+            if (!success) {
+              RuntimeManager.specifiedPlay(RuntimeManager.current)
+            }
+          })
+        }
       }
     }
 
@@ -186,21 +229,23 @@
     }
 
     getSongLyric () {
-      const id = RuntimeManager.current.id
-      if (id !== 0) {
-        this.setState({id, lyric: '歌词加载中...'})
+      setTimeout(() => {
+        const id = this.state.current.id
+        if (id !== 0) {
+          this.setState({id, lyric: '歌词加载中...'})
 
-        const sfn = ({body}) => {
-          if (id !== this.state.id) return
-          let lyric = '纯音乐，请您欣赏'
-          if (!body.nolyric) {
-            lyric = (body.lrc && body.lrc.lyric) || '当前歌曲暂无歌词'
+          const sfn = ({body}) => {
+            if (id !== this.state.id) return
+            let lyric = '纯音乐，请您欣赏'
+            if (!body.nolyric) {
+              lyric = (body.lrc && body.lrc.lyric) || '当前歌曲暂无歌词'
+            }
+            this.setState({id, lyric})
           }
-          this.setState({id, lyric})
+          const efn = err => notice('歌词加载失败')
+          window.node.request('/lyric?id=' + id).then(sfn, efn)
         }
-        const efn = err => notice('歌词加载失败')
-        window.node.request('/lyric?id=' + id).then(sfn, efn)
-      }
+      })
     }
 
     getMoveStyleName (i) {
@@ -221,12 +266,23 @@
     }
 
     nextPlay = e => {
-      RuntimeManager.next()
+      if (RuntimeManager.module !== 'fm') {
+        this.pushNewData(this.state.data)
+        RuntimeManager.specifiedPlay(1)
+      } else {
+        RuntimeManager.next()
+      }
     }
 
     previousPlay (i) {
       if (i === 0) {
-        RuntimeManager.previous()
+        if (RuntimeManager.module !== 'fm') {
+          this.pushNewData(this.state.data)
+          RuntimeManager.specifiedPlay(this.state.data[i])
+        } else {
+          RuntimeManager.previous()
+        }
+        this.getSongLyric()
         this.setState({
           move: 'right',
           current: RuntimeManager.current,

@@ -16,14 +16,14 @@ class RuntimeManager extends Event {
   current: I.Song = defaultCurrent
   addlist = new Set()
   mode: I.PlayMode = 'cycle'
-  FM: boolean = false
   DisableSwitch: boolean = false
+  module: I.Moudles = 'normal'
 
   Hearken = new Media({volume: 0.5})
 
   public push (item: I.Song) {
     this.playlist.push(item)
-    this.dispatch('playlistChanged')
+    this.dispatch('playlistChanged', item)
     return true
   }
 
@@ -35,16 +35,17 @@ class RuntimeManager extends Event {
       if (this.current === defaultCurrent) {
         this.current = list[0]
       }
-      this.dispatch('playlistChanged')
+      this.dispatch('playlistChanged', list)
       return true
     }
     return false
   }
 
   public clear () {
-    this.playlist = []
+    const emptyList = []
+    this.playlist = emptyList
     this.addlist.clear()
-    this.dispatch('playlistChanged')
+    this.dispatch('playlistChanged', emptyList)
     return true
   }
 
@@ -59,7 +60,7 @@ class RuntimeManager extends Event {
       })
     }
     this.addlist.add(listname)
-    this.dispatch('playlistChanged')
+    this.dispatch('playlistChanged', list)
     return true
   }
 
@@ -83,7 +84,7 @@ class RuntimeManager extends Event {
         this.toStartNewSong(<I.Song>newItem)
         .then(() => {
           if (needDispath) {
-            this.dispatch('playlistChanged')
+            this.dispatch('playlistChanged', this.playlist)
           }
         })
         .catch(msg => {
@@ -184,14 +185,15 @@ class RuntimeManager extends Event {
     this.dispatch('modeChanged')
   }
 
-  public setFM (fm: boolean) {
-    this.FM = true
-    this.dispatch('setfm')
+  public setModule (_module: I.Moudles, fn?: Function) {
+    this.module = _module
+    typeof fn === 'function' && fn(_module)
+    this.dispatch('moduleChanged', _module)
   }
 
   public setDisableSwitch (isDisable: boolean) {
     this.DisableSwitch = isDisable
-    this.dispatch('setDisable')
+    this.dispatch('setDisable', isDisable)
   }
 
   // 播放音乐
@@ -213,8 +215,8 @@ class RuntimeManager extends Event {
         this.getSongDetailInfo(item.id).then(url => {
           if (item.id !== this.current.id) return
           this.Hearken.ready(h => h.start(url))
-          this.dispatch('currentChanged')
-          this.dispatch('start')
+          this.dispatch('currentChanged', item)
+          this.dispatch('start', item)
           resolve()
         })
       }, err => reject(err.body.message))

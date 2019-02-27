@@ -36,6 +36,7 @@
 
 <script>
   import { notice } from 'web/utils'
+  import Router from 'web/manager/router'
   import RuntimeManager from 'web/manager/runtime'
   import ListForm from 'web/components/song-list-form'
 
@@ -44,6 +45,9 @@
   @Grass.CSSModules(style)
   export default class DailySong extends Grass.Component {
     // #temp
+
+    willReceiveProps = () => false
+
     component = { ListForm }
 
     getDate () {
@@ -57,7 +61,12 @@
         showNoResult: false,
         tracks: [],
       }
-      this.getRecommendDate()
+
+      Router.on('changed', url => {
+        if (url === 'DailySong' && !cacheTracks) {
+          this.getRecommendDate()
+        }
+      })
     }
 
     getRecommendDate () {
@@ -96,6 +105,7 @@
 
     playAll = e => {
       this.check(data => {
+        RuntimeManager.setModule('normal')
         RuntimeManager.replaceAll('dailyRecommendList', data, 0)
           ? notice('添加成功', true)
           : notice('请勿重复添加')
@@ -103,6 +113,7 @@
     }
 
     addAll = e => {
+      if (RuntimeManager.modules !== 'normal') return
       this.check(data => {
         RuntimeManager.pushList('dailyRecommendList', data)
         ? notice('添加成功', true)

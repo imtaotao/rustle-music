@@ -177,6 +177,10 @@
 
     // 播放相似音乐
     playSimilarSong = val => {
+      if (RuntimeManager.module !== 'normal') {
+        RuntimeManager.setModule('normal')
+        RuntimeManager.clear()
+      }
       RuntimeManager.specifiedPlay(val)
     }
 

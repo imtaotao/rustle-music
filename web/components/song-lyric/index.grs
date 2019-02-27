@@ -1,5 +1,5 @@
 <template>
-  <div styleName='container' id='lyircBox'>
+  <div styleName='container' :id='(this.props.type || "") + "_lyircBox"'>
     <ul styleName='lyric-box'>
       <li v-for='(val, i) of lines' :styleName='active === i ? "active" : ""'>
         {{ val.txt }}
@@ -26,7 +26,6 @@
       }
       this.getLyric()
       this.moveLyric()
-      window.aa = this
     }
 
     didReceiveProps () {
@@ -53,23 +52,27 @@
     moveLyric () {
       setTimeout(() => {
         const limit = 3
+        const type = this.props.type || ''
         const lines = this.state.lines
+        
         if (lines.length > 1) {
-          const node = document.getElementById('lyircBox')
+          const node = document.getElementById(type + '_lyircBox')
           const fn = () => {
             this.timer = setTimeout(() => {
-              let currentTime = RuntimeManager.Hearken.getCurrentTime()
-              if (typeof currentTime === 'number') {
-                currentTime *= 1000
-                const currentLine = lines.find(({time}) => time > currentTime)
-                const active = lines.indexOf(currentLine) - 1
+              if (!type || type === RuntimeManager.module) {
+                let currentTime = RuntimeManager.Hearken.getCurrentTime()
+                if (typeof currentTime === 'number') {
+                  currentTime *= 1000
+                  const currentLine = lines.find(({time}) => time > currentTime)
+                  const active = lines.indexOf(currentLine) - 1
 
-                // 如果scrolltop 不应该在顶层但是却在顶层，就需要修正
-                if (active !== this.state.active ||
-                  this.state.active > limit && node.scrollTop === 0) {
-                  this.setState({active})
-                  if (node) {
-                    this.setContainerScrollTop(node, active, limit)
+                  // 如果scrolltop 不应该在顶层但是却在顶层，就需要修正
+                  if (active !== this.state.active ||
+                    this.state.active > limit && node.scrollTop === 0) {
+                    this.setState({active})
+                    if (node) {
+                      this.setContainerScrollTop(node, active, limit)
+                    }
                   }
                 }
               }
