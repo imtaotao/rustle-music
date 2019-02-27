@@ -14,10 +14,10 @@
     // #temp
     timer = null
 
-    // windows 8000 star
+    // windows 7000 star
     particleCount = window.node.windows()
-      ? 10000
-      : 20000
+      ? 70000
+      : 14000
 
     parameters = [
       [[0.85, 1, 0.5], 3],

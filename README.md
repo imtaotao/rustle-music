@@ -9,4 +9,5 @@
 4. start codeing
 
 # 下载
+windows 下体验不是很好，有点小卡。。。
 安装包[下载地址](https://imtaotao.github.io/rustle-music)
