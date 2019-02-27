@@ -37,3 +37,20 @@ export function timestampToTime (timestamp: number) {
   const sec = date.getSeconds()
   return {year, month, day, hour, min, sec}
 }
+
+export function scrollEvent (id: string) {
+  if (!window.node.macOs()) return () => {}
+  return e => {
+    const node:any = document.getElementById(id)
+    if (node) {
+      const style = node.style
+      if (e.target.scrollTop > 50) {
+        if (!style.backdropFilter) {
+          style.backdropFilter = 'blur(30px)'
+        }
+      } else if (style.backdropFilter) {
+        style.backdropFilter = ''
+      }
+    }
+  }
+}

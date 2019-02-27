@@ -19,6 +19,8 @@ interface Window {
   onNetworkError: () => void
   clipboard: (text: string) => void;
   node: {
+    macOs: () => boolean;
+    windows: () => boolean;
     request: (router: string, body?: Object) => Promise<RequestResponse>
     getCookie: () => Cookie | null
     setCookie: (cookie: Cookie) => void

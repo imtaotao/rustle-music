@@ -87,6 +87,7 @@
 
     getSongComment (cb, offset) {
       const { id, type } = this.props
+      if (!id) return
       const limit = this.state.limit
       if (offset == null) {
         offset = this.state.offset

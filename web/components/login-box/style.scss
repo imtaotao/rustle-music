@@ -159,8 +159,15 @@ $width: 70%;
 }
 
 .toogle {
+  height: 30px;
   font-size: 13px;
   font-family: '方正兰亭超细黑简体';
   text-align: center;
   cursor: pointer;
+}
+
+.tips {
+  font-size: 11px;
+  text-align: center;
+  font-family: '方正兰亭超细黑简体';
 }

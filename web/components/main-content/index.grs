@@ -1,8 +1,10 @@
 <template>
   <div>
-    <Head styleName='head' v-show='!showSongList'>
-      <div styleName='placeholder' slot='placeholder'></div>
-    </Head>
+    <div id='MainHead' styleName='head-box' v-show='!showSongList'>
+      <Head styleName='head'>
+        <div styleName='placeholder' slot='placeholder'></div>
+      </Head>
+    </div>
     <div styleName='content no-padding' v-show='showPrivateFM'>
       <PrivateFM/>
     </div>

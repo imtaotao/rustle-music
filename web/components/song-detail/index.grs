@@ -4,7 +4,7 @@
       <PlayBackground v-show='showBgStar'/>
       <div styleName='bg' :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></div>
       <div styleName='bg-mask'></div>
-      <div styleName='content-box' @scroll='this.scroll'>
+      <div styleName='content-box' @scroll='this.scroll()'>
         <div styleName='left'>
           <div styleName='needle' id='needle'>
             <div styleName='btn'><i></i></div>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-  import { notice } from 'web/utils'
+  import { notice, scrollEvent } from 'web/utils'
   import Head from 'web/components/head'
   import SongLyric from 'web/components/song-lyric'
   import Comments from 'web/components/comment-form'
@@ -220,20 +220,9 @@
       }
       fn()
     }
-
-    scroll = e => {
-      if (!window.node.macOs()) return
-      const node = this.scroll.node || (this.scroll.node = document.getElementById('headBox'))
-      if (node) {
-        const style = node.style
-        if (e.target.scrollTop > 50) {
-          if (!style.backdropFilter) {
-            style.backdropFilter = 'blur(30px)'
-          }
-        } else if (style.backdropFilter) {
-          style.backdropFilter = ''
-        }
-      }
+    
+    scroll () {
+      return scrollEvent('headBox')
     }
   }
 </script>

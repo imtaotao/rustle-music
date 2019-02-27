@@ -1,5 +1,5 @@
 <template>
-  <div styleName='container'>
+  <div styleName='container' @scroll='this.scroll()'>
     <div styleName='top'>
       <div styleName='bg' :style='this.getPicUrl(current)'></div>
       <div styleName='song-img'>
@@ -38,15 +38,26 @@
         <SongLyric styleName='lyric' :lyric='lyric' type='fm'/>
       </div>
     </div>
+    <div styleName='bottom' v-show='current !== 0'>
+      <div styleName='title'>
+        <p><b>听友评论</b><span>（已有{{ total }}条评论）</span></p>
+        <p>
+          <span><i className='icon-pen'></i>发表评论</span>
+          <i styleName='expression' className='icon-expression'></i>
+        </p>
+      </div>
+      <Comments type='music' :id='current.id' :setCommentLen='this.setCommentLen'/>
+    </div>
   </div>
 </template>
 
 <script>
-  import { notice } from 'web/utils'
+  import { notice, scrollEvent } from 'web/utils'
   import Router from 'web/manager/router'
   import UserManager from 'web/manager/user'
   import RuntimeManager from 'web/manager/runtime'
   import SongLyric from 'web/components/song-lyric'
+  import Comments from 'web/components/comment-form'
 
   let count = 0
   const Hearken = RuntimeManager.Hearken
@@ -54,7 +65,7 @@
   @Grass.CSSModules(style)
   export default class PrivateFM extends Grass.Component {
     // #temp
-    component = { SongLyric }
+    component = { Comments, SongLyric }
 
     willReceiveProps = () => false
 
@@ -66,6 +77,7 @@
       window.dd = this
       this.state = {
         id: 0,
+        total: 0,
         lyric: '',
         move: null,
         data: [defaultItem, defaultItem],
@@ -288,6 +300,14 @@
           current: RuntimeManager.current,
         })
       }
+    }
+
+    scroll () {
+      return scrollEvent('MainHead')
+    }
+
+    setCommentLen = total => {
+      this.setState({total})
     }
   }
 </script>

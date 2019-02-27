@@ -31,6 +31,7 @@
         <div styleName='toogle' @click='this.toggle'>
           {{ phoneMode ? '邮箱' : '手机' }}登录
         </div>
+        <div styleName='tips'>Tips: 可以使用网易云音乐账号登录哦~</div>
       </div>
     </div>
   </div>

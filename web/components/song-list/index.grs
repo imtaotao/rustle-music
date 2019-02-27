@@ -1,7 +1,9 @@
 <template>
-  <div styleName='container'>
+  <div styleName='container' @scroll='this.scroll()'>
     <div styleName='bg-box' :style='{backgroundImage: "url("+ this.props.playlist.coverImgUrl +")"}'></div>
-    <Head styleName='head'/>
+    <div id='SongListHead' styleName='head-box'>
+      <Head styleName='head'/>
+    </div>
     <div styleName='list-info-box'>
       <div styleName='list-img' :style='{backgroundImage: "url("+ this.props.playlist.coverImgUrl +")"}'></div>
       <div styleName='detail-info'>
@@ -86,7 +88,7 @@
   import UserManager from 'web/manager/user'
   import RuntimeManager from 'web/manager/runtime'
   import ListForm from 'web/components/song-list-form'
-  import { notice, timestampToTime, filterCount } from 'web/utils'
+  import { notice, scrollEvent, timestampToTime, filterCount } from 'web/utils'
 
   @Grass.CSSModules(style)
   export default class SongList extends Grass.Component {
@@ -117,6 +119,10 @@
     beforeCreate () {
       this.state = this.defaultState
       this.updataSongListInfo()
+    }
+
+    scroll () {
+      return scrollEvent('SongListHead')
     }
 
     extendsDescription = e => {

@@ -35,6 +35,8 @@
     debounced = false
     Router = Router
 
+    willReceiveProps = () => false
+
     pressEnter = e => enter(e, this.receiveRecommendValue.bind(null, e.target.value.trim()))
 
     hideSuggestBox = () => this.setState({showSuggest: false})
