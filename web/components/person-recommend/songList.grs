@@ -51,10 +51,9 @@
         stashData: [],
       }
 
-      // userManager.logged
-      //   ? this.getRecommendData()
-      //   : this.getPersonalizedData()
-      this.getPersonalizedData()
+      userManager.logged
+        ? this.getRecommendData()
+        : this.getPersonalizedData()
       userManager.on('login', this.getRecommendData)
       userManager.on('logout', this.getPersonalizedData)
     }
@@ -66,7 +65,7 @@
 
     getPlayCount (val) {
       const playCount = val.playCount || val.playcount
-      return playCount < 1000
+      return playCount < 100000
         ? Math.floor(playCount)
         : Math.floor(playCount / 10000) + '万'
     }

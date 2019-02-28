@@ -87,7 +87,7 @@
           resultData: [],
         })
         const { type, limit, offset } = item || this.state.searchTypes[0]
-        window.node.request(`/search?keywords=${keyword}&type=${type}&limit=${limit}&offset=${offset}`)
+        window.node.request(`/search?keywords=${keyword}&type=${type}&limit=${limit}&offset=${offset * limit}`)
         .then(({body}) => {
           if (this.state.selected.offset !== offset) return
 

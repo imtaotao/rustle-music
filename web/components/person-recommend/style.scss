@@ -124,6 +124,7 @@
     padding: 10px 10px 0 0;
     color: #fff;
     font-size: 12px;
+    text-shadow: 1px 1px rgba(0,0,0,0.2);
     & i {
       @include img(12, 'play-icon');
       margin-right: 5px;
@@ -361,7 +362,7 @@
 
 // 电台
 .dj-container {
-  margin-bottom: 170px;
+  margin-bottom: 100px;
   & .content {
     position: relative;
   }

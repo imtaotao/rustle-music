@@ -3,6 +3,7 @@
 .container {
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
 }
 
 .hight-list-enter {
@@ -12,6 +13,7 @@
   overflow: hidden;
   box-shadow: 0 0 2px 0 rgba(0,0,0,0.2);
   position: relative;
+  cursor: pointer;
   .backdrop {
     width: 100%;
     height: 100%;
@@ -119,5 +121,87 @@
   }
   &:hover {
     background: #f3f3f3;
+  }
+}
+
+.song-list {
+  width: 100%;
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  li {
+    $size: 175px;
+    width: $size;
+    position: relative;
+    margin: 0 calc((100% - #{$size * 4}) / 6);
+    margin-bottom: 35px;
+    &:nth-child(4n) {
+      margin-right: 0;
+    }
+    &:nth-child(4n + 1) {
+      margin-left: 0;
+    }
+    img {
+      width: 100%;
+      height: $size;
+      border-radius: 10px;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+      border: border(#ddd);
+    }
+    .list-info {
+      width: 100%;
+      height: $size;
+      padding: 10px;
+      font-size: 12px;
+      color: #fff;
+      text-shadow: 1px 1px rgba(0,0,0,0.2);
+      position: absolute;
+      cursor: pointer;
+      p {
+        text-align: right;
+        i {
+          @include img(12, 'play-icon');
+          margin-right: 5px;
+        }
+      }
+      div {
+        position: absolute;
+        bottom: 10px;
+        i {
+          margin-top: 2px;
+          font-size: 13px;
+          margin-right: 5px;
+          font-weight: bold;
+        }
+      }
+      .play-btn {
+        $s: 40px;
+        $iconSize: 15;
+        @include center;
+        display: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        position: absolute;
+        padding-left: $iconSize / 4 + 4 + px;
+        padding-bottom: 2px;
+        bottom: 10px;
+        right: 10px;
+        i {
+          @include img($iconSize, 'play-red');
+        }
+      }
+      &:hover .play-btn {
+        display: flex;
+      }
+    }
+    .list-name {
+      font-size: 13px;
+      color: #333;
+      margin: 10px 0 20px 0;
+    }
   }
 }

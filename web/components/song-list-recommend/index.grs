@@ -18,12 +18,35 @@
           <li v-for='val of hotCatlist'>{{ val.name }}</li>
         </ul>
       </div>
+      <div styleName='song-list'>
+        <ul>
+          <li v-for='list of songlist'>
+            <div styleName='list-info' @click.self='this.viewDetailSongList.bind(this, list)'>
+              <p><i></i>{{ this.getPlayCount(list) }}</p>
+              <div><i className='icon-artists'></i>{{ list.creator.nickname }}</div>
+              <div styleName='play-btn' @click='this.replaceSongList.bind(this, list)'><i></i></div>
+            </div>
+            <img :src='list.coverImgUrl'/>
+            <div styleName='list-name'>{{ list.name }}</div>
+          </li>
+        </ul>
+         <PaginggBar
+            v-show='total > limit'
+            :count='total'
+            :offset='offset'
+            :limit='limit'
+            :toGetPageingData='this.toGetPageingData'/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   import { notice } from 'web/utils'
+  import Router from 'web/manager/router'
+  import userManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'
+  import PaginggBar from 'web/components/paging-bar'
 
   @Grass.CSSModules(style)
   export default class SongListRecommend extends Grass.Component {
@@ -33,11 +56,17 @@
     hotCatlist = false
     hightQuality = false
 
+    component = { PaginggBar }
+
     beforeCreate () {
       this.state = {
-        current: '',
-        hightList: {id: 0},
+        offset: 0,
+        limit: 100,
+        total: 0,
+        songlist: [],
         hotCatlist: [],
+        current: '全部',
+        hightList: {id: 0},
         catlist: {
           categories: {},
           sub: [],
@@ -52,6 +81,13 @@
       return false
     }
 
+    getPlayCount (val) {
+      const playCount = val.playCount || val.playcount
+      return playCount < 100000
+        ? Math.floor(playCount)
+        : Math.floor(playCount / 10000) + '万'
+    }
+
     getData () {
       this.getCatList()
       this.getSongList()
@@ -64,12 +100,8 @@
       this.hotCatlist = true
       window.node.request('/playlist/hot').then(({body}) => {
         const hotCatlist = body && body.tags
-        console.log(hotCatlist);
         if (hotCatlist) {
-          this.setState({
-            hotCatlist,
-            current: '全部',
-          })
+          this.setState({hotCatlist})
         }
       }, err => {
         console.error(err)
@@ -107,8 +139,66 @@
       })
     }
 
-    getSongList () {
+    getSongList (_offset) {
+      if (this.songlist) return
+      this.songlist = true
+      const { current, offset, limit } = this.state
+      _offset = _offset == null ? offset : _offset
+      return window.node.request(`/top/playlist?limit=${limit}&cat=${current }&offset=${_offset * limit}`)
+      .then(({body}) => {
+        const songlist = body && body.playlists
+        if (songlist && body.cat === this.state.current) {
+          this.setState({
+            songlist,
+            total: body.total,
+          }) 
+        }
+      }, err => {
+        console.error(err)
+        this.songlist = false
+        return Promise.reject(err)
+      })
+    }
 
+    toGetPageingData = page => {
+      this.songlist = false
+      this.getSongList(page)
+      .then(() => {
+        this.setState({offset: page})
+      })
+      .catch(err => {
+        notice(err.body.msg)
+      })
+    }
+
+    getSongListDetailData (id, cb) {
+      this.requestListId = id
+      userManager.getSongListDetail(id).then(({body}) => {
+        if (this.requestListId === id) {
+          const data = body.playlist && body.playlist.tracks
+          cb(body.playlist && body.playlist)
+        }
+      })
+    }
+
+    viewDetailSongList ({id}) {
+      this.getSongListDetailData(id, data => {
+        if (data) {
+          Router.to('SongList', data)
+        }
+      })
+    }
+
+    // 播放歌单歌曲
+    replaceSongList ({id}) {
+      this.getSongListDetailData(id, data => {
+        if (data && data.tracks) {
+          RuntimeManager.setModule('normal')
+          RuntimeManager.replaceAll(id, data.tracks, 0)
+            ? notice('添加成功', true)
+            : notice('请勿重复添加')
+        }
+      })
     }
   }
 </script>

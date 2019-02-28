@@ -106,7 +106,7 @@
         })
       }
       const efn = err => notice('歌曲评论获取失败')
-      window.node.request(`/comment/${type}?id=${id}&limit=${limit}&offset=${offset}`).then(sfn, efn)
+      window.node.request(`/comment/${type}?id=${id}&limit=${limit}&offset=${offset * limit}`).then(sfn, efn)
     }
 
     toGetPageingData = page => {
