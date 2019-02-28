@@ -12,17 +12,22 @@
         styleName='content'
         v-show='active.val === "recommend"'
         :showLoading='this.showLoading'/>
+      
+      <SongListRecommend
+        styleName='content'
+        v-show='active.val === "songList"'/>
     </div>
   </div>
 </template>
 
 <script>
   import PersonRecommend from 'web/components/person-recommend'
+  import SongListRecommend from 'web/components/song-list-recommend'
 
   @Grass.CSSModules(style)
   export default class DiscoverMusic extends Grass.Component {
     // #temp
-    component = { PersonRecommend }
+    component = { PersonRecommend, SongListRecommend }
 
     beforeCreate () {
       const types = [

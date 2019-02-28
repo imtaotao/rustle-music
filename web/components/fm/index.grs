@@ -96,8 +96,8 @@
             // 否则只是更改页面数据，并不播放
             this.setState({
               data,
-              playing: false,
               current: data[1],
+              playing: RuntimeManager.module === 'fm' ?  Hearken.playing() : false,
             })
           }
           this.getSongLyric()

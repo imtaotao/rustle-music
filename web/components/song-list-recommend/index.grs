@@ -1,0 +1,12 @@
+<<template>
+  <div>
+    歌单
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class SongListRecommend extends Grass.Component {
+    // #temp
+  }
+</script>
