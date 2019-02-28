@@ -4,15 +4,10 @@
     <div styleName='content'>
       <ul>
         <li v-for='item of data'>
-          <div styleName='img' :style='{backgroundImage: "url(" + item.song.album.picUrl + ")"}'></div>
+          <div styleName='img' :style='{backgroundImage: "url(" + item.picUrl + ")"}'></div>
           <div styleName='desc'>
-            <div styleName='name'>{{ item.name }}</div>
-            <div styleName='auth'>
-              <span v-for='(val, i) of item.song.artists'>
-                <a v-if='i !== 0'> / </a>
-                {{ val.name }}
-              </span>
-            </div>
+            <div styleName='name'>{{ item.copywriter }}</div>
+            <div styleName='auth'>{{ item.name }}</div>
           </div>
         </li>
       </ul>
@@ -45,10 +40,10 @@
     }
 
     getDJData = () => {
-      window.node.request('/personalized/newsong').then(({body}) => {
+      window.node.request('/personalized/djprogram').then(({body}) => {
         let data = body.result || []
         this.setState({data})
-        console.log(data);
+        console.log(data, 'dj');
       }, this.props.efn)
     }
   }

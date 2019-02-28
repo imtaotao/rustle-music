@@ -101,6 +101,18 @@
     border-radius: 5px;
     background-size: cover;
     overflow: hidden;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.4;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+    }
   }
 
   & .play-count {
@@ -161,7 +173,18 @@
       width: $size;
       height: 100px;
       border-radius: 10px;
-      border: border(#eee);
+      background-size: cover;
+      position: relative;
+    }
+    & .bg-image:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('../../assets/img/bg.png') no-repeat;
       background-size: cover;
     }
     & .name {
@@ -204,7 +227,20 @@
         width: 60px;
         border-radius: 5px;
         background-size: cover;
-        border: border(#eee);
+        position: relative;
+      }
+      & .pic:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        border-radius: 5px;
+        pointer-events: none;
+        background: url('../../assets/img/bg.png') no-repeat;
+        background-size: cover;
       }
       & .play-btn {
         @include center;
@@ -268,9 +304,20 @@
       height: 100px;
       border-radius: 10px;
       overflow: hidden;
-      border: border(#eee);
       background-size: cover;
       cursor: pointer;
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: url('../../assets/img/bg.png') no-repeat;
+        background-size: cover;
+      }
     }
     & .bg-image:hover .mask {
       height: 48px;
@@ -300,6 +347,7 @@
       width: 175px;
     }
     & .auth {
+      width: 90%;
       font-size: 12px;
       margin: 8px 0;
       color: #929292;
@@ -353,7 +401,19 @@
     margin-right: 20px;
     border-radius: 5px;
     background-size: cover;
-    border: border(#eee);
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.5;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+    }
   }
   .desc {
     width: 60%;
@@ -362,14 +422,14 @@
     @include hideText;
     width: 100%;
     color: #333;
-    font-size: 15px;
+    font-size: 13px;
     margin-bottom: 10px;
   }
   .auth {
     width: 100%;
     @include hideText;
     color: #929292;
-    font-size: 13px;
+    font-size: 12px;
     margin-top: 10px;
     font-family: 方正兰亭超细黑简体;
   }
