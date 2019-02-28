@@ -12,10 +12,12 @@
         styleName='content'
         v-show='active.val === "recommend"'
         :showLoading='this.showLoading'/>
-      
-      <SongListRecommend
+
+      <div
         styleName='content'
-        v-show='active.val === "songList"'/>
+        v-show='active.val === "songList"'>
+        <SongListRecommend/>
+      </div>
     </div>
   </div>
 </template>

@@ -14,6 +14,8 @@
   import Sidebar from 'web/components/sidebar'
   import MainContent from 'web/components/main-content'
 
+  console.time('render time')
+
   @Grass.CSSModules(style)
   class Root extends Grass.Component {
     // #temp
@@ -23,7 +25,6 @@
     }
   }
 
-  console.time('render time')
   Grass.use(pluging, Grass)
   Root.$mount(document.getElementById('root'))
   console.timeEnd('render time')

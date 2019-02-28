@@ -49,6 +49,18 @@ $theme: #c4463a;
   align-items: center;
 }
 
+@mixin defaultImg {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: url('../../assets/img/bg.png') no-repeat;
+  background-size: cover;
+}
+
 @function border ($color:#ddd, $size:1) {
   @return $size + px solid $color;
 }

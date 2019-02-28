@@ -43,7 +43,6 @@
       window.node.request('/personalized/djprogram').then(({body}) => {
         let data = body.result || []
         this.setState({data})
-        console.log(data, 'dj');
       }, this.props.efn)
     }
   }

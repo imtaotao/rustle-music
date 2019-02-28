@@ -1,12 +1,114 @@
-<<template>
-  <div>
-    歌单
+<template>
+  <div styleName='container'>
+    <div styleName='hight-list-enter'>
+      <div styleName='backdrop' :style='{backgroundImage: "url("+ hightList.coverImgUrl + ")"}'></div>
+      <div styleName='hight-description'>
+        <img :src='hightList.coverImgUrl'/>
+        <div>
+          <p styleName='sign'>精品歌单</p>
+          <p styleName='title'>{{ hightList.name || '' }}</p>
+          <p styleName='desc'>{{ hightList.copywriter || '' }}</p>
+        </div>
+      </div>
+    </div>
+    <div styleName='list-content' v-show='current'>
+      <div styleName='cat-list'>
+        <div styleName='current-type'>{{ current }}<i></i></div>
+        <ul>
+          <li v-for='val of hotCatlist'>{{ val.name }}</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+  import { notice } from 'web/utils'
+
   @Grass.CSSModules(style)
   export default class SongListRecommend extends Grass.Component {
     // #temp
+    catlist = false    
+    songlist = false
+    hotCatlist = false
+    hightQuality = false
+
+    beforeCreate () {
+      this.state = {
+        current: '',
+        hightList: {id: 0},
+        hotCatlist: [],
+        catlist: {
+          categories: {},
+          sub: [],
+        },
+      }
+      this.getData()
+      window.ss = this
+    }
+
+    willReceiveProps = () => {
+      this.getData()
+      return false
+    }
+
+    getData () {
+      this.getCatList()
+      this.getSongList()
+      this.getHotCatList()
+      this.getHightQuality()
+    }
+
+    getHotCatList () {
+      if (this.hotCatlist) return
+      this.hotCatlist = true
+      window.node.request('/playlist/hot').then(({body}) => {
+        const hotCatlist = body && body.tags
+        console.log(hotCatlist);
+        if (hotCatlist) {
+          this.setState({
+            hotCatlist,
+            current: '全部',
+          })
+        }
+      }, err => {
+        console.error(err)
+        this.hotCatlist = false
+      })
+    }
+
+    getCatList () {
+      if (this.catlist) return
+      this.catlist = true
+      window.node.request('/playlist/catlist').then(({body}) => {
+        if (body) {
+          const { sub, categories } = body
+          this.setState({
+            catlist: {sub, categories}
+          })
+        }
+      }, err => {
+        console.error(err)
+        this.catlist = false
+      })
+    }
+
+    getHightQuality () {
+      if (this.hightQuality) return
+      this.hightQuality = true
+      // 只获取一条数据用于做 entry
+      window.node.request('/top/playlist/highquality?limit=1').then(({body}) => {
+        if (body) {
+          this.setState({hightList: body.playlists[0]})
+        }
+      }, err => {
+        console.error(err)
+        this.hightQuality = false
+      })
+    }
+
+    getSongList () {
+
+    }
   }
 </script>

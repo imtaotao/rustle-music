@@ -6,7 +6,7 @@
 1. `yarn` (add dependencies package)
 2. `yarn start` (start http-dev-server)
 3. `yarn dev --dev` (start electron client)
-4. start codeing
+4. start coding
 
 ## 用到了一些个人写的库
 + [grass](https://github.com/imtaotao/Grass)<br>
