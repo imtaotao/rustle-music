@@ -29,5 +29,5 @@ async function downAPIfile () {
   const currentAPIUrl = path.resolve(__dirname, '../interface/module')
   const depositoryUrl = 'https://github.com/Binaryify/NeteaseCloudMusicApi/tree/master.zip'
 
-  
+
 }
