@@ -15,16 +15,22 @@ type RequestResponse = {
   body:any
 }
 
+type Update = {
+  toUpdate: Function
+  needUpdate: Promise<boolean>
+}
+
 interface Window {
   onNetworkError: () => void
   clipboard: (text: string) => void;
   node: {
-    macOs: () => boolean;
-    windows: () => boolean;
-    request: (router: string, body?: Object) => Promise<RequestResponse>
+    update: Update
+    macOs: () => boolean
+    windows: () => boolean
+    clearCookie: () => void
     getCookie: () => Cookie | null
     setCookie: (cookie: Cookie) => void
-    clearCookie: () => void
+    request: (router: string, body?: Object) => Promise<RequestResponse>
   }
 }
 
