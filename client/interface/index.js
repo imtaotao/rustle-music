@@ -8,9 +8,9 @@ let COOKIES = null
 
 // router
 const special = {
-  'daily_signin.js': '/daily_signin',
   'fm_trash.js': '/fm_trash',
-  'personal_fm.js': '/personal_fm'
+  'personal_fm.js': '/personal_fm',
+  'daily_signin.js': '/daily_signin',
 }
 
 const router = {}

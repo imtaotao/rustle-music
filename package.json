@@ -1,6 +1,7 @@
 {
   "name": "rustle",
   "version": "1.0.0",
+  "music-version": "3.1.0",
   "description": "music application",
   "main": "client/main.js",
   "scripts": {
@@ -18,15 +19,8 @@
   "dependencies": {
     "@rustle/grass": "^0.0.1-alpha.6",
     "@rustle/hearken": "^0.0.1-alpha.4",
-    "apicache": "^1.2.1",
-    "asar": "^1.0.0",
-    "cookie": "^0.3.1",
     "input-range": "^1.2.8",
-    "opn": "^5.4.0",
-    "pac-proxy-agent": "^3.0.0",
-    "request": "^2.85.0",
-    "three": "^0.101.1",
-    "yargs": "^13.2.1"
+    "three": "^0.101.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -36,9 +30,13 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.1.5",
     "NeteaseCloudMusicApi": "^3.4.0",
+    "apicache": "^1.2.1",
+    "asar": "^1.0.0",
     "babel-loader": "^8.0.5",
+    "cookie": "^0.3.1",
     "cross-env": "^5.2.0",
     "css-loader": "^2.1.0",
+    "download-git-repo": "^1.1.0",
     "electron": "^4.0.1",
     "electron-builder": "^20.38.5",
     "file-loader": "^3.0.1",
@@ -47,8 +45,12 @@
     "html-webpack-plugin": "^3.2.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
+    "opn": "^5.4.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "pac-proxy-agent": "^3.0.0",
+    "request": "^2.85.0",
     "resolve-url-loader": "^3.0.0",
+    "rimraf": "^2.6.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
     "ts-loader": "^5.3.3",
@@ -59,6 +61,7 @@
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "yargs": "^13.2.1"
   }
 }

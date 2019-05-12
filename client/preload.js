@@ -1,16 +1,18 @@
 const opn = require('opn')
+const clipboard = require('electron').clipboard
 const { macOs, windows } = require('../platform/utils')
+const update = require('./update/dependency')
 const {
   request,
   setCookie,
   getCookie,
   clearCookie,
 } = require('./interface')
-const clipboard = require('electron').clipboard
 
 // 暴露给渲染进程的 node api
 process.once('loaded', function () {
   global.node = {
+    update,
     macOs,
     windows,
     setCookie,
