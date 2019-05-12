@@ -8,13 +8,17 @@ module.exports = function (isDev, mainWindow) {
     })
   }
   
+  globalShortcut.register('Ctrl+Alt+I', () => {
+    mainWindow.webContents.openDevTools({mode: 'bottom'})
+  })
+
   // 测试环境下，保持两端快捷键同步
   if (isDev) {
-    if (windows()) {
-      globalShortcut.register('Ctrl+Alt+I', () => {
-        mainWindow.webContents.openDevTools({mode: 'bottom'})
-      })
-    }
+    // if (windows()) {
+    //   globalShortcut.register('Ctrl+Alt+I', () => {
+    //     mainWindow.webContents.openDevTools({mode: 'bottom'})
+    //   })
+    // }
     globalShortcut.register('Alt+R', () => {
       mainWindow.webContents.reload()
     })
