@@ -7,7 +7,7 @@ module.exports = (query, request) => {
     offset: query.offset || 0,
     asc: toBoolean(query.asc)
   }
-  
+  console.log(toBoolean(query.asc))
   return request(
     'POST',
     `https://music.163.com/weapi/dj/program/byradio`,

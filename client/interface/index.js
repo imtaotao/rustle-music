@@ -16,6 +16,7 @@ const special = {
 const router = {}
 fs.readdirSync(path.join(__dirname, 'module')).reverse().forEach(file => {
   if(!(/\.js$/i.test(file))) return
+
   let route = (file in special) ? special[file] : '/' + file.replace(/\.js$/i, '').replace(/_/g, '/')
   let question = require(path.join(__dirname, 'module', file))
 

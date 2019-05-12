@@ -22,6 +22,7 @@
 
     async beforeCreate () {
       // 检测依赖的网易云 api 版本，以及更新
+      console.log(window.node);
       const { needUpdate, toUpdate } = window.node.update
       const need = await needUpdate()
       if (need) toUpdate()
