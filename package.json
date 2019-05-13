@@ -12,7 +12,7 @@
     "build": "rm -rf ./dist && webpack --env.build",
     "build:an": "rm -rf ./dist && webpack --env.build --env.analyzer",
     "package:mac": "yarn build && cross-env electron-builder --mac",
-    "package:win": "yarn build && cross-env electron-builder --win --ia32"
+    "package:win": "cross-env electron-builder --win --ia32"
   },
   "author": "",
   "license": "ISC",
