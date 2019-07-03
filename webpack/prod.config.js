@@ -35,7 +35,7 @@ const plugins = [
   new HtmlWebpackPlugin({
     inject: true,
     filename: './index.html',
-    template: 'index.html',
+    template: 'entry.html',
     minify: {
       removeComments: true,
       removeAttributeQuotes: true,

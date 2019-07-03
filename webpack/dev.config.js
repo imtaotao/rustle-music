@@ -30,7 +30,7 @@ const plugins = [
   new webpack.HotModuleReplacementPlugin(), // 配合 dev-server 热加载
   new HtmlWebpackPlugin({
     filename: './index.html',
-    template: 'index.html',
+    template: 'entry.html',
   })
 ]
 
