@@ -1,0 +1,138 @@
+<template>
+  <div styleName='song-list'>
+    <div styleName='title'>推荐歌单<i></i></div>
+    <div styleName='content'>
+      <ul styleName='list'>
+        <li>
+          <div styleName='image daily-update' @click='this.toSongRecommendPage'>
+            <div styleName='bg'></div>
+            <div styleName='calendar' className='icon-calendar'>
+              <span>{{ this.getDate() }}</span>
+            </div>
+            <div styleName='mask'>根据您的音乐口味生成每日更新</div>
+          </div>
+        </li>
+        <li v-for='val of data'>
+          <div
+            styleName='image'
+            :style='{backgroundImage: "url("+ val.picUrl +"）"}'
+            @click.self='this.viewDetailSongList.bind(this, val)'>
+            <div styleName='play-count'><i></i>{{ this.getPlayCount(val) }}</div>
+            <span styleName='play-btn' @click='this.replaceSongList.bind(this, val)'><i></i></span>
+          </div>
+          <div styleName='name'>{{ val.name }}</div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { notice } from 'web/utils'
+  import Router from 'web/manager/router'
+  import userManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'
+
+  let currentId = ''
+
+  @Grass.CSSModules(style)
+  export default class SongList extends Grass.Component {
+    // #temp
+    requestListId = null
+
+    beforeCreate () {
+      const item = {
+        picUrl: '',
+        playCount: 0,
+        name: '-',
+      }
+      this.state = {
+        data: (new Array(9)).fill(item),
+        stashData: [],
+      }
+
+      userManager.logged
+        ? this.getRecommendData()
+        : this.getPersonalizedData()
+      userManager.on('login', this.getRecommendData)
+      userManager.on('logout', this.getPersonalizedData)
+    }
+
+    getDate () {
+      const day = (new Date()).getDate()
+      return day < 10 ? '0' + day : day
+    }
+
+    getPlayCount (val) {
+      const playCount = val.playCount || val.playcount
+      return playCount < 100000
+        ? Math.floor(playCount)
+        : Math.floor(playCount / 10000) + '万'
+    }
+
+    getRecommendData = () => {
+      window.node.request('/recommend/resource').then(({body}) => {
+        const data = body.recommend
+        const stashData = this.state.stashData
+        if (data.length > 9) {
+          data.length = 9
+        } else if (stashData.length > 0) {
+          const len = 9 - data.length
+          for (let i = 0; i < len; i++) {
+            if (!stashData[i]) break
+            data.unshift(stashData[i])
+          }
+        }
+        this.setState({data})
+      }, this.props.efn)
+    }
+
+    getPersonalizedData = () => {
+      window.node.request('/personalized').then(({body}) => {
+        const data = body.result
+        if (data.length > 9) data.length = 9
+        this.setState({
+          data,
+          stashData: data,
+        })
+      }, this.props.efn)
+    }
+
+    getSongList (id, cb) {
+      this.requestListId = id
+      userManager.getSongListDetail(id).then(({body}) => {
+        if (this.requestListId === id) {
+          const data = body.playlist && body.playlist.tracks
+          cb(body.playlist && body.playlist)
+        }
+      })
+    }
+
+    viewDetailSongList ({id}) {
+      this.getSongList(id, data => {
+        if (data) {
+          Router.to('SongList', data)
+        }
+      })
+    }
+
+    // 播放歌单歌曲
+    replaceSongList ({id}) {
+      this.getSongList(id, data => {
+        if (data && data.tracks) {
+          RuntimeManager.setModule('normal')
+          RuntimeManager.replaceAll(id, data.tracks, 0)
+            ? notice('添加成功', true)
+            : notice('请勿重复添加')
+        }
+      })
+    }
+
+    // 前往每日歌曲推荐页面
+    toSongRecommendPage = e => {
+      userManager.logged
+        ? Router.to('DailySong')
+        : notice('请先登录')
+    }
+  }
+</script>

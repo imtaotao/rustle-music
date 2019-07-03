@@ -1,0 +1,122 @@
+<template>
+  <div>
+    <div id='MainHead' styleName='head-box' v-show='!showSongList'>
+      <Head styleName='head'>
+        <div styleName='placeholder' slot='placeholder'></div>
+      </Head>
+    </div>
+    <div styleName='content no-padding' v-show='showPrivateFM'>
+      <PrivateFM/>
+    </div>
+    <div styleName='content' v-show='showSongList'>
+      <SongList :id='songListId' :playlist='playlist'/>
+    </div>
+    <div styleName='content' v-show='showDailySong'>
+      <DailySong/>
+    </div>
+    <SearchResult styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
+    <DiscoverMusic styleName='fill-content ' v-show='showDiscoverMusic'/>
+  </div>
+</template>
+
+<script>
+  import Head from 'web/components/head'
+  import Router from 'web/manager/router'
+  import PrivateFM from 'web/components/fm'
+  import Sidebar from 'web/components/sidebar'
+  import SongList from 'web/components/song-list'
+  import RuntimeManager from 'web/manager/runtime'
+  import DailySong from 'web/components/daily-song'
+  import SearchResult from 'web/components/search-result'
+  import DiscoverMusic from 'web/components/discover-music'
+  window.r = Router
+
+  const defaultPlaylist = {
+    tags: [],
+    name: '',
+    description: '',
+    coverImgUrl: '',
+    playCount: 0,
+    trackCount: 0,
+    createTime: 0,
+    shareCount: 0,
+    commentCount: 0,
+    subscribedCount: 0,
+    creator: {
+      nickname: '',
+      avatarUrl: '',
+    },
+  }
+  @Grass.CSSModules(style)
+  export default class MainContent extends Grass.Component {
+    // #temp
+    component = { Head, SongList, DailySong, PrivateFM, SearchResult, DiscoverMusic }
+
+    searchValue = ''
+
+    beforeCreate () {
+      const routerCtrs = {
+        showSongList: false,
+        showDailySong: false,
+        showPrivateFM: false,
+        showSearchResult: false,
+        showDiscoverMusic: false,
+      }
+
+      this.state = {
+        ...routerCtrs,
+        songListId: null,
+        playlist: defaultPlaylist,
+      }
+
+      // 注册路由
+      this.registerRouter()
+    }
+
+    registerRouter () {
+      const show = key => this.setState({[key]: true})
+      const hide = key => () => this.setState({[key]: false})
+
+      // 搜索页面
+      Router.register('Search', val => {
+         show('showSearchResult')
+          // 清空歌单数据，避免内存浪费
+          this.setState({
+            playlist: defaultPlaylist,
+            songListId: null,
+          })
+          this.searchValue = val
+      }, hide('showSearchResult'), true)
+
+      // 歌单详情页面
+      Router.register('SongList', item => {
+        this.setState({
+          playlist: item,
+          songListId: item.id,
+          showSongList: true,
+        })
+      }, hide('showSongList'), true)
+
+      // 私人 fm 页面
+      Router.register('fm', () => show('showPrivateFM'), hide('showPrivateFM'))
+      
+      // 歌曲推荐页面
+      Router.register('DailySong', () => show('showDailySong'), hide('showDailySong'))
+
+      // 发现页面
+      Router.register('DiscoverMusic', () => show('showDiscoverMusic'), hide('showDiscoverMusic'))
+    }
+
+    // main content 区域显示指定页面，其余的页面都隐藏
+    showSpecifiedPage (pageKey) {
+      this.setState(state => {
+        const keys = Object.keys(state)
+        for (let i = 0; i <  keys.length; i++) {
+          if (keys[i].includes('show')) {
+            state[keys[i]] = keys[i] === pageKey
+          }
+        }
+      })
+    }
+  }
+</script>

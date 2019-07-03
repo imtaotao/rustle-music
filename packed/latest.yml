@@ -1,0 +1,8 @@
+version: 1.0.0
+files:
+  - url: rustle-1.0.0.exe
+    sha512: wAZOGoPMPIoxiqotZScdtd9AYqY8kk/g6KWloEyjrn7CKR1eC6sOzu58ZqlmjObAXZQ1eJ+ZZL7rWCaus8uoyA==
+    size: 47805878
+path: rustle-1.0.0.exe
+sha512: wAZOGoPMPIoxiqotZScdtd9AYqY8kk/g6KWloEyjrn7CKR1eC6sOzu58ZqlmjObAXZQ1eJ+ZZL7rWCaus8uoyA==
+releaseDate: '2019-07-03T03:17:59.784Z'

@@ -1,0 +1,108 @@
+<template>
+  <div styleName='container'>
+    <div styleName='bar-box' v-show='this.pages > 1'>
+      <span styleName='left-array' @click='this.prePage'><i></i></span>
+      <span
+        :styleName='this.props.offset === val ? "active" : ""'
+        v-for='val of this.tagsCount()'
+        @click='this.tooglePage.bind(this, val)'>{{ typeof val === 'number' ? val + 1 : val }}</span>
+      <span styleName='right-array' @click='this.nextPage'><i></i></span>
+    </div>
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class PaginggBar extends Grass.Component {
+    // #temp
+    // props: { limit, count, toGetPageingData }
+
+    beforeCreate () {
+      const { count, limit } = this.props
+      this.pages = Math.ceil(count / limit)
+    }
+
+    willReceiveProps (newProps) {
+      for (const key in newProps) {
+        if (newProps[key] !== this.props[key]) {
+          return true
+        }
+      }
+      return false
+    }
+
+    didReceiveProps () {
+      const { count, limit } = this.props
+      this.pages =  Math.ceil(count / limit)
+    }
+
+    tagsCount () {
+      const tags = []
+      const active = this.props.offset
+      // 只有一页的话，不用出现分页组件
+      if (this.pages > 1) {
+        // 最多放 9 个有用的标签，一头一尾，中间 7 个
+        const haveExtra = this.pages > 9
+        if (haveExtra) {
+          const endValue = this.pages - 1
+          tags.push(0)
+
+          active > 5
+            ? tags.push('...')
+            : tags.push(1)
+          
+          for (let i = 2; i < endValue; i++) {
+            // active 左边 3 个，右边 3 个
+            const left = active - i
+            const right = i - active
+
+            if (left === right ||
+              (left > 0 && left < 4) ||
+              (right > 0 && right < 4)) {
+              tags.push(i)
+            }
+          }
+
+          const minCapcity = 9
+          const tagsEndValue = tags[tags.length - 1]
+          // 保证最少都要有 7 个标签
+          if (tags.length < minCapcity && tagsEndValue < endValue) {
+            const beforeAdd = tagsEndValue < minCapcity
+            for (let j = 0, len = minCapcity - tags.length; j < len; j++) {
+              beforeAdd
+                ? tags.push(tagsEndValue + j + 1)
+                : tags.splice(2, 0, tags[2] - 1)
+            }
+          }
+
+          // 看最后末尾还有没有没显示出来的
+          if (tagsEndValue !== endValue - 1) {
+            tags.push('...')
+          }
+          tags.push(endValue)
+        } else {
+          for (let i = 0; i < this.pages; i++) {
+            tags.push(i)
+          }
+        }
+      }
+      return tags
+    }
+
+    prePage = e => {
+      const val = this.props.offset - 1
+      val >= 0 && this.tooglePage(val)
+    }
+
+    nextPage = e => {
+      const val = this.props.offset + 1
+      val <= this.pages - 1 && this.tooglePage(val)
+    }
+
+    tooglePage (val) {
+      if (val !== this.props.offset && typeof val === 'number') {
+        this.props.toGetPageingData(val)
+      }
+    }
+  }
+</script>

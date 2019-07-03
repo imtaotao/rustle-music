@@ -1,0 +1,87 @@
+@import 'web/components/common.scss';
+
+$singeHeight: 35px;
+.container {
+  width: 100%;
+  & ul {
+    font-size: 11px;
+    margin: 20px 0;
+    color: #8e8e8e;
+  }
+  & li {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: $singeHeight;
+    cursor: pointer;
+    & span {
+      @include hideText;
+      display: inline-block;
+      text-align: center;
+      line-height: $singeHeight;
+    }
+    & a:hover {
+      color: #5d5d5d;
+    }
+  }
+  & li:nth-child(2n) {
+    background: rgba(0, 0, 0, 0.02);
+  }
+  & li:not(:first-child):hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+}
+
+.list-head .title {
+  padding-left: 100px;
+}
+
+.song-name {
+  color: #5d5d5d;
+}
+
+.list-head span:hover {
+  background: #f2f1f2;
+}
+
+.title {
+  width: 35%;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: start;
+  padding-left: 20px;
+  line-height: $singeHeight;
+  & a {
+    margin-left: 10px;
+  }
+  & a:last-child {
+    @include hideText;
+  }
+}
+
+.singer {
+  width: 25%;
+}
+
+.album {
+  width: 25%;
+}
+
+.duration {
+  width: 10%;
+}
+
+.icon {
+  display: block;
+}
+
+.active a {
+  color: $theme !important;
+}
+.active .title a:first-child {
+  font-size: 20px;
+  margin-left: 5px;
+}
+.active .title a:nth-child(2) {
+  margin-left: 7px;
+}

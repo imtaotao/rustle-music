@@ -1,0 +1,38 @@
+<template>
+  <div>
+    <ul styleName='song-list'>
+      <li
+        v-for='(item, i) of list'
+        :styleName='this.props.active === item.id ? "active" : ""'
+        @click='this.props.viewDetailContent.bind(null, item, false)'>
+        <i :className='item.icon'></i>
+        <span>{{ item.key }}</span>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class DefaultFun extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.state = {
+        list: [
+          {
+            id: 'discover',
+            key: '发现音乐',
+            special: true,
+            icon: 'icon-music',
+          },
+          {
+            id: 'fm',
+            key:'私人FM',
+            special: true,
+            icon: 'icon-fm',
+          },
+        ]
+      }
+    }
+  }
+</script>

@@ -1,0 +1,105 @@
+<template>
+  <div styleName='container' @click.self='this.props.hide'>
+    <div styleName='content'>
+      <div styleName='hot-box' v-show='forcedShowHot || !this.props.searchValue'>
+        <p styleName='title'>热门搜索</p>
+        <ul styleName='tags'>
+          <li v-for='val of hotData' @click='this.props.receiveRecommendValue.bind(null, val.first)'>{{ val.first }}</li>
+        </ul>
+      </div>
+      <div styleName='suggest-box' v-show='!forcedShowHot && this.props.searchValue'>
+        <div styleName='loading' v-show='suggestOrder.length === 0'><i></i></div>
+        <div styleName='suggest-detail-box' v-show='suggestOrder.length > 0'>
+          <div styleName='single-type-box' v-for='item of suggestOrder'>
+            <p styleName='title icon'><i :className='"icon-" + item'></i>{{ transferNames[item] }}</p>
+            <ul styleName='list-content'>
+              <li v-for='lists of suggestData[item]' @click='this.processSearchResult.bind(this, item, lists)'>
+                <span>{{ lists.name }}</span>
+                <span
+                  v-if='lists.artistName || lists.album || lists.artist'>
+                   - {{ lists.artistName || (lists.album || lists.artist).name }}
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { notice } from 'web/utils'
+  import RuntimeManager from 'web/manager/runtime'
+
+  @Grass.CSSModules(style)
+  export default class SearchSuggest extends Grass.Component {
+    // #temp
+    efn = err => notice(err.msg)
+
+    didReceiveProps = this.updateSearchResult
+
+    beforeCreate () {
+      this.state = {
+        forcedShowHot: false,        
+        hotData: [],
+        suggestOrder: [],
+        suggestData: {},
+        transferNames: {
+          songs: '单曲',
+          artists: '歌手',
+          albums: '专辑',
+          mvs: '视频',
+          playlists: '歌单',
+        },
+      }
+      this.updateSearchResult()
+    }
+
+    // 根据输入的值判断搜索哪种结果
+    updateSearchResult () {
+      this.props.searchValue
+        ? this.getSearchSuggest()
+        : this.getDefaultRecommend()
+    }
+
+    didUpdate () {
+      if (this.state.forcedShowHot && this.state.hotData.length === 0) {
+        this.getDefaultRecommend()
+      }
+    }
+
+    getDefaultRecommend () {
+      window.node.request('/search/hot').then(({body}) => {
+        this.setState({hotData: body.result.hots})
+      }, this.efn)
+    }
+
+    getSearchSuggest (keyword) {
+      keyword = keyword || this.props.searchValue
+      if (keyword) {
+        window.node.request('/search/suggest?keywords=' + keyword).then(({body}) => {
+          const suggestOrder = body.result.order
+          const forcedShowHot = !body.result.order
+          this.setState({
+            forcedShowHot,
+            suggestData: body.result,
+            suggestOrder: suggestOrder || [],
+          })
+        }, this.efn)
+      }
+    }
+
+    processSearchResult (type, val) {
+      switch (type) {
+        case 'songs' :
+          if (RuntimeManager.module !== 'normal') {
+            RuntimeManager.setModule('normal')
+            RuntimeManager.clear()
+          }
+          RuntimeManager.specifiedPlay(val)
+          break
+      }
+    }
+  }
+</script>

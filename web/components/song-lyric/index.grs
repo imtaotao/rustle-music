@@ -1,0 +1,93 @@
+<template>
+  <div styleName='container' :id='(this.props.type || "") + "_lyircBox"'>
+    <ul styleName='lyric-box'>
+      <li v-for='(val, i) of lines' :styleName='active === i ? "active" : ""'>
+        {{ val.txt }}
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script>
+  import parseLyric from 'web/share/parse-lyric'
+  import RuntimeManager from 'web/manager/runtime'
+
+  @Grass.CSSModules(style)
+  export default class SongLyric extends Grass.Component {
+    // #temp
+    timer = null
+
+    willReceiveProps = newProps => newProps.lyric !== this.props.lyric
+
+    beforeCreate () {
+      this.state = {
+        active: 0,
+        lines: [{time: 0, txt: '暂无歌词'}],
+      }
+      this.getLyric()
+      this.moveLyric()
+    }
+
+    didReceiveProps () {
+      if (this.timer) {
+        clearTimeout(this.timer)
+        this.timer = null
+      }
+      this.getLyric()
+      this.moveLyric()
+    }
+
+    getLyric () {
+      if (typeof this.props.lyric === 'string') {
+        let { lines } = parseLyric(this.props.lyric)
+        if (lines.length === 0) {
+          lines = [{time: 0, txt: this.props.lyric}]
+        }
+        this.setState({lines})
+      } else {
+        this.setState({lines: [{time: 0, txt: '暂无歌词'}]})
+      }
+    }
+
+    moveLyric () {
+      setTimeout(() => {
+        const limit = 3
+        const type = this.props.type || ''
+        const lines = this.state.lines
+        
+        if (lines.length > 1) {
+          const node = document.getElementById(type + '_lyircBox')
+          const fn = () => {
+            this.timer = setTimeout(() => {
+              if (!type || type === RuntimeManager.module) {
+                let currentTime = RuntimeManager.Hearken.getCurrentTime()
+                if (typeof currentTime === 'number') {
+                  currentTime *= 1000
+                  const currentLine = lines.find(({time}) => time > currentTime)
+                  const active = lines.indexOf(currentLine) - 1
+
+                  // 如果scrolltop 不应该在顶层但是却在顶层，就需要修正
+                  if (active !== this.state.active ||
+                    this.state.active > limit && node.scrollTop === 0) {
+                    this.setState({active})
+                    if (node) {
+                      this.setContainerScrollTop(node, active, limit)
+                    }
+                  }
+                }
+              }
+              fn()
+            }, 150)
+          }
+          fn()
+        }
+      })
+    }
+
+    setContainerScrollTop (node, active, limit) {
+      if (active > limit && active < this.state.lines.length - limit) {
+        node.scrollTop = (active - limit) * 40
+      }
+    }
+  }
+</script>

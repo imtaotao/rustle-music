@@ -1,0 +1,51 @@
+@import 'web/components/common.scss';
+
+$height: 25px;
+.container {
+  height: $height;
+  width: 100%;
+  margin: 40px 0;
+}
+
+.bar-box {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & span {
+    min-width: $height;
+    height: $height;
+    line-height: $height;
+    text-align: center;
+    padding: 0 5px;
+    border: border(#ddd);
+    border-radius: 5px;
+    margin: 0 5px;
+    color: #666;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  & span:not(.active):hover {
+    background: #f4f4f4;
+    font-weight: bold;
+  }
+  & span.active {
+    color: #fff;
+    background: $theme;
+    border-color: $theme;
+  }
+}
+
+.left-array {
+  @include center;
+  & i {
+    @include img(14, 'left-move');
+  }
+}
+
+.right-array {
+  @include center;
+  & i {
+    @include img(13, 'right-move');
+  }
+}

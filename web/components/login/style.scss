@@ -1,0 +1,39 @@
+$height: 50px;
+.container {
+  width: 100%;
+  height: $height;
+  line-height: $height;
+  padding-left: 15px;
+  position: relative;
+  z-index: 1;
+  & .chunk {
+    float: left;
+    cursor: pointer;
+    font-size: 13px;
+    height: $height;
+    margin-right: 10px;
+  }
+  & .prompt {
+    $size: 10px;
+    $rootUrl: '../../assets/';
+    width: $size;
+    height: $size;
+    background: url($rootUrl + 'arrow.svg');
+    background-size: contain;
+    margin-top: ($height - $size) / 2;
+    transform: rotateZ(-90deg);
+  }
+}
+
+.head-pic {
+  width: $height;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #e1e3e4;
+  & span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+  }
+}

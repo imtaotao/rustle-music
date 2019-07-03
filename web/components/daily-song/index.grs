@@ -1,0 +1,124 @@
+<template>
+  <div styleName='container'>
+    <div styleName='title'>
+      <div styleName='daily-update' className='icon-calendar'>
+        <span>{{ this.getDate() }}</span>
+      </div>
+      <div styleName='description'>
+        <p><span styleName='title-span'>每日歌曲推荐</span></p>
+        <p><span styleName='content'>根据你的音乐口味生成，每天6:00更新</span></p>
+      </div>
+      <ul styleName='operational'>
+        <li styleName='play'>
+          <div styleName='play-all' @click='this.playAll'>
+            <i className='icon-play'></i>
+            <span>播放全部</span>
+          </div>
+          <div styleName='add-all' @click='this.addAll'>
+            <i className='icon-add'></i>
+          </div>
+        </li>
+        <li>
+          <i className='icon-star'></i>
+          <span>收藏全部</span>
+        </li>
+      </ul>
+    </div>
+    <div styleName='list'>
+      <div styleName='loading' v-show='showLoading'><i></i></div>
+      <div styleName='no-result' v-show='showNoResult'>没有得到结果哦~</div>
+      <div styleName='list-form' v-show='!showNoResult && !showLoading'>
+        <ListForm :tracks='tracks'/>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import { notice } from 'web/utils'
+  import Router from 'web/manager/router'
+  import RuntimeManager from 'web/manager/runtime'
+  import ListForm from 'web/components/song-list-form'
+
+  let cacheTracks = null
+
+  @Grass.CSSModules(style)
+  export default class DailySong extends Grass.Component {
+    // #temp
+
+    willReceiveProps = () => false
+
+    component = { ListForm }
+
+    getDate () {
+      const day = (new Date()).getDate()
+      return day < 10 ? '0' + day : day
+    }
+
+    beforeCreate () {
+      this.state = {
+        showLoading: false,
+        showNoResult: false,
+        tracks: [],
+      }
+
+      Router.on('changed', url => {
+        if (url === 'DailySong' && !cacheTracks) {
+          this.getRecommendDate()
+        }
+      })
+    }
+
+    getRecommendDate () {
+      const set = (tracks, showNoResult) => {
+        this.setState({
+          tracks,
+          showNoResult,
+          showLoading: false,
+        })
+      }
+      if (cacheTracks) {
+        return set(cacheTracks, false)  
+      }
+      const sfn = ({body}) => {
+        const tracks = body.recommend || []
+        set(tracks, tracks.length === 0)
+        cacheTracks = tracks
+      }
+      const efn = ({body}) => {
+        notice(body.msg)
+        set([], true)
+      }
+      this.setState({showLoading: true})
+      window.node.request('/recommend/songs').then(sfn, efn)
+    }
+
+    check (cb) {
+      if (this.state.showLoading) {
+        return notice('请等待资源加载完成')
+      }
+      if (this.state.tracks.length === 0) {
+        return notice('当前没有可添加的歌曲')
+      }
+      cb(this.state.tracks)
+    }
+
+    playAll = e => {
+      this.check(data => {
+        RuntimeManager.setModule('normal')
+        RuntimeManager.replaceAll('dailyRecommendList', data, 0)
+          ? notice('添加成功', true)
+          : notice('请勿重复添加')
+      })
+    }
+
+    addAll = e => {
+      if (RuntimeManager.modules !== 'normal') return
+      this.check(data => {
+        RuntimeManager.pushList('dailyRecommendList', data)
+        ? notice('添加成功', true)
+        : notice('请勿重复添加')
+      })
+    }
+  }
+</script>

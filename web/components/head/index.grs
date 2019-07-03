@@ -1,0 +1,108 @@
+<template>
+  <div styleName='container' className='drag' @click.self='this.hideSuggestBox'>
+    <slot></slot>
+    <div :styleName='"btn left " + (this.Router.canBack() ? "" : "none")' @click='this.preRouter' title='后退'><i></i></div>
+    <div :styleName='"btn right " + (this.Router.canForward() ? "" : "none")' @click='this.nextRouter' title='前进'><i></i></div>
+    <div styleName='search-box'>
+      <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
+      <input
+        styleName='search-input'
+        placeholder='搜索'
+        :value='searchValue'
+        @keydown='this.pressEnter'
+        @input='this.changeInputValue'
+        @focus='() => this.setState({showSuggest: true})'/>
+      <i styleName='remove-icon' v-show='searchValue' @click='this.removeInputValue'></i>
+    </div>
+    <div styleName='btn set' @click='this.setConfig'><i></i></div>
+    <SearchSuggest v-if='showSuggest' :hide='this.hideSuggestBox' :searchValue='searchValue' :receiveRecommendValue='this.receiveRecommendValue'/>
+  </div>
+</template>
+
+<script>
+  import Router from 'web/manager/router'
+  import { enter, notice } from 'web/utils'
+  import SearchSuggest from 'web/components/search-suggest'
+
+  // 保证各个 Head 组件实例的 searchValue 能够共享
+  let stashSuggestValue = null
+
+  @Grass.event
+  @Grass.CSSModules(style)
+  export default class Head extends Grass.Component {
+    // #temp
+    component = { SearchSuggest }
+    debounced = false
+    Router = Router
+
+    willReceiveProps = () => false
+
+    pressEnter = e => enter(e, this.receiveRecommendValue.bind(null, e.target.value.trim()))
+
+    hideSuggestBox = () => this.setState({showSuggest: false})
+
+    beforeCreate () {
+      this.state = {
+        showSuggest: false,
+        searchValue: stashSuggestValue || '',
+      }
+    }
+
+    created () {
+      // 占位符绑定事件
+      if (this.$slot && this.$slot[0]) {
+        this.$slot[0].el.onclick = this.hideSuggestBox
+      }
+    }
+
+    changeInputValue = e => {
+      if (!this.debounced) {
+        const val = e.target.value.trim()
+        this.debounced = true
+        this.setState({searchValue: val})
+        stashSuggestValue = val
+        setTimeout(() => this.debounced = false, 500)
+      }
+    }
+
+    removeInputValue = e => {
+      this.setState({searchValue: ''})
+      stashSuggestValue = null
+    }
+
+    receiveRecommendValue = searchValue => {
+      searchValue = typeof searchValue === 'string'
+        ? searchValue
+        : this.state.searchValue
+
+      this.setState({
+        searchValue,
+        showSuggest: false,
+      })
+      this.toSearchPage(searchValue)
+    }
+
+    toSearchPage (val) {
+      if (val) {
+        Promise.resolve().then(() => {
+          Router.to('Search', val)
+          stashSuggestValue = val
+        })
+      }
+    }
+
+    nextRouter = () => {
+      this.hideSuggestBox()
+      Router.forward()
+    }
+
+    preRouter = () => {
+      this.hideSuggestBox()
+      Router.back()
+    }
+
+    setConfig = () => {
+      this.hideSuggestBox()
+    }
+  }
+</script>

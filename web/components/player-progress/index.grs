@@ -1,0 +1,124 @@
+<template>
+  <div :styleName='"progress" + (this.props.showSongDetail ? " detail" : "")'>
+    <div styleName='noloading-progress'>
+      <div></div>
+    </div>
+    <div id='loadingProgress' styleName='loading-progress'></div>
+    <div id='playingProgress' styleName='playing-progress'
+      @change='this.progressChange'
+      @input='this.progressInput'>
+      <i styleName='dot' v-progress='options'></i>
+    </div>
+  </div>
+</template>
+
+<script>
+  import RuntimeManager from 'web/manager/runtime'
+  const Hearken = RuntimeManager.Hearken
+
+  @Grass.CSSModules(style)
+  export default class Player extends Grass.Component {
+    // #temp
+    willReceiveProps = newProps => newProps.showSongDetail !== this.props.showSongDetail
+
+    Slider = null
+
+    preventTimer = false
+
+    playProgressTimer = null
+    loadingProgressTimer = null
+
+    beforeCreate () {
+      const comp = this
+      this.state = {
+        options: {
+          component: comp,
+          direction: 'x',
+        },
+      }
+      this.monitorRuntimeManager()
+    }
+
+    monitorRuntimeManager () {
+      // 播放进度条
+      let progressNode = null
+      const clearPlayingProgress = () => {
+        if (this.playProgressTimer) {
+          clearInterval(this.playProgressTimer)
+          this.playProgressTimer = null
+        }
+      }
+
+      const playingProgress = () => {
+        if (!progressNode) {
+          progressNode = document.getElementById('playingProgress')
+        }
+        this.playProgressTimer = setTimeout(() => {
+          const progress = Hearken.getPercent()
+          if (!this.preventTimer && progressNode) {
+            progressNode.style.width = progress * 100 + '%'
+          }
+          progress >= 1
+            ? clearPlayingProgress()
+            : playingProgress()
+        }, 300)
+      }
+      
+      // 加载进度条
+      let loadingNode = null
+      const clearLoadingProgress = () => {
+        if (this.loadingProgressTimer) {
+          clearTimeout(this.loadingProgressTimer)
+          this.loadingProgressTimer = null
+        }
+      }
+
+      const getLoadingProgress = () => {
+        if (!loadingNode) {
+          loadingNode = document.getElementById('loadingProgress')
+        }
+        this.loadingProgressTimer = setTimeout(() => {
+          const progress = Hearken.getLoading()
+          if (loadingNode) {
+            loadingNode.style.width = progress * 100 + '%'
+          }
+          progress === 1
+            ? clearLoadingProgress()
+            : getLoadingProgress()
+        }, 500)
+      }
+
+      Hearken.on('start', () => {
+        clearPlayingProgress()
+        playingProgress()
+        getLoadingProgress()
+        if (RuntimeManager.mode !== 'song-cycle' && loadingNode) {
+          loadingNode.style.width = 0
+        }
+      })
+      Hearken.on('stop', clearPlayingProgress)
+      Hearken.on('play', playingProgress)
+      Hearken.on('pause', clearPlayingProgress)
+      Hearken.on('ended', () => {
+        clearPlayingProgress()
+        clearLoadingProgress()
+        if (progressNode) {
+          progressNode.style.width = 0
+        }
+      })
+    }
+
+    progressChange = e => {
+      this.preventTimer = false
+      const duration = RuntimeManager.current.dt || RuntimeManager.current.duration
+      const val = e.value * duration / 1000
+      if (!isNaN(val) && val < Hearken.getDuration()) {
+        Hearken.forward(val)
+      }
+    }
+
+    progressInput = e => {
+      this.preventTimer = true
+    }
+  }
+</script>

@@ -1,0 +1,34 @@
+<template>
+  <div styleName='container'>
+    <MainContent styleName='main-content'/>
+    <Sidebar styleName='slide-bar'/>
+    <div styleName='player'>
+      <Player/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Player from 'web/components/player'
+  import pluging from 'web/components/pluging'
+  import Sidebar from 'web/components/sidebar'
+  import MainContent from 'web/components/main-content'
+
+  console.time('render time')
+  @Grass.CSSModules(style)
+  class Root extends Grass.Component {
+    // #temp
+    component = { Player, Sidebar, MainContent }
+
+    async beforeCreate () {
+      // 检测依赖的网易云 api 版本，以及更新
+      const { needUpdate, toUpdate } = window.node.update
+      const need = await needUpdate()
+      if (need) toUpdate()
+    }
+  }
+
+  Grass.use(pluging, Grass)
+  Root.$mount(document.getElementById('root'))
+  console.timeEnd('render time')
+</script>

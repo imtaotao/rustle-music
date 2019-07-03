@@ -1,0 +1,12 @@
+<template>
+  <div styleName='container'>
+      singer-form
+  </div>
+</template>
+
+<script>
+  @Grass.CSSModules(style)
+  export default class SingerForm extends Grass.Component {
+    // #temp
+  }
+</script>

@@ -1,0 +1,79 @@
+<template>
+  <div styleName='container'>
+    <div @click='this.clickAccount' styleName='chunk head-pic'>
+      <span :style='{backgroundImage: "url("+ avatarUrl  +")"}'></span>
+    </div>
+    <div @click='this.clickAccount' styleName='chunk'>{{ nickname }}</div>
+    <div @click='this.clickAccount' styleName='chunk prompt'></div>
+    <LoginBox v-if='showLoginBox' :hideLoginBox='this.hideLoginBox' :login='this.login'/>
+    <PersonInfo v-if='showViewInfo' :hideViewInfo='this.hideViewInfo' :logout='this.logout'/>
+  </div>
+</template>
+
+<script>
+  import userManager from 'web/manager/user'
+  import LoginBox from 'web/components/login-box'
+  import PersonInfo from 'web/components/information'
+  
+  const defaultAvatarUrl = require('../../assets/no-login.svg')
+  const defaultNickname = '未登录' 
+
+  @Grass.CSSModules(style)
+  export default class Sidebar extends Grass.Component {
+    // #temp
+    beforeCreate () {
+      this.component = { LoginBox, PersonInfo }
+      this.state = {
+        showLoginBox: false,
+        showViewInfo: false,
+        avatarUrl: userManager.avatarUrl || defaultAvatarUrl,
+        nickname: userManager.nickname || defaultNickname,
+      }
+      // 如果自动登录或别的地方登录成功，隐藏登录框
+      userManager.on('login', () => {
+        this.setState({
+          showLoginBox: false,
+          nickname: userManager.nickname,
+          avatarUrl: userManager.avatarUrl,
+        })
+      })
+    }
+
+    clickAccount = e => {
+      const showModel = userManager.logged
+        ? 'showViewInfo'
+        : 'showLoginBox'
+      this.setState({[showModel]: true})
+    }
+
+    hideLoginBox = () => {
+      this.setState({showLoginBox: false})
+    }
+
+    hideViewInfo = e => {
+      this.setState({showViewInfo: false})
+    }
+
+    logout = e => {
+      if (!userManager.logged) return Promise.resolve(false)
+      return userManager.logout().then(res => {
+        this.setState({
+          nickname: userManager.nickname || defaultNickname,
+          avatarUrl: userManager.avatarUrl || defaultAvatarUrl,
+        })
+        return true
+      })
+    }
+
+    login = (type, account, password, autoLogin) => {
+      return userManager.login[type](account, password, autoLogin)
+        .then(res => {
+          this.setState({
+            showLoginBox: false,
+            nickname: userManager.nickname,
+            avatarUrl: userManager.avatarUrl,
+          })
+        })
+    }
+  }
+</script>

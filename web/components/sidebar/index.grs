@@ -1,0 +1,126 @@
+<template>
+  <div styleName='container' className='drag'>
+    <Login/>
+    <div styleName='song-list-box'>
+      <DefaultList
+        styleName='default-list'
+        :active='this.active'
+        :viewDetailContent='this.viewDetailContent'/>
+      <!-- 歌单 -->
+      <div styleName='list-box' v-for='(val, key) of this.state'>
+        <span styleName='list-head'>{{ key }}</span>
+        <ul styleName='song-list'>
+          <li 
+            v-for='item of val'
+            :styleName='this.active === item.id ? "active" : ""'
+            @click='this.viewDetailContent.bind(null, item, key === "收藏的歌单")'>
+            <i :className='this.getIcon(item)'></i>
+            <span>{{ this.getListName(item.name) }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Router from 'web/manager/router'
+  import Login from 'web/components/login'
+  import DefaultList from './default-list'
+  import SongManager from 'web/manager/song'
+  import UserManager from 'web/manager/user'
+
+  @Grass.event
+  @Grass.CSSModules(style)
+  export default class Sidebar extends Grass.Component {
+    // #temp
+    active = 'discover'
+
+    isMyLikeList = false
+
+    component = { Login, DefaultList }
+
+    beforeCreate () {
+      let defaultData = {
+        '我的音乐': [
+          { name: '下载管理', id: 'download', special: true, icon: 'icon-down' },
+        ],
+      }
+
+      this.state = defaultData
+      if (UserManager.logged) this.getSongList()
+
+      UserManager.on('login', this.getSongList)
+      UserManager.on('logout', () => {
+        // 恢复未登陆的初始状态
+        SongManager.cleanCache()
+        this.state = defaultData
+        this.forceUpdate()
+        this.active = 'discover'
+        Router.to('DiscoverMusic')
+      })
+      Router.to('DiscoverMusic')
+    }
+
+    getIcon (item) {
+      if (item.icon) return item.icon
+      return item.name.includes(UserManager.nickname)
+        ? 'icon-like1'
+        : 'icon-playlists'
+    }
+
+    getListName (name) {
+      return name.replace(UserManager.nickname, '我')
+    }
+
+    getSongList = () => {
+      // 获取当前用户的所有歌单
+      UserManager.getSongList().then(({subscribe, create}) => {
+        const myMusic = this.state['我的音乐'].concat([
+          { name: '我的电台', id: 'radio', special: true, icon: 'icon-radio' },
+          { name: '我的收藏', id: 'collection', special: true, icon: 'icon-star' },
+        ])
+
+        this.cacheMyCollectList(create)
+        this.setState({
+          '我的音乐': myMusic,
+          '创建的歌单': create,
+          '收藏的歌单': subscribe,
+        })
+      })
+    }
+
+    cacheMyCollectList (list) {
+      const res = list.find(val => val.creator.userId === UserManager.id)
+      SongManager.cache(send => {
+         UserManager.getSongListDetail(res.id).then(({body}) => {
+           send(body.playlist.trackIds)
+         })
+      })
+    }
+
+    viewDetailContent = (item, isCollectList) => {
+      this.active = item.id
+      item.isCollectList = isCollectList
+      // 如果是歌单，而且歌单名字包含昵称，就是"我喜欢的音乐"
+      item.isMyLikeList = item.name && item.name.includes(UserManager.nickname)
+      item.description = item.description && item.description.replace(/↵/g, '\n')
+      this.forceUpdate()
+
+      // 路由页面
+      if (item.special) {
+        switch (item.id) {
+          case 'discover' :
+            Router.to('DiscoverMusic')
+            break
+          case 'fm' :
+            Router.to('fm')
+            break
+        }
+      } else {
+        // 传递当前选中的歌单数据
+        Router.to('SongList', item)
+      }
+    }
+  }
+</script>

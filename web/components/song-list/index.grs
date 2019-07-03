@@ -1,0 +1,205 @@
+<template>
+  <div styleName='container' @scroll='this.scroll()'>
+    <div styleName='bg-box' :style='{backgroundImage: "url("+ this.props.playlist.coverImgUrl +")"}'></div>
+    <div id='SongListHead' styleName='head-box'>
+      <Head styleName='head'/>
+    </div>
+    <div styleName='list-info-box'>
+      <div styleName='list-img' :style='{backgroundImage: "url("+ this.props.playlist.coverImgUrl +")"}'></div>
+      <div styleName='detail-info'>
+        <div styleName='list-name'>
+          <span>歌单</span>
+          <b>{{ this.getListName() }}</b>
+        </div>
+        <div styleName='author'>
+          <i :style='{backgroundImage: "url("+ this.props.playlist.creator.avatarUrl +")"}'></i>
+          <span styleName='name'>{{ this.props.playlist.creator.nickname || '-' }}</span>
+          <span>{{ this.getCreateTime() }} 创建</span>
+        </div>
+        <div styleName='operational'>
+          <ul>
+            <li styleName='play'>
+              <div styleName='play-all' @click='this.playAll'>
+                <i className='icon-play'></i>
+                <span>播放全部</span>
+              </div>
+              <div styleName='add-all'>
+                <i className='icon-add' @click='this.addAll'></i>
+              </div>
+            </li>
+            <li v-for="(val, i) of tagList" :style='this.getCollectBtnStyle(i)'>
+              <i :className='val.icon'></i>
+              <span>{{ val.name }}{{ this.getTagCount(i) }}</span>
+            </li>
+          </ul>
+        </div>
+        <ul styleName='more-info-box'>
+          <li v-show='!this.props.playlist.isMyLikeList'>
+            <span styleName='title'>标签</span>：
+            <span>
+              <span v-if='this.canShowTag()' v-for='(val, i) of this.props.playlist.tags'>
+                <a styleName='tag'>{{ val }}</a>
+                <span v-if='i < 2' style='display:inline-block;margin:0 5px;'>/</span>
+              </span>
+              <span v-if='!this.canShowTag()'>暂无标签</span>
+            </span>
+          </li>
+          <li>
+            <span styleName='title'>歌曲数</span>：<span styleName='count'>{{ this.props.playlist.trackCount }}</span>
+            <span styleName='title second'>播放数</span>：<span styleName='count'>{{ this.filterCount(this.props.playlist.playCount) }}</span>
+          </li>
+          <li v-show='this.props.playlist.isMyLikeList' style='height: 30px;'></li>
+          <li v-show='!this.props.playlist.isMyLikeList'>
+            <span styleName='title'>简介</span>：
+            <span :styleName='"description " + (extendsDesc ? "zoom-out" : "zoom")'>{{ this.props.playlist.description || '暂无简介' }}</span>
+            <i
+              :styleName='"array " + (extendsDesc ? "bottom" : "top")'
+              v-show='!!this.props.playlist.description'
+              @click='this.extendsDescription'
+             ></i>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div styleName='loading' v-show='loading'><i></i></div>
+    <ListForm styleName='main-content' v-show='!loading' :tracks='tracks'/>
+  </div>
+</template>
+
+/*
+  playlist
+    creator：歌单作者资料
+      avatarUrl: 作者头像
+      nickname: 作者昵称
+    tags: 歌单标签 string[]
+    name: 歌单名字
+    coverImgUrl: 背景图片
+    createTime: 创建时间
+    description: 歌单描述
+    playCount: 播放数量
+    trackCount: 歌曲数量
+    shareCount: 歌单分享数量
+    commentCount: 评论数量
+    subscribedCount: 订阅数量
+*/
+
+<script>
+  import Head from 'web/components/head'
+  import UserManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'
+  import ListForm from 'web/components/song-list-form'
+  import { notice, scrollEvent, timestampToTime, filterCount } from 'web/utils'
+
+  @Grass.CSSModules(style)
+  export default class SongList extends Grass.Component {
+    // #temp
+    component = { Head, ListForm }
+
+    filterCount = filterCount
+
+    // 切换歌单选项时重新获取数据
+    didReceiveProps = this.updataSongListInfo
+
+    willReceiveProps = newProps => newProps.id !== this.props.id
+
+    getListName = () => this.props.playlist.name.replace(UserManager.nickname, '我')
+
+    defaultState = {
+      loading: true,
+      shareCount: '---',
+      extendsDesc: false,
+      tracks: [],
+      tagList: [
+        {name: '收藏', icon: 'icon-star'},
+        {name: '分享', icon: 'icon-share'},
+        {name: '下载全部', icon: 'icon-down'},
+      ],
+    }
+
+    beforeCreate () {
+      this.state = this.defaultState
+      this.updataSongListInfo()
+    }
+
+    scroll () {
+      return scrollEvent('SongListHead')
+    }
+
+    extendsDescription = e => {
+      this.setState({extendsDesc: !this.state.extendsDesc})
+    }
+
+    getCollectBtnStyle (i) {
+      return i === 0 && !this.props.playlist.isCollectList
+        ? {color: '#bbb9b1'}
+        : {}
+    }
+
+    canShowTag () {
+      const tags = this.props.playlist.tags
+      return tags && tags.length > 0
+    }
+
+    getTagCount (i) {
+      switch (i) {
+        case 0 :
+          return `(${filterCount(this.props.playlist.subscribedCount)})`
+        case 1 :
+          return `(${filterCount(this.state.shareCount)})`
+        default :
+          return ''
+      }
+    }
+
+    getCreateTime () {
+      let { year, month, day } = timestampToTime(this.props.playlist.createTime)
+      isNaN(day) && (day = 0)
+      isNaN(year) && (year = 0)
+      isNaN(month) && (month = 0)
+      return `${year}-${month}-${day}`
+    }
+
+    updataSongListInfo () {
+      // 获取当前歌单的详细数据
+      const id = this.props.id
+
+      if (typeof id === 'number') {
+        // 切换歌单时，清空上一个歌单的数据
+        this.setState(this.defaultState)
+        UserManager.getSongListDetail(id).then(({body}) => {
+          if (this.props.id === id) {
+            this.setState({
+              loading: false,
+              tracks: body.playlist.tracks,
+              trackIds: body.playlist.trackIds,
+              shareCount: body.playlist.shareCount,
+            })
+          }
+        })
+      }
+    }
+
+    // 歌单操作
+    playAll = e => {
+      const tracks = this.state.tracks
+      if (tracks.length === 0) {
+        return notice('请等待歌单数据加载完成')
+      }
+      RuntimeManager.setModule('normal')
+      RuntimeManager.replaceAll(this.props.id, tracks, 0)
+        ? notice('添加成功', true)
+        : notice('请勿重复添加')
+    }
+
+    addAll = e => {
+      if (RuntimeManager.module !== 'normal') return
+      const tracks = this.state.tracks
+      if (tracks.length === 0) {
+        return notice('请等待歌单数据加载完成')
+      }
+      RuntimeManager.pushList(this.props.id, tracks)
+        ? notice('添加成功', true)
+        : notice('请勿重复添加')
+    }
+  }
+</script>

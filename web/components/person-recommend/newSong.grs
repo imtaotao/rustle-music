@@ -1,0 +1,68 @@
+<template>
+  <div styleName='new-song'>
+    <div styleName='title'>最新音乐<i></i></div>
+    <div styleName='content'>
+      <ul styleName='song-list'>
+        <li v-for='(val, i) of data'>
+          <div styleName='pic' :style='{backgroundImage: "url("+ val.song.album.picUrl +")"}'>
+            <div styleName='play-btn' @click='this.play.bind(this, val.song)'><i></i></div>
+          </div>
+          <span styleName='number'>{{ this.getIndex(i) }}</span>
+          <div styleName='description'>
+            <div styleName='name'>{{ val.name }}</div>
+            <div styleName='auth'>
+              <span v-for='(val, i) of val.song.artists'>
+                <a v-if='i !== 0'> / </a>
+                {{ val.name }}
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script>
+  import userManager from 'web/manager/user'
+  import RuntimeManager from 'web/manager/runtime'
+
+  @Grass.CSSModules(style)
+  export default class newSong extends Grass.Component {
+    // #temp
+    willReceiveProps = () => false
+
+    getIndex = i => i < 9 ? '0' + (i + 1) : i + 1
+
+    beforeCreate () {
+      const item = {
+        name: '-', 
+        song: {
+          album: {picUrl: ''},
+          artists: [{name: '-'}],
+        },
+      }
+      this.state = {
+        data: (new Array(10)).fill(item),
+      }
+      this.getNewSongData()
+      userManager.on('login', this.getNewSongData)
+      userManager.on('logout', this.getNewSongData)
+    }
+
+    getNewSongData = () => {
+      window.node.request('/personalized/newsong').then(({body}) => {
+        const data = body.result || []
+        this.setState({data})
+      }, this.props.efn)
+    }
+
+    play (val) {
+      if (RuntimeManager.module !== 'normal') {
+        RuntimeManager.setModule('normal')
+        RuntimeManager.clear()
+      }
+      RuntimeManager.specifiedPlay(val)
+    }
+  }
+</script>

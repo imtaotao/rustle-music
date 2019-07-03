@@ -1,0 +1,40 @@
+@import '../common.scss';
+
+.container {
+  height: 80px;
+  width: 340px;
+  background: rgba(0,0,0, 0.8);
+  color: #fff;
+  line-height: 80px;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 5px;
+  position: fixed;
+  top: calc(50% - 150px);
+  left: calc(50% - 170px);
+  z-index: 99;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  & span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.icon {
+  @include img(40, 0);
+  margin-right: 10px;
+  margin-left: -10px
+}
+
+.crying {
+  background-image: url('../../assets/crying-face.svg')
+}
+
+.smiley {
+  background-image: url('../../assets/smiley-face.svg')
+}

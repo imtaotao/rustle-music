@@ -1,0 +1,55 @@
+@import 'web/components/common.scss';
+
+.container {
+  color: #333;
+}
+
+$headHeight: 55px;
+.head {
+  width: 100%;
+  height: $headHeight;
+  position: fixed;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+  box-shadow: 15px 8px 30px 0 rgba(0, 0, 0, 0.05);
+  & span {
+    height: $headHeight;
+    line-height: $headHeight;
+    display: inline-block;
+    margin-right: 25px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  & span.active {
+    font-weight: bold;
+    color: $theme;
+    border-bottom: border($theme, 3);
+  }
+}
+
+.content-box {
+  width: 100%;
+  max-height: calc(100% - 70px);
+  overflow-x: hidden;
+  position: relative;
+  z-index: 0;
+  & .content {
+    margin-top: $headHeight + 20px;
+    padding-right: 30px;
+  }
+}
+
+.loading {
+  position: fixed;
+  width: 65%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 2;
+  & i {
+    @include img(40, 'loading');
+  }
+}

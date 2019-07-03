@@ -1,0 +1,155 @@
+<template>
+  <div styleName='container' id='particalesBox'>
+  </div>
+</template>
+
+<script>
+  import * as THREE from 'three'
+
+  const WIDTH = window.innerWidth
+  const HEIGHT = window.innerHeight
+
+  @Grass.CSSModules(style)
+  export default class PlayBackground extends Grass.Component {
+    // #temp
+    timer = null
+
+    // windows 7000 star
+    particleCount = window.node.windows()
+      ? 70000
+      : 14000
+
+    parameters = [
+      [[0.85, 1, 0.5], 3],
+      [[0.80, 1, 0.5], 3],
+    ]
+
+    beforeCreate () {
+      setTimeout(() => {
+        this.init(document.getElementById('particalesBox')).animate()
+        window.onresize = e => {
+          this.camera.aspect = window.innerWidth / window.innerHeight
+          this.camera.updateProjectionMatrix()
+          this.renderer.setSize(window.innerWidth, window.innerHeight)
+        }
+      })
+    }
+
+    destroy () {
+      if (this.timer) {
+        cancelAnimationFrame(this.timer)
+        this.timer = null
+      }
+    }
+
+    init (container) {
+      const fieldOfView = 75
+      const nearPlane = 1
+      const farPlane = 3000
+      const fogDensity = 0.0007
+      const aspectRatio = WIDTH / HEIGHT
+
+      const camera = new THREE.PerspectiveCamera(fieldOfView, aspectRatio, nearPlane, farPlane)
+      camera.position.z = farPlane / 3
+
+      const scene = new THREE.Scene()
+      scene.fog = new THREE.FogExp2('#29c5e6', fogDensity)
+      const geometry = new THREE.Geometry()
+
+      this.scene = scene
+      this.camera = camera
+      this.geometry = geometry
+      this.container = container
+      this.createParticles()
+      this.createRenter()
+
+      return this
+    }
+
+    createParticles () {
+      const materials = this.materials = []
+
+      for (let i = 0; i < this.particleCount; i++) {
+        const vertex = new THREE.Vector3()
+        vertex.x = Math.random() * 2000 - 1000
+        vertex.y = Math.random() * 2000 - 1000
+        vertex.z = Math.random() * 2000 - 1000
+        this.geometry.vertices.push(vertex)
+      }
+
+      for (let i = 0; i < this.parameters.length; i++) {
+        const color = this.parameters[i][0]
+        const size = this.parameters[i][1]
+
+        const rgb = new THREE.Color(color[0], color[1], color[2]).getStyle().split(',')
+        rgb[0] = rgb[0].replace('rgb(', '')
+        rgb[2] = rgb[2].replace(')', '')
+
+        materials[i] = new THREE.PointsMaterial({  
+            size,
+            transparent: true,
+            depthWrite: false,
+            map: createCanvasMaterial(rgb, 256),
+        })
+    
+        const particles = new THREE.Points(this.geometry, materials[i])
+        particles.rotation.x = Math.random() * 6
+        particles.rotation.y = Math.random() * 6
+        particles.rotation.z = Math.random() * 6
+        this.scene.add(particles)
+      }
+    }
+
+    createRenter () {
+      this.renderer = new THREE.WebGLRenderer({antialias: false, alpha:true})
+      this.renderer.setPixelRatio(window.devicePixelRatio)
+      this.renderer.setSize(WIDTH, HEIGHT)
+      this.container.appendChild(this.renderer.domElement)
+    }
+
+    render () {
+      const time = Date.now() * 0.00002
+
+      for (let i = 0; i < this.scene.children.length; i++) {
+        const object = this.scene.children[i]
+        if (object instanceof THREE.Points) {
+          object.rotation.y = time * (i < 4 ? i + 1 : -(i + 1))
+        }
+      }
+
+      for (let i = 0; i < this.materials.length; i++) {
+        const color = this.parameters[i][0]
+        const h = (360 * (color[0] + time) % 360) / 360
+        this.materials[i].color.setHSL(h, color[1], color[2])
+      }
+
+      this.renderer.render(this.scene, this.camera)
+    }
+
+    animate () {
+      this.timer = requestAnimationFrame(() => this.animate())
+      this.render()
+    }
+  }
+
+  function createCanvasMaterial([r, g, b], size) {
+    const matCanvas = document.createElement('canvas')
+    matCanvas.width = matCanvas.height = size
+    const matContext = matCanvas.getContext('2d')
+    const texture = new THREE.Texture(matCanvas)
+    // Draw a circle
+    const center = size / 2
+    matContext.beginPath()
+    matContext.arc(center, center, size/2, 0, 2 * Math.PI, false)
+    matContext.closePath()
+    const gradient = matContext.createRadialGradient(center, center, 10, center, center, center)
+    gradient.addColorStop(0.005, `rgba(${r},${g},${b}, 1)`)
+    gradient.addColorStop(1, `rgba(${r},${g },${b}, 0.2)`)
+    matContext.fillStyle = gradient
+    matContext.fill()
+    // need to set needsUpdate
+    texture.needsUpdate = true
+    // return a texture made from the canvas
+    return texture
+  }
+</script>

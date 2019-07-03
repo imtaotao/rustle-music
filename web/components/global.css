@@ -1,0 +1,189 @@
+/**
+ * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
+ * http://cssreset.com
+ */
+ * {box-sizing: border-box;}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, input {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font-weight: normal;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, menu, nav, section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* custom */
+a {
+  color: #7e8c8d;
+  text-decoration: none;
+  -webkit-backface-visibility: hidden;
+}
+
+li {
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  -webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  height: 5px;
+  background: -webkit-gradient(linear,left top, right bottom, from(#485563), to(#29323c));
+  -webkit-border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  width: 5px;
+  background-color: rgba(125, 125, 125, 0.7);
+  -webkit-border-radius: 6px;
+}
+
+/* reset css */
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: #333;
+  user-select: none;
+  font-family: 'tahoma';
+  -webkit-text-size-adjust: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+
+.scroll::-webkit-scrollbar-thumb {
+  background: rgba(176, 175, 183, 0.5);
+  border-radius: 15px;
+}
+.scroll::-webkit-scrollbar-track {
+  background: rgba(64, 65, 66, .5);
+}
+.scroll::-webkit-scrollbar-track-piece {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+}
+
+.rt {
+  float: right !important;
+}
+.lf {
+  float: left !important;
+}
+
+/*组件过度动画*/
+/*slide*/
+.slide-left-enter-active, .slide-left-leave-active {
+ transition: all 1s;
+}
+.slide-left-enter, .slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(-50%);
+}
+
+/*slide-top*/
+.slide-top-enter-active, .slide-top-leave-active {
+ transition: all 1s;
+}
+.slide-top-enter, .slide-top-leave-to {
+  opacity: 0;
+  transform: translateY(-50%);
+}
+
+/*width*/
+.zoom-enter-active, .zoom-leave-active {
+ transition: all 0.2s;
+}
+.zoom-enter, .zoom-leave-to {
+  opacity: 0;
+  transform: scale3d(0.1, 0.1, 1);
+}
+
+/*fade*/
+.fade-enter-active, .fade-leave-active {
+ transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+/*long fade*/
+.long-fade-enter-active, .long-fade-leave-active {
+ transition: opacity 2s;
+}
+.long-fade-enter, .long-fade-leave-to {
+  opacity: 0;
+}
+
+input::-webkit-input-placeholder {
+  color: #c3c7c7;
+}
+input::-moz-input-placeholder {
+  color: #c3c7c7;
+}
+input::-ms-input-placeholder {
+  color: #c3c7c7;
+}
+
+#root {
+  height: 100%;
+}
+
+.drag {
+  -webkit-app-region: drag;
+}
+
+@font-face
+{
+  font-family: 方正兰亭超细黑简体;
+  src: url('../fonts/方正兰亭超细黑简体.ttf');
+}
+
+@font-face {
+  font-family: tahoma;
+  src: url('../fonts/tahoma.ttf');
+}

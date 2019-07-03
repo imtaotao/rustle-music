@@ -1,0 +1,39 @@
+$slideWidth: 20%;
+.container {
+  height: 100%;
+  background: #fff;
+}
+
+.slide-bar {
+  width: $slideWidth;
+  height: calc(100% - 70px);
+  position: relative;
+  z-index: 1;
+}
+
+.main-content {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100% - $slideWidth;
+  min-width: 800px;
+  max-width: 1200px;
+  height: 100%;
+}
+
+.player {
+  width: 100%;
+  height: 70px;
+  position: relative;
+  z-index: 2;
+}
+
+.bg {
+  position: absolute;
+  width: 100%;
+  height: 85%;
+  backdrop-filter: blur(10px);
+  background:rgba(247, 129, 116, 0.5);
+  z-index: 0;
+  top: 15%;
+}

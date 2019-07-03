@@ -1,0 +1,66 @@
+// 主题颜色
+$theme: #c4463a;
+
+// 通用 mixin 和 函数
+@mixin img ($wah, $url, $size:cover, $type:'svg') {
+  display: inline-block;
+  width: $wah + px;
+  height: $wah + px;
+  background-size: $size;
+  background-repeat: no-repeat;
+  @if ($url != 0) {
+    background-image: url('../../assets/' + $url + '.' + $type);
+  }
+}
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin halfPX ($color, $with:0.5) {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  width: 1px;
+  background: $color;
+  transform: scaleX($with);
+}
+
+@mixin v-halfPX ($color, $height:0.5) {
+  content: '';
+  display: inline-block;
+  height: 1px;
+  width: 100%;
+  background: $color;
+  transform: scaleY($height);
+}
+
+@mixin hideText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin defaultImg {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: url('../../assets/img/bg.png') no-repeat;
+  background-size: cover;
+}
+
+@function border ($color:#ddd, $size:1) {
+  @return $size + px solid $color;
+}

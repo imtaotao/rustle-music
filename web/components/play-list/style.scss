@@ -1,0 +1,156 @@
+@import 'web/components/common.scss';
+
+.container {
+  $top: 56px;
+  width: 41.5%;
+  height: calc(100% - #{$top});
+  position: absolute;
+  top: $top;
+  right: 0;
+  background: #fff;
+  border-top-left-radius: 5px;
+  box-shadow: 5px 8px 15px 0 rgba(0, 0, 0, 0.5);
+}
+
+$titleHeight: 100px;
+.title {
+  width: 100%;
+  height: $titleHeight;
+  position: relative;
+  padding: 20px;
+}
+
+.title::before {
+  @include v-halfPX(#ddd, 0.3);
+  width: calc(100% - 40px);
+  position: absolute;
+  bottom: 0;
+}
+
+.btn {
+  width: 210px;
+  border: border(#ddd);
+  border-radius: 25px;
+  display: flex;
+  margin: 0 auto;
+  & div {
+    @include center;
+    padding: 8px 0;
+    width: 50%;
+    border-radius: 25px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  & div:not(.active):hover {
+    background: #eff0f2;
+    color: #686868;
+  }
+  & div.active {
+    background: #bbb;
+    color: #fff;
+  }
+}
+
+.info-desc {
+  width: 100%;
+  padding: 15px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  & .count {
+    font-size: 11px;
+    color: #999;
+    margin-right: 20%;
+  }
+  & div {
+    @include center;
+    font-size: 12px;
+    color: #7b7b7b;
+    cursor: pointer;
+    & i {
+      font-size: 20px;
+      margin-right: 5px;
+      color: #7b7b7b;
+    }
+  }
+  & div:hover, div:hover i {
+    color: #535355;
+  }
+  & .collect {
+    position: relative;
+  }
+  & .collect::before {
+    @include halfPX(#b9b9b9);
+    position: absolute;
+    height: 70%;
+    right: -40%;
+  }
+}
+
+.content {
+  width: 100%;
+  height: calc(100% - #{$titleHeight});
+}
+
+.history-list, .play-list {
+  color: #333;
+  & ul {
+    width: 100%;
+    max-height: 100%;
+    overflow-x: hidden;
+  }
+}
+
+.song-item {
+  width: 100%;
+  height: 35px;
+  display: flex;
+  color: #aba8a8;
+  align-items: center;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  & .name {
+    display: flex;
+    align-items: center;
+    width: 50%;
+    padding-left: 10px;
+    color: #565656;
+    & span {
+      @include hideText;
+      width: 70%;
+    }
+    & i {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      margin-right: 5px;
+    }
+  }
+  & .auth {
+    @include hideText;
+    width: 30%;
+  }
+  & .duration {
+    width: 20%;
+    padding-left: 5%;
+  }
+}
+.song-item:nth-child(2n) {
+  background: #f9f9f9;
+}
+
+.song-item.active {
+  color: $theme;
+  & .name {
+    color: $theme;
+  }
+}
+
+.song-item:not(.active):hover {
+  background: #f1f1f1;
+  & div {
+    color: #565656;
+  }
+}

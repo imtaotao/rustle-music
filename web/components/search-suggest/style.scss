@@ -1,0 +1,117 @@
+@import 'web/components/common.scss';
+
+.container {
+  width: 100%;
+  max-height: calc(100% - 120px);
+  position: fixed;
+  z-index: 999;
+  top: 50px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  height: 100%;
+  width: 35.5%;
+  right: 0;
+  padding: 20px 0;
+  background: #fff;
+  overflow-x: hidden;
+  border-top-left-radius: 5px;
+  box-shadow: 5px 8px 15px 0 rgba(0, 0, 0, 0.5);
+}
+
+.content::-webkit-scrollbar-thumb:vertical {
+  background: #000C40;
+}
+
+.hot-box {
+  height: 100%;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.title {
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.tags {
+  overflow: hidden;
+  & li {
+    float: left;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 20px;
+    padding: 0 15px;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: 方正兰亭超细黑简体;
+    text-align: center;
+    border: border(#d2d2d2);
+    margin: 5px;
+    cursor: pointer;
+  }
+  & li:hover {
+    background: #f3f3f3;
+  }
+}
+
+.suggest-box {
+  height: 100%;
+  width: 100%;
+}
+
+.loading {
+  $height: 150px;
+  height: $height;
+  width: 100%;
+  text-align: center;
+  line-height: $height;
+  & i {
+    @include img(30, 'loading');
+  }
+}
+
+.suggest-detail-box {
+  width: 100%;
+}
+
+.title.icon {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  & i {
+    height: 14px;
+    width: 14px;
+    margin-right: 8px;
+  }
+}
+
+.single-type-box {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.list-content {
+  & li {
+    @include hideText;
+    width: 100%;
+    height: 35px;
+    padding: 0 40px;
+    line-height: 35px;
+    color: #333;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: 方正兰亭超细黑简体;
+    cursor: pointer;
+  }
+  & li:hover {
+    background: #f5f3f3;
+  }
+}

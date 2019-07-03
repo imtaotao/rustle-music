@@ -1,0 +1,437 @@
+@import 'web/components/common.scss';
+
+.container {
+  color: #333;
+  width: 100%;
+}
+
+.banner {
+  width: 100%;
+  height: 250px;
+}
+
+// 推荐歌单
+.song-list {
+  width: 100%;
+  margin-top: 30px;
+  & .daily-update {
+    @include center;
+    border-color: #bbb !important;
+  }
+  & .bg {
+    width: 100%;
+    height: 100%;
+    background: url('../../assets/img/recommend.jpg') no-repeat;
+    background-size: cover;
+    filter: blur(5px);
+  }
+  & .calendar {
+    font-size: 83px;
+    color: #fff;
+    position: absolute;
+    z-index: 0;
+    & span {
+      position: absolute;
+      color: #fff;
+      font-size: 40px;
+      font-family: tahoma;
+      left: 21px;
+      bottom: 11px;
+    }
+  }
+  & .daily-update:hover .mask {
+    top: 0;
+  }
+  & .mask {
+    position: absolute;
+    top: -51px;
+    width: 100%;
+    height: 50px;
+    color: #fff;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-family: 方正兰亭超细黑简体;
+    font-weight: bold;
+    line-height: 18px;
+    background: rgba(0,0,0,0.5);
+    transition: all 0.1s ease;
+    z-index: 1;
+  }
+}
+
+.title {
+  width: 100%;
+  color: #555;
+  margin: 10px 0 30px 0;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-content: center;
+  cursor: pointer;
+  & i {
+    @include img(18, 'right2');
+    margin: 0 5px;
+  }
+}
+
+.title:hover {
+  color: #333;
+}
+
+.content {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.list {
+  $size: 135px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  & li {
+    width: $size;
+    margin: 0 calc((100% - #{($size + 2) * 5}) / 10);
+    cursor: pointer;
+  }
+  & .image {
+    width: 100%;
+    height: $size;
+    border: border(#eee);
+    position: relative;
+    border-radius: 5px;
+    background-size: cover;
+    overflow: hidden;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.4;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+    }
+  }
+
+  & .play-count {
+    width: 100%;
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
+    text-align: right;
+    padding: 10px 10px 0 0;
+    color: #fff;
+    font-size: 12px;
+    text-shadow: 1px 1px rgba(0,0,0,0.2);
+    & i {
+      @include img(12, 'play-icon');
+      margin-right: 5px;
+    }
+  }
+
+  & .play-btn {
+    $iconSize: 13;
+    display: none;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    padding-left: $iconSize / 4 + px;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    & i {
+      @include img($iconSize, 'play-red');
+    }
+  }
+
+  & li:hover .play-btn {
+    display: flex;
+  }
+
+  & .name {
+    line-height: 20px;
+    margin: 10px 0 20px 0;
+    font-size: 13px;
+    color: #333;
+  }
+}
+
+// 独家放送
+.priveate-content {
+  & ul {
+    $size: 175px;
+    display: flex;
+    justify-content: space-around;
+    & li {
+      cursor: pointer;
+    }
+    & .bg-image {
+      width: $size;
+      height: 100px;
+      border-radius: 10px;
+      background-size: cover;
+      position: relative;
+    }
+    & .bg-image:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+    }
+    & .name {
+      width: $size;
+      line-height: 20px;
+      margin: 10px 0 20px 0;
+      font-size: 13px;
+      color: #333;
+    }
+  }
+}
+
+// 最新音乐
+.new-song {
+  & .content {
+    position: relative;
+  }
+  & .content::before {
+    @include v-halfPX(#ddd, 0.3);
+    position: absolute;
+    top: 0;
+  }
+  & .song-list {
+    overflow: hidden;
+    & li {
+      width: 45%;
+      height: 80px;
+      position: relative;
+      float: left;
+      margin-right: 5%;
+      padding: 10px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      border-radius: 5px;
+      cursor: pointer;
+      & .pic {
+        @include center;
+        height: 60px;
+        width: 60px;
+        border-radius: 5px;
+        background-size: cover;
+        position: relative;
+      }
+      & .pic:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.5;
+        border-radius: 5px;
+        pointer-events: none;
+        background: url('../../assets/img/bg.png') no-repeat;
+        background-size: cover;
+      }
+      & .play-btn {
+        @include center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        padding-left: 3.25px;
+        background: rgba(255, 255, 255, 0.65);
+        & i {
+          @include img(10, 'play-red');
+        }
+      }
+      & .number {
+        margin: 0 15px;
+        font-size: 12px;
+        color: #bdbdbd;
+      }
+      & .description {
+        width: 60%;
+      }
+      & .name {
+        @include hideText;
+        width: 100%;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 16px;
+      }
+      & .auth {
+        @include hideText;
+        width: 100%;
+        margin-top: 10px;
+        color: #888;
+        font-size: 13px;
+        font-weight: bold;
+        font-family: 方正兰亭超细黑简体;
+      }
+    }
+    & li:hover {
+      background: #f2f2f2;
+    }
+    & li::before {
+      @include v-halfPX(#ddd, 0.3);
+      width: 95%;
+      position: absolute;
+      bottom: 0;
+    }
+  }
+}
+
+// mv
+.mv-content {
+  & ul {
+    $size: 175px;
+    display: flex;
+    justify-content: space-around;
+    & li {
+      cursor: pointer;
+    }
+    & .bg-image {
+      width: $size;
+      height: 100px;
+      border-radius: 10px;
+      overflow: hidden;
+      background-size: cover;
+      cursor: pointer;
+      position: relative;
+      &:after {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: url('../../assets/img/bg.png') no-repeat;
+        background-size: cover;
+      }
+    }
+    & .bg-image:hover .mask {
+      height: 48px;
+      opacity: 1;
+    }
+    & .mask {
+      width: 100%;
+      height: 0;
+      opacity: 0;
+      color: #fff;
+      font-family: 方正兰亭超细黑简体;
+      font-weight: bold;
+      padding: 5px 10px;
+      font-size: 12px;
+      line-height: 20px;
+      background: rgba(0,0,0,0.5);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp:2;
+      transition: all 0.2s ease;
+    }
+    & .name {
+      font-size: 13px;
+      margin: 8px 0;
+      width: 175px;
+    }
+    & .auth {
+      width: 90%;
+      font-size: 12px;
+      margin: 8px 0;
+      color: #929292;
+      font-family: 方正兰亭超细黑简体;
+    }
+    & .auth span:hover {
+      color: #727272;
+    }
+  }
+}
+
+// 电台
+.dj-container {
+  margin-bottom: 100px;
+  & .content {
+    position: relative;
+  }
+  & .content::before {
+    @include v-halfPX(#ddd, 0.3);
+    position: absolute;
+    top: 0;
+  }
+  & ul {
+    overflow: hidden;
+  }
+  & li {
+    width: 40%;
+    margin-right: 10%;
+    height: 115px;
+    border-radius: 5px;
+    position: relative;
+    padding: 0 10px;
+    display: flex;
+    float: left;
+    align-items: center;
+    cursor: pointer;
+  }
+  & li:hover {
+    background: #f2f2f2;
+  }
+  & li::before {
+    @include v-halfPX(#ddd, 0.3);
+    width: 95%;
+    position: absolute;
+    bottom: 0;
+  }
+  .img {
+    $size: 90px;
+    width: $size;
+    height: $size;
+    margin-right: 20px;
+    border-radius: 5px;
+    background-size: cover;
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.5;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+    }
+  }
+  .desc {
+    width: 60%;
+  }
+  .name {
+    @include hideText;
+    width: 100%;
+    color: #333;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .auth {
+    width: 100%;
+    @include hideText;
+    color: #929292;
+    font-size: 12px;
+    margin-top: 10px;
+    font-family: 方正兰亭超细黑简体;
+  }
+}

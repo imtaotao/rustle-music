@@ -1,0 +1,338 @@
+<template>
+  <div :styleName='"container" + (showSongDetail ? " detail" : "")'>
+    <div styleName='player-box' id='Player'>
+      <Progress :showSongDetail='showSongDetail'/>
+      <div styleName='blur-bg'></div>
+      <div styleName='content'>
+        <div styleName='left'>
+          <div styleName='song-img' v-show='showDesc'>
+            <div styleName='img-content' :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'></div>
+            <div
+              styleName='zoom'
+              :className='"icon-zoom" + (showSongDetail ? "-out" : "")'
+              @click='this.showSongDetail'></div>
+          </div>
+          <div styleName='desc' v-show='showDesc'>
+            <div styleName='name'>{{ current.name || '' }}</div>
+              <div styleName='auth'>
+                <span v-for='(val, i) of current.ar || current.artists'>
+                  <a v-if='i !== 0'> / </a>
+                  {{ val.name }}
+                </span>
+              </div>
+          </div>
+        </div>
+        <div styleName='center'>
+          <ul>
+            <li styleName='icon' className='icon-like1' title='收藏'></li>
+            <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode' v-show='!isFMModule'>
+              <div>{{ playOrderDesc }}</div>
+            </li>
+            <li styleName='time'>{{ this.getDuration() }}</li>
+            <li styleName='icon' className='icon-pre' v-show='!isFMModule' @click='this.preSong' title='上一首'></li>
+            <li
+              styleName='play'
+              :className='"icon-" + (playing ? "pause" : "play")'
+              @click='this.togglePlay'></li>
+            <li styleName='icon' className='icon-next' @click='this.nextSong' title='下一首'></li>
+            <li styleName='time' id='CurrentTime'>00:00</li>
+            <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
+            <li styleName='icon share' title='分享' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
+              <div styleName='share-box' v-show='showCopyLink'>
+                <div @click='this.copyLink'><i></i>复制链接</div>
+                <span></span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div styleName='right'>
+          <div
+            styleName='icon'
+            title='播放列表'
+            v-show='!isFMModule'
+            className='icon-list'
+            @click='() => this.setState({showPlayList: !showPlayList})'>
+          </div>
+          <div
+            styleName='icon volume'
+            @click.self='this.mute'
+            :className='"icon-" + (mute ? "mute" : "volume")'>
+            <div styleName='volume-box'>
+              <div styleName='volume-bar-container'>
+                <div></div>
+                <div styleName='bar' @change='this.volumeChange' @input='this.volumeChange'>
+                  <i v-progress='options'></i>
+                </div>
+              </div>
+              <span styleName='array'></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div styleName='play-list' v-show='showPlayList' @click.self='this.hidePlayList'>
+      <PlayList/>
+    </div>
+    <div styleName='song-detail-box' v-show='showSongDetail' v-transition='"zoom"'>
+      <SongDeatil :song='current' :playing='playing'/>
+    </div>
+  </div>
+</template>
+
+<script>
+  import Router from 'web/manager/router'
+  import { notice, getDuration } from 'web/utils'
+  import RuntimeManager from 'web/manager/runtime'
+  import PlayList from 'web/components/play-list'
+  import SongDeatil from 'web/components/song-detail'
+  import Progress from 'web/components/player-progress'
+
+  const Hearken = RuntimeManager.Hearken
+  const playOrderDesc = {
+    'cycle': '循环播放',
+    'random': '随机播放',
+    'song-cycle': '单曲循环',
+  }
+
+  @Grass.CSSModules(style)
+  export default class Player extends Grass.Component {
+    // #temp
+    Slide = null
+    component = { Progress, PlayList, SongDeatil }
+
+    beforeCreate () {
+      const comp = this
+      this.state = {
+        isFMModule: false,
+        showCopyLink: false,
+        showPlayList: false,
+        showSongDetail: false,
+        showDesc: RuntimeManager.current.id !== 0,
+        mode: RuntimeManager.mode,
+        mute: Hearken.options.mute,
+        current: RuntimeManager.current,
+        playing: Hearken.playing(),
+        playOrderDesc: playOrderDesc[RuntimeManager.mode],
+        options: {
+          component: comp,
+          direction: 'y',
+        },
+      }
+
+      // 注册歌曲详情页面路由
+      Router.register('SongDetail', () => {
+        this.setState({showSongDetail: true})
+      }, () => {
+        this.setState({showSongDetail: false})
+      })
+
+      this.monitorRuntimeMagager()
+    }
+
+    monitorRuntimeMagager () {
+      // 当前播放音乐发生变化
+      RuntimeManager.on('currentChanged', current => {
+        this.setState({
+          current,
+          showDesc: current.id !== 0,
+        })
+      })
+
+      // 播放模式改变
+      RuntimeManager.on('modeChanged', () => {
+        this.setState({
+          mode: RuntimeManager.mode,
+          playOrderDesc: playOrderDesc[RuntimeManager.mode],
+        })
+      })
+
+      // 检测当前播放模块
+      RuntimeManager.on('moduleChanged', _module => {
+        this.setState({isFMModule: _module === 'fm'})
+      })
+
+      // 音频 start
+      let node = null
+      let timer = null
+      const currentTime = () => {
+        if (!node) node = document.getElementById('CurrentTime') 
+        timer = setTimeout(() => {
+          if (node) {
+            node.textContent = this.getCurrentTime()
+          }
+          if (RuntimeManager.Hearken.playing()) {
+            currentTime()
+          } else if (timer) {
+            // 如果当前是暂停状态，清除定时器
+            clearTimeout(timer)
+            timer = null
+          }
+        }, 500)
+      }
+      const changeState = () => {
+        this.setState({playing: Hearken.playing()})
+      }
+      // 音频开始播放的时候要实时监测当前播放时间
+      const soundPlay = () => {
+        changeState()
+        currentTime()
+      }
+
+      Hearken.on('start', soundPlay)
+      Hearken.on('stop', changeState)
+      Hearken.on('play', soundPlay)
+      Hearken.on('pause', changeState)
+      Hearken.on('ended', repeat => {
+        switch (RuntimeManager.mode) {
+          case 'cycle' :
+            this.setState({playing: false})
+            this.setState(() => this.nextSong())
+            break
+          case 'song-cycle' :
+            repeat()
+            break
+          case 'random' :
+            this.setState({playing: false})
+            this.setState(() => this.randomPlay())
+            break
+          default :
+            this.setState({playing: false})
+            this.setState(() => this.nextSong())
+        }
+      })
+
+      Hearken.on('mute', mute => {
+        this.setState({mute})
+        if (mute) {
+          this.Slide._volume = Hearken.options.volume
+          this.Slide.dispatch('change', 0)
+        } else if (this.Slide._volume != null) {
+          this.Slide.dispatch('change', this.Slide._volume)
+        }
+      })
+    }
+
+    getDuration () {
+      const time = this.state.current.dt || this.state.current.duration || 0
+      return getDuration(time)
+    }
+
+    getCurrentTime () {
+      const time = Hearken.getCurrentTime() || 0
+      return getDuration(time * 1000)
+    }
+
+    hidePlayList = () => {
+      this.setState({showPlayList: false})
+    }
+
+    // 暂停 / 播放
+    togglePlay = e => {
+      if (this.state.playing) {
+        Hearken.fadePause(0.5)
+      } else if (Hearken.state) {
+        Hearken.fadePlay(1)
+      } else {
+        if (RuntimeManager.current.id === 0) {
+          return notice('当前没有可播放的歌曲')
+        }
+        // 如果 state 为 null 代表需要通过 start 播放
+        Hearken.restart(1).then(success => {
+          if (!success) {
+            RuntimeManager.specifiedPlay(RuntimeManager.current)
+          }
+        })
+      }
+    }
+
+    // 切换模式
+    setMode = e => {
+      const oldMode = RuntimeManager.mode
+      switch (RuntimeManager.mode) {
+        case 'cycle' :
+          RuntimeManager.setMode('song-cycle')
+          break
+        case 'song-cycle' :
+          RuntimeManager.setMode('random')
+          break
+        case 'random' :
+          RuntimeManager.setMode('cycle')
+          break
+        default :
+          RuntimeManager.setMode('cycle')
+      }
+    }
+
+    // 复制当前播放音乐 url
+    copyLink () {
+      if (RuntimeManager.current.id === 0) {
+        return notice('当前没有正在播放的歌曲')
+      }
+      const url = Hearken.audio.currentSrc
+      if (url) {
+        window.node.clipboard(url)
+        notice('复制成功', true)
+      } else {
+        notice('复制失败')
+      }
+    }
+
+    // 声音变化
+    mute = e => {
+      Hearken.options.mute
+        ? Hearken.setMute(false)
+        : Hearken.setMute(true)
+    }
+
+    volumeChange = e => {
+      if (typeof e.value === 'number') {
+        Hearken.setVolume(e.value)
+        if (e.value === 0) {
+          this.setState({mute: true})
+        } else if (this.state.mute) {
+          this.setState({mute: false})
+        }
+      }
+    }
+
+    // 进去退出歌曲详情页面
+    showSongDetail = e => {
+      this.setState({showSongDetail: !this.state.showSongDetail})
+    }
+
+    // 切换歌曲
+    check (cb) {
+      if (RuntimeManager.playlist.length === 0) {
+        notice('当前播放列表中没有歌曲了')
+      } else {
+        cb()
+      }
+    }
+
+    nextSong = e => {
+      this.check(() => {
+        const res = RuntimeManager.mode === 'random'
+        ? RuntimeManager.randomPlay()
+        : RuntimeManager.next()
+      
+        !res && notice('播放失败')
+      })
+    }
+
+    preSong = e => {
+      this.check(() => {
+        const res = RuntimeManager.mode === 'random'
+          ? RuntimeManager.randomPlay()
+          : RuntimeManager.previous()
+      
+        !res && notice('播放失败')
+      })
+    }
+
+    randomPlay = () => {
+      this.check(() => {
+        !RuntimeManager.randomPlay() && notice('播放失败')
+      })
+    }
+  }
+</script>

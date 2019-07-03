@@ -1,0 +1,48 @@
+<template>
+  <div styleName='container'>
+    <Banner styleName='banner' :bannerData='bannerData'/>
+    <SongList :efn='this.efn' :showLoading='this.props.showLoading'/>
+    <PrivateContent :efn='this.efn'/>
+    <NewSong :efn='this.efn'/>
+    <MV :efn='this.efn'/>
+    <DJ :efn='this.efn'/>
+  </div>
+</template>
+
+<script>
+  import DJ from './dj'
+  import MV from './mv'
+  import NewSong from './newSong'
+  import SongList from './songList'
+  import { notice } from 'web/utils'
+  import Banner from 'web/components/banner'
+  import PrivateContent from './privateContent'
+
+  @Grass.CSSModules(style)
+  export default class PersonRecommend extends Grass.Component {
+    // #temp
+
+    component = { DJ, MV, Banner, NewSong, SongList, PrivateContent }
+
+    efn = err => notice(err.body.msg)
+
+    beforeCreate () {
+      this.state = {
+        bannerData: [],
+      }
+      this.getBannerData()
+    }
+
+    getBannerData () {
+      window.node.request('/banner').then(({body}) => {
+        let bannerData = body.banners
+        if (bannerData.length > 8) {
+          bannerData.length = 8
+        }
+        bannerData.reverse()
+        bannerData.forEach((val, i) => val.index = i)
+        this.setState({bannerData})
+      }, this.efn)
+    }
+  }
+</script>

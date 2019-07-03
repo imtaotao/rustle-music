@@ -1,0 +1,148 @@
+@import 'web/components/common.scss';
+
+.container {
+  position: relative;
+  perspective: 1000px;
+  overflow: hidden;
+}
+
+.points {
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  & span {
+    $size: 7px;
+    display: inline-block;
+    width: $size;
+    height: $size;
+    margin: 0 5px;
+    border-radius: 50%;
+    background: #e5e5e5;
+    cursor: pointer;
+  }
+  & .active {
+    background: $theme;
+  }
+}
+
+.item {
+  width: 80%;
+  height: 90%;
+  position: absolute;
+  left: 10%;
+  bottom: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  & p {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0.4;
+      width: 100%;
+      height: 100%;
+      background: url('../../assets/img/bg.png') no-repeat;
+      background-size: cover;
+      pointer-events: none;
+    }
+    & span {
+      position: absolute;
+      width: 65px;
+      height: 30px;
+      line-height: 30px;
+      font-size: 12px;
+      bottom: 0;
+      right: 0;
+      text-align: center;
+      border-top-left-radius: 10px;
+      color: #fff;
+      background: rgba(0,0,0,0.6);
+    }
+    & .red {
+      background: $theme;
+    }
+    & .blue {
+      background: #1c64a0;
+    }
+  }
+  & a {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.click-remove {
+  $size: 30;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  pointer-events: none;
+  & div {
+    cursor: pointer;
+    pointer-events: auto;
+  }
+  & .left {
+    @include img($size, 'left-toggle')
+  }
+  & .right {
+    @include img($size - 4, 'right-toggle')
+  }
+}
+
+.animate {
+  transition: transform ease 0.3s;
+}
+
+.mask-layer {
+  background: rgba(26, 19, 19, 0.4);
+}
+
+@function translate ($x, $z) {
+  @return translate3d($x * 18%, 13px, $z * 100 + px);
+}
+._0, ._8 {
+  z-index: 3;
+  transform: none;
+}
+._1 {
+  z-index: 2;
+  transform: translate(-1, -1);
+}
+._2 {
+  z-index: 1;
+  transform: translate(-1, -2);
+}
+._3 {
+  z-index: 0;
+  transform: translate(-1, -3);
+}
+._4 {
+  z-index: 0;
+  transform: translate(-1, -4);
+}
+._5 {
+  z-index: 0;
+  transform: translate(1, -3);
+}
+._6 {
+  z-index: 1;
+  transform: translate(1, -2);
+}
+._7, ._-1 {
+  z-index: 2;
+  transform: translate(1, -1);
+}

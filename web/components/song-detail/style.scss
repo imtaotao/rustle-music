@@ -1,0 +1,339 @@
+@import 'web/components/common.scss';
+
+.container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #fff;
+  .root-box {
+    width: 100%;
+    height: 100%;
+    &.show-bg-bar {
+      color: #a29e9e;
+      .bg-mask {
+        background: none;
+      }
+      .disc {
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+  .bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    filter: blur(20px);
+    left: 30px;
+    background-size: 150%;
+    background-position: 50% -300px;
+    background-repeat: no-repeat;
+    z-index: 0;
+  }
+}
+
+.head-box {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  z-index: 4;
+  transition: all 0.5s;
+}
+
+.head {
+  position: absolute;
+  background: rgba(255,255,255, 0) !important;
+}
+
+.content-box {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 4;
+  padding-bottom: 50px;
+  overflow-x: hidden;
+}
+
+.bg-mask {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 2;
+  background: rgba(255,255,255, 0.6);
+}
+
+.left {
+  padding-left: 90px;
+  width: 50%;
+  float: left;
+  height: calc(100% - 70px);
+  position: relative;
+  .needle {
+    width: 140px;
+    height: 210px;
+    left: 180px;
+    top: 0;
+    position: absolute;
+    background: url('../../assets/img/ic_needle.png') no-repeat;
+    background-size: cover;
+    background-position-y: -25px;
+    z-index: 2;
+    transform-origin: 25px top;
+    transition: all 0.5s ease;
+    .btn {
+      @include center;
+      $bg: rgba(0,0,0,0.1);
+      position: absolute;
+      top: -20px;
+      left: 5px;
+      border: 6px solid $bg;
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      border-radius: 50%;
+      i {
+        width: 10px;
+        height: 10px;
+        background: $bg;
+        border-radius: 50%;
+      }
+    }
+  }
+  .disc {
+    @include center;
+    $size: 314px;
+    width: $size;
+    height: $size;
+    position: absolute;
+    background: url('../../assets/img/ic_disc.png') no-repeat;
+    background-size: 300px;
+    background-position: -3px;
+    z-index: 0;
+    top: 120px;
+    border-radius: 50%;
+    border: 10px solid rgba(0,0,0,0.1);
+    $s: 200px;
+    i {
+      width: $s;
+      height: $s;
+      position: absolute;
+      border: 5px solid #000;
+      background-size: cover;
+      border-radius: 50%;
+    }
+    .default-img {
+      width: $s;
+      height: $s;
+      position: absolute;
+      border: 5px solid #000;
+      background-size: cover;
+      background-image: url('../../assets/img/bg.png');
+      border-radius: 50%;
+    }
+  }
+}
+
+.right {
+  float: left;
+  width: 40%;
+  padding-right: 20px;
+  margin: 90px 40px 0 0;
+  .song-name {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 15px;
+    b {
+      @include hideText;
+      max-width: 70%;
+      height: 25px;
+      font-size: 22px;
+      margin-right: 15px;
+      color: #444;
+    }
+    span {
+      border: border($theme);
+      border-radius: 3px;
+      padding: 3px;
+      color: $theme;
+      font-size: 14px;
+    }
+  }
+  .song-info {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 25px;
+    margin-bottom: 20px;
+    li {
+      @include hideText;
+      width: 40%;
+      font-size: 12px;
+      color: #848488;
+      span {
+        color: #7e99c7;
+        cursor: pointer;
+      }
+      span:hover {
+        color: #374d71;
+      }
+    }
+  }
+}
+
+
+.buttom-content-box {
+  width: 100%;
+  padding: 15px 0 100px 0;
+  overflow: hidden;
+}
+
+.comment {
+  float: left;
+  width: 67%;
+  padding: 0 45px 0 55px;
+  .title {
+    width: 100%;
+    margin: 10px 0 20px 0;
+    p:first-child {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      color: #333;
+      font-size: 16px;
+      span {
+        color: #818286;
+        font-size: 12px;
+        margin-left: 10px;
+      }
+    }
+    p:last-child {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      padding: 0 10px;
+      color: #bbb;
+      border: border(#ddd);
+      width: 100%;
+      height: 32px;
+      background: #fdfdfd;
+      border-radius: 3px;
+      margin-top: 10px;
+      cursor: pointer;
+      span {
+        @include center;
+      }
+      span i {
+        font-size: 22px;
+        margin-right: 5px;
+        &:before {
+          color: #bbb;
+        }
+      }
+      .expression {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.similar-song-list {
+  float: left;
+  width: 33%;
+  padding-right: 40px;
+  .similar-song-title {
+    margin-bottom: 20px;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+    border-radius: 3px;
+    padding: 5px;
+    cursor: pointer;
+    &:hover {
+      background: rgba(0,0,0,0.1);
+    }
+    .song-img {
+      @include center;
+      width: 50px;
+      height: 50px;
+      background: #ddd;
+      background-size: cover;
+      border-radius: 5px;
+      margin-right: 10px;
+      .play-btn {
+        @include center;
+        width: 30px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%;
+        & i {
+          @include img(13, 'play-red');
+          margin-left: 4px;
+        }
+      }
+    }
+    .info {
+      width: calc(100% - 70px);
+      color: #333;
+      height: 80%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      p {
+        @include hideText;
+        width: 100%;
+      }
+      p:first-child {
+        font-size: 14px;
+      }
+      p:last-child {
+        font-size: 12px;
+        color: #828282;
+      }
+    }
+  }
+}
+
+.pure-mode {
+  position: absolute;
+  left: 35%;
+  bottom: 60px;
+  height: 20px;
+  font-size: 13px;
+  display: flex;
+  color: #585858;
+  align-items: center;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 50px;
+    border-radius: 15px;
+    margin-left: 10px;
+    background: rgba(0,0,0,0.05);
+    cursor: pointer;
+    i {
+      display: block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.1);
+    }
+  }
+  &.turn-on {
+    span {
+      color: #a29e9e;
+    }
+    div {
+      justify-content: flex-end;
+      background: rgba(255,255,255,0.2) !important;
+      i {
+        background: rgba(255,255,255,0.25) !important;
+      }
+    }
+  }
+}

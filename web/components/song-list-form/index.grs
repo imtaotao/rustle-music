@@ -1,0 +1,113 @@
+<template>
+  <main styleName='container'>
+    <ul>
+      <li styleName='list-head'>
+        <span styleName='title'>音乐标题</span>
+        <span styleName='singer'>歌手</span>
+        <span styleName='album'>专辑</span>
+        <span styleName='duration'>时长</span>
+      </li>
+      <li
+        v-for='(val, i) of this.props.tracks'
+        :styleName='this.isPlayingItem(val) ? "active" : ""'
+        @dblclick='this.play.bind(this, val)'>
+        <span styleName='title'>
+          <a :className='this.isPlayingItem(val) ? "icon-playing" : ""'>
+            {{ this.getSerialNumber(val, i) }}
+          </a>
+          <a :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'></a>
+          <a className='icon-down'></a>
+          <a styleName='song-name'>{{ val.name }}</a>
+        </span>
+        <span styleName='singer'>
+          <a v-for='(item, i) of val.ar || val.artists' @click='this.viewAuthor.bind(this, item)'>
+            <b v-if='i > 0'> / </b>
+            {{ item.name }}
+          </a>
+        </span>
+        <span styleName='album'><a>{{ (val.al || val.album).name }}</a></span>
+        <span styleName='duration'><a>{{ this.getDuration(val.dt || val.duration) }}</a></span>
+      </li>
+    </ul>
+  </main>
+</template>
+
+mmp, 几个接口返回的字段不一样
+/*
+  name: 歌曲名称
+  id: 歌曲id
+  dt: 歌曲时间
+  mv: mv id
+  publishTime: 发布时间
+  alia: 别名 [names]
+  al: 专辑数据
+    name: 专辑名称
+    id: 专辑id
+    picUrl: 歌曲图片
+  ar: 作者数据 [ars]
+    id: 作者id
+    name: 作者名称
+*/
+
+<script>
+  import { getDuration } from 'web/utils'
+  import SongManager from 'web/manager/song'
+  import RuntimeManager from 'web/manager/runtime'
+
+  const Hearken = RuntimeManager.Hearken
+
+  @Grass.CSSModules(style)
+  export default class ListForm extends Grass.Component {
+    // #temp
+    didReceiveProps () {
+      console.log(this.props.tracks.length && this.props.tracks, 'tt');
+    }
+
+    beforeCreate () {
+      Hearken.on('start', () => {
+        if (RuntimeManager.mode !== 'song-cycle') {
+          this.setState({})
+        }
+      })
+    }
+
+    willReceiveProps (newProps) {
+      for (const key in newProps) {
+        if (newProps[key] !== this.props[key]) {
+          return true
+        }
+      }
+      return false
+    }
+
+    isCollectMusic (id) {
+      return SongManager.has(id)
+    }
+
+    isPlayingItem (item) {
+      return item.id === RuntimeManager.current.id
+    }
+
+    getDuration (time) {
+      return getDuration(time)
+    }
+
+    getSerialNumber (item, i) {
+      return this.isPlayingItem(item)
+        ? ''
+        : i > 8 ? i + 1 : '0' + (i + 1)
+    }
+
+    play (item) {
+      if (RuntimeManager.module !== 'normal') {
+        RuntimeManager.setModule('normal')
+        RuntimeManager.clear()
+      }
+      RuntimeManager.specifiedPlay(item)
+    }
+
+    viewAuthor (item) {
+      console.log(item);
+    }
+  }
+</script>
