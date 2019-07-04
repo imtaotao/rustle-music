@@ -29,12 +29,16 @@
     }
 
     didReceiveProps () {
+      this.clearTimer()
+      this.getLyric()
+      this.moveLyric()
+    }
+
+    clearTimer () {
       if (this.timer) {
         clearTimeout(this.timer)
         this.timer = null
       }
-      this.getLyric()
-      this.moveLyric()
     }
 
     getLyric () {
@@ -58,6 +62,7 @@
         if (lines.length > 1) {
           const node = document.getElementById(type + '_lyircBox')
           const fn = () => {
+            this.clearTimer()
             this.timer = setTimeout(() => {
               if (!type || type === RuntimeManager.module) {
                 let currentTime = RuntimeManager.Hearken.getCurrentTime()
@@ -77,7 +82,7 @@
                 }
               }
               fn()
-            }, 150)
+            }, 200)
           }
           fn()
         }
