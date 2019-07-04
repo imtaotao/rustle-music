@@ -9,10 +9,12 @@
     "dev": "electron .",
     "icon": "node ./web/assets/change.js",
     "start": "webpack-dev-server --env.dev",
-    "build": "rm -rf ./dist && webpack --env.build",
+    "build": "webpack --env.build",
+    "build:rm": "rm -rf ./dist && webpack --env.build",
     "build:an": "rm -rf ./dist && webpack --env.build --env.analyzer",
-    "package:mac": "yarn build && cross-env electron-builder --mac",
-    "package:win": "cross-env electron-builder --win --ia32"
+    "package:mac": "yarn build:rm && cross-env electron-builder --mac",
+    "package:win": "yarn build:rm && cross-env electron-builder --win --ia32",
+    "package:purewin": "cross-env electron-builder --win --ia32" 
   },
   "author": "",
   "license": "ISC",
