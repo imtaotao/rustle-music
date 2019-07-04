@@ -24,7 +24,7 @@ fs.readdirSync(path.join(__dirname, 'module')).reverse().forEach(file => {
     let query = Object.assign({}, _query, body, {cookie: cookies})
     return question(query, request)
     .then(answer => {
-      console.log('[OK]', route)
+      // console.log('[OK]', route)
       return {
         cookie: answer.cookie,
         status: answer.status,

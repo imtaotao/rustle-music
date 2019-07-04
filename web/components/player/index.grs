@@ -33,7 +33,8 @@
             <li
               styleName='play'
               :className='"icon-" + (playing ? "pause" : "play")'
-              @click='this.togglePlay'></li>
+              @click='this.togglePlay'>
+            </li>
             <li styleName='icon' className='icon-next' @click='this.nextSong' title='下一首'></li>
             <li styleName='time' id='CurrentTime'>00:00</li>
             <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
@@ -202,7 +203,6 @@
       })
 
       Hearken.on('mute', mute => {
-        this.setState({mute})
         if (mute) {
           this.Slide._volume = Hearken.options.volume
           this.Slide.dispatch('change', 0)
