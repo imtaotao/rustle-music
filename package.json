@@ -17,7 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@rustle/grass": "^0.0.1-alpha.6",
+    "@rustle/grass": "^0.0.1-alpha.7",
     "@rustle/hearken": "^0.0.1-alpha.4",
     "input-range": "^1.2.8",
     "three": "^0.101.1",
