@@ -1,8 +1,17 @@
 <template>
-  <div styleName='container' @click.self='this.props.hideLoginBox'>
+  <div
+    styleName='container'
+    @click.self='this.props.hideLoginBox'
+  >
     <div styleName='box'>
-      <i styleName='cross' @click='this.props.hideLoginBox'></i>
-      <div styleName='icon' :style='this.getIconStyle()'></div>
+      <i
+        styleName='cross'
+        @click='this.props.hideLoginBox'
+      ></i>
+      <div
+        styleName='icon'
+        :style='this.getIconStyle()'
+      ></div>
       <div styleName='input-container'>
         <input
           type='text'
@@ -10,7 +19,8 @@
           :value='account'
           @change='this.accountChanged'
           @focus='this.clearErrorInfo'
-          :placeholder='"请输入" + (phoneMode ? "手机号" : "邮箱")'/>
+          :placeholder='"请输入" + (phoneMode ? "手机号" : "邮箱")'
+        />
         <input
           type='password'
           styleName='input'
@@ -18,17 +28,33 @@
           @change='this.passwordChanged'
           @focus='this.clearErrorInfo'
           @keydown='this.pressEnter'
-          placeholder='请输入密码'/>
+          placeholder='请输入密码'
+        />
       </div>
       <div styleName='button-container'>
         <div styleName='auto-login'>
           <!-- 自动登录选框 -->
-          <input type='checkbox' :checked='autoLogin' id='AutoLogin' @change='this.checkboxChanged'/>
-          <label for='AutoLogin' className='black'>自动登录</label>
+          <input
+            id='AutoLogin'
+            type='checkbox'
+            :checked='autoLogin'
+            @change='this.checkboxChanged'
+          />
+          <label
+            for='AutoLogin'
+            className='black'
+          >自动登录</label>
           <span v-show='errorInfo'>{{ errorInfo }}</span>
         </div>
-        <button styleName='button' :style='{background: logining ? "#ddd" : ""}' @click='this.login'>登录</button>
-        <div styleName='toogle' @click='this.toggle'>
+        <button
+          styleName='button'
+          @click='this.login'
+          :style='{background: logining ? "#ddd" : ""}'
+        >登录</button>
+        <div
+          styleName='toogle'
+          @click='this.toggle'
+        >
           {{ phoneMode ? '邮箱' : '手机' }}登录
         </div>
         <div styleName='tips'>Tips: 可以使用网易云音乐账号登录哦~</div>

@@ -4,8 +4,14 @@
     <div styleName='content'>
       <ul styleName='song-list'>
         <li v-for='(val, i) of data'>
-          <div styleName='pic' :style='{backgroundImage: "url("+ val.song.album.picUrl +")"}'>
-            <div styleName='play-btn' @click='this.play.bind(this, val.song)'><i></i></div>
+          <div
+            styleName='pic'
+            :style='{backgroundImage: "url("+ val.song.album.picUrl +")"}'
+          >
+            <div
+              styleName='play-btn'
+              @click='this.play.bind(this, val.song)'
+            ><i></i></div>
           </div>
           <span styleName='number'>{{ this.getIndex(i) }}</span>
           <div styleName='description'>

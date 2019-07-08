@@ -1,9 +1,10 @@
 <template>
   <ul>
     <li
-      :styleName='"song-item " + (this.isPlaying(val) ? "active" : "")'
       v-for='val of this.props.playlist'
-      @dblclick='this.play.bind(this, val)'>
+      @dblclick='this.play.bind(this, val)'
+      :styleName='"song-item " + (this.isPlaying(val) ? "active" : "")'
+    >
       <div styleName='name'>
         <i :className='this.isPlaying(val) ? "icon-playing" : ""'></i>
         <span>{{ val.name }}</span>

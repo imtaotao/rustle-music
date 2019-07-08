@@ -1,19 +1,47 @@
 <template>
-  <div styleName='container' @click.self='this.props.hide'>
+  <div
+    styleName='container'
+    @click.self='this.props.hide'
+  >
     <div styleName='content'>
-      <div styleName='hot-box' v-show='forcedShowHot || !this.props.searchValue'>
+      <div
+        styleName='hot-box'
+        v-show='forcedShowHot || !this.props.searchValue'
+      >
         <p styleName='title'>热门搜索</p>
         <ul styleName='tags'>
-          <li v-for='val of hotData' @click='this.props.receiveRecommendValue.bind(null, val.first)'>{{ val.first }}</li>
+          <li
+            v-for='val of hotData'
+            @click='this.props.receiveRecommendValue.bind(null, val.first)'
+          >
+            {{ val.first }}
+          </li>
         </ul>
       </div>
-      <div styleName='suggest-box' v-show='!forcedShowHot && this.props.searchValue'>
-        <div styleName='loading' v-show='suggestOrder.length === 0'><i></i></div>
-        <div styleName='suggest-detail-box' v-show='suggestOrder.length > 0'>
-          <div styleName='single-type-box' v-for='item of suggestOrder'>
-            <p styleName='title icon'><i :className='"icon-" + item'></i>{{ transferNames[item] }}</p>
+      <div
+        styleName='suggest-box'
+        v-show='!forcedShowHot && this.props.searchValue'
+      >
+        <div
+          styleName='loading'
+          v-show='suggestOrder.length === 0'
+        ><i></i></div>
+        <div
+          styleName='suggest-detail-box'
+          v-show='suggestOrder.length > 0'
+        >
+          <div
+            styleName='single-type-box'
+            v-for='item of suggestOrder'
+          >
+            <p styleName='title icon'>
+              <i :className='"icon-" + item'></i>{{ transferNames[item] }}
+            </p>
             <ul styleName='list-content'>
-              <li v-for='lists of suggestData[item]' @click='this.processSearchResult.bind(this, item, lists)'>
+              <li
+                v-for='lists of suggestData[item]'
+                @click='this.processSearchResult.bind(this, item, lists)'
+              >
                 <span>{{ lists.name }}</span>
                 <span
                   v-if='lists.artistName || lists.album || lists.artist'>

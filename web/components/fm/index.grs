@@ -1,18 +1,27 @@
 <template>
-  <div styleName='container' @scroll='this.scroll()'>
+  <div
+    styleName='container'
+    @scroll='this.scroll()'
+  >
     <div styleName='top'>
-      <div styleName='bg' :style='this.getPicUrl(current)'></div>
+      <div
+        styleName='bg'
+        :style='this.getPicUrl(current)'
+      >
+      </div>
       <div styleName='song-img'>
         <div
-          :styleName='"img-box-" + this.getMoveStyleName(i)'
-          :style='this.getPicUrl(val)'
           v-for='(val, i) of data'
-          @click='this.previousPlay.bind(this, i)'>
+          :style='this.getPicUrl(val)'
+          @click='this.previousPlay.bind(this, i)'
+          :styleName='"img-box-" + this.getMoveStyleName(i)'
+        >
           <div
+            v-if='i !== 2'
+            @click='this.togglePlay'
             :styleName='playing ? "play" : ""'
             :className='playing ? "icon-pause" : "icon-play"'
-            v-if='i !== 2'
-            @click='this.togglePlay'>
+          >
           </div>
         </div>
         <div styleName='btns'>
@@ -24,7 +33,10 @@
           </button>
         </div>
       </div>
-      <div styleName='song-content' v-if='current.id !== 0'>
+      <div
+        v-if='current.id !== 0'
+        styleName='song-content'
+      >
         <div styleName='song-name'>
           <b>{{ current.name }}</b>
           <span>极高音质</span>
@@ -47,10 +59,17 @@
         <p><b>听友评论</b><span>（已有{{ total }}条评论）</span></p>
         <p>
           <span><i className='icon-pen'></i>发表评论</span>
-          <i styleName='expression' className='icon-expression'></i>
+          <i
+            styleName='expression'
+            className='icon-expression'
+          ></i>
         </p>
       </div>
-      <Comments type='music' :id='current.id' :setCommentLen='this.setCommentLen'/>
+      <Comments
+        type='music'
+        :id='current.id'
+        :setCommentLen='this.setCommentLen'
+      />
     </div>
   </div>
 </template>

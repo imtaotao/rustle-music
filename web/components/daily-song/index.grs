@@ -1,7 +1,10 @@
 <template>
   <div styleName='container'>
     <div styleName='title'>
-      <div styleName='daily-update' className='icon-calendar'>
+      <div
+        styleName='daily-update'
+        className='icon-calendar'
+      >
         <span>{{ this.getDate() }}</span>
       </div>
       <div styleName='description'>
@@ -10,11 +13,17 @@
       </div>
       <ul styleName='operational'>
         <li styleName='play'>
-          <div styleName='play-all' @click='this.playAll'>
+          <div
+            styleName='play-all'
+            @click='this.playAll'
+          >
             <i className='icon-play'></i>
             <span>播放全部</span>
           </div>
-          <div styleName='add-all' @click='this.addAll'>
+          <div
+            styleName='add-all'
+            @click='this.addAll'
+          >
             <i className='icon-add'></i>
           </div>
         </li>

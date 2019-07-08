@@ -4,7 +4,8 @@
       <li
         v-for='(item, i) of list'
         :styleName='this.props.active === item.id ? "active" : ""'
-        @click='this.props.viewDetailContent.bind(null, item, false)'>
+        @click='this.props.viewDetailContent.bind(null, item, false)'
+      >
         <i :className='item.icon'></i>
         <span>{{ item.key }}</span>
       </li>

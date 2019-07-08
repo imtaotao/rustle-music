@@ -1,22 +1,30 @@
 <template>
-  <div styleName='container' @click.self='this.props.hideViewInfo'>
+  <div
+    styleName='container'
+    @click.self='this.props.hideViewInfo'
+  >
     <div styleName='box'>
       <i styleName='loading' v-show='!dataReady'></i>
-      <div styleName='transfer-container' v-show='dataReady'>
+      <div
+        v-show='dataReady'
+        styleName='transfer-container'
+      >
         <div styleName='person-info'>
           <ul>
             <li
               styleName='person-value'
               v-for='(val, key) of psersonInfo'
-              @click='this.viewPersonInfo.bind(this, key)'>
+              @click='this.viewPersonInfo.bind(this, key)'
+            >
               <span>{{ val }}</span>
               <span>{{ key }}</span>
             </li>
           </ul>
           <div
             styleName='check-in'
+            @click='this.checkIn'
             :style='pcSign && {color: "#c2c2c2"}'
-            @click='this.checkIn'>
+          >
             <i v-show='!pcSign'></i>
             {{ pcSign ? '已' : '' }}签到
           </div>

@@ -1,6 +1,9 @@
 <template>
   <div styleName='container'>
-    <div styleName='comments' v-for='(val, i) of comments'>
+    <div
+      styleName='comments'
+      v-for='(val, i) of comments'
+    >
       <p styleName='title'>
         <b>
           {{ i === 0 ? "精彩" : "最新" }}评论
@@ -9,14 +12,20 @@
       </p>
       <ul styleName='comments-list'>
         <li styleName='single-comment' v-for='item of val'>
-          <div styleName='avatar' :style='{backgroundImage: "url("+ item.user.avatarUrl +")"}'></div>
+          <div
+            styleName='avatar'
+            :style='{backgroundImage: "url("+ item.user.avatarUrl +")"}'
+          ></div>
           <div styleName='content'>
             <div>
               <span styleName='user'>{{ item.user.nickname }}：</span>
               {{ item.content }}
             </div>
             <!-- 回复的主体 -->
-            <div styleName='be-replied' v-for='replied of item.beReplied || []'>
+            <div
+              styleName='be-replied'
+              v-for='replied of item.beReplied || []'
+            >
               <span styleName='user'>@{{ replied.user.nickname }}：</span>
               {{ replied.content }}
             </div>
@@ -24,7 +33,10 @@
               <div>{{ this.getPublishTime(item.time) }}</div>
               <ul>
                 <li>
-                  <i :styleName='item.liked ? "active" : ""' className='icon-comment-like'></i>
+                  <i
+                    className='icon-comment-like'
+                    :styleName='item.liked ? "active" : ""'
+                  ></i>
                   {{ item.likedCount }}
                 </li>
                 <li><i className='icon-reply'></i></li>

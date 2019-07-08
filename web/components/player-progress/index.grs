@@ -1,12 +1,19 @@
 <template>
-  <div :styleName='"progress" + (this.props.showSongDetail ? " detail" : "")'>
+  <div
+    :styleName='"progress" + (this.props.showSongDetail ? " detail" : "")'>
     <div styleName='noloading-progress'>
       <div></div>
     </div>
-    <div id='loadingProgress' styleName='loading-progress'></div>
-    <div id='playingProgress' styleName='playing-progress'
+    <div
+      id='loadingProgress'
+      styleName='loading-progress'
+    ></div>
+    <div
+      id='playingProgress'
+      styleName='playing-progress'
+      @input='this.progressInput'
       @change='this.progressChange'
-      @input='this.progressInput'>
+    >
       <i styleName='dot' v-progress='options'></i>
     </div>
   </div>

@@ -1,12 +1,26 @@
 <template>
   <div styleName='container'>
-    <div styleName='bar-box' v-show='this.pages > 1'>
-      <span styleName='left-array' @click='this.prePage'><i></i></span>
+    <div
+      styleName='bar-box'
+      v-show='this.pages > 1'
+    >
       <span
-        :styleName='this.props.offset === val ? "active" : ""'
+        styleName='left-array'
+        @click='this.prePage'
+      ><i></i></span>
+      <span
         v-for='val of this.tagsCount()'
-        @click='this.tooglePage.bind(this, val)'>{{ typeof val === 'number' ? val + 1 : val }}</span>
-      <span styleName='right-array' @click='this.nextPage'><i></i></span>
+        @click='this.tooglePage.bind(this, val)'
+        :styleName='this.props.offset === val ? "active" : ""'
+      >
+        {{ typeof val === 'number' ? val + 1 : val }}
+      </span>
+      <span
+        @click='this.nextPage'
+        styleName='right-array'
+      >
+        <i></i>
+      </span>
     </div>
   </div>
 </template>
