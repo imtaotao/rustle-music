@@ -175,6 +175,4 @@ class UserManager extends Event {
   }
 }
 
-const a = new UserManager()
-export default a;
-(<any>window).a = a
+export default new UserManager()

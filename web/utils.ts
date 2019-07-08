@@ -4,7 +4,7 @@ export function enter (e: KeyboardEvent, cb: Function) {
   (e.key === 'Enter' || e.keyCode === 13) && cb()
 }
 
-export function notice (msg: any, type?: string, time?: number) {
+export function notice (msg: any, type?: boolean, time?: number) {
   Notice.show(msg, type, time)
 }
 

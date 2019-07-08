@@ -15,7 +15,10 @@
           <a :className='this.isPlayingItem(val) ? "icon-playing" : ""'>
             {{ this.getSerialNumber(val, i) }}
           </a>
-          <a :className='this.props.isMyLikeList || this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'></a>
+          <a
+            @click='this.like.bind(this, val)'
+            :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'>
+          </a>
           <a className='icon-down'></a>
           <a styleName='song-name'>{{ val.name }}</a>
         </span>
@@ -69,6 +72,10 @@ mmp, 几个接口返回的字段不一样
           this.setState({})
         }
       })
+
+      SongManager.on('update', () => {
+        this.forceUpdate()
+      })
     }
 
     willReceiveProps (newProps) {
@@ -99,6 +106,13 @@ mmp, 几个接口返回的字段不一样
         RuntimeManager.clear()
       }
       RuntimeManager.specifiedPlay(item)
+    }
+
+    // 点击喜欢或者不喜欢
+    like (val) {
+      if (val.id !== 0) {
+        SongManager.requestLike(val.id)
+      }
     }
 
     viewAuthor (item) {

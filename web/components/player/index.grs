@@ -24,7 +24,11 @@
         </div>
         <div styleName='center'>
           <ul>
-            <li styleName='icon' className='icon-like1' title='收藏'></li>
+            <li 
+              title='收藏'
+              styleName='icon' 
+              @click='this.like'
+              :className='isLike ? "icon-like2" : "icon-like1"'></li>
             <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode' v-show='!isFMModule'>
               <div>{{ playOrderDesc }}</div>
             </li>
@@ -82,9 +86,10 @@
 
 <script>
   import Router from 'web/manager/router'
+  import SongManager from 'web/manager/song'
   import { notice, getDuration } from 'web/utils'
-  import RuntimeManager from 'web/manager/runtime'
   import PlayList from 'web/components/play-list'
+  import RuntimeManager from 'web/manager/runtime'
   import SongDeatil from 'web/components/song-detail'
   import Progress from 'web/components/player-progress'
 
@@ -104,6 +109,7 @@
     beforeCreate () {
       const comp = this
       this.state = {
+        isLike: false,
         isFMModule: false,
         showCopyLink: false,
         showPlayList: false,
@@ -127,15 +133,26 @@
         this.setState({showSongDetail: false})
       })
 
-      this.monitorRuntimeMagager()
+      this.monitorSongManager()
+      this.monitorRuntimeManager()
     }
 
-    monitorRuntimeMagager () {
+    monitorSongManager () {
+      // 收藏的歌曲清单有变化
+      SongManager.on('update', () => {
+        this.setState({
+          isLike: SongManager.has(this.state.current.id),
+        })
+      })
+    }
+
+    monitorRuntimeManager () {
       // 当前播放音乐发生变化
       RuntimeManager.on('currentChanged', current => {
         this.setState({
           current,
           showDesc: current.id !== 0,
+          isLike: SongManager.has(current.id),
         })
       })
 
@@ -210,6 +227,16 @@
           this.Slide.dispatch('change', this.Slide._volume)
         }
       })
+    }
+
+    // 收藏或者取消收藏歌曲
+    like = () => {
+      const id = this.state.current.id
+      if (id === 0) {
+        return notice('播放列表没有歌曲')
+      }
+      // 收藏的歌曲逻辑在里面
+      SongManager.requestLike(id)
     }
 
     getDuration () {
