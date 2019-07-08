@@ -41,6 +41,7 @@ $theme: #c4463a;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-bottom: 1px; // window 上需要往上移 1px
 }
 
 @mixin center {
