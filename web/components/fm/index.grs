@@ -16,8 +16,12 @@
           </div>
         </div>
         <div styleName='btns'>
-          <button><i :className='"icon-like1"'></i></button>
-          <button @click='this.nextPlay'><i className='icon-next'></i></button>
+          <button @click='this.like'>
+            <i :className='isLike ? "icon-like2" : "icon-like1"'></i>
+          </button>
+          <button @click='this.nextPlay'>
+            <i className='icon-next'></i>
+          </button>
         </div>
       </div>
       <div styleName='song-content' v-if='current.id !== 0'>
@@ -54,6 +58,7 @@
 <script>
   import { notice, scrollEvent } from 'web/utils'
   import Router from 'web/manager/router'
+  import SongManager from 'web/manager/song'
   import UserManager from 'web/manager/user'
   import RuntimeManager from 'web/manager/runtime'
   import SongLyric from 'web/components/song-lyric'
@@ -74,15 +79,15 @@
         album: {},
         id: 0,
       }
-      window.dd = this
       this.state = {
         id: 0,
         total: 0,
         lyric: '',
         move: null,
+        isLike: false,
         data: [defaultItem, defaultItem],
-        current: RuntimeManager.module === 'fm' ? RuntimeManager.current : defaultItem,
         playing: RuntimeManager.module === 'fm' ?  Hearken.playing() : false,
+        current: RuntimeManager.module === 'fm' ? RuntimeManager.current : defaultItem,
       }
 
       const replaceFMdataAndPlay = () => {
@@ -91,12 +96,16 @@
             // 如果切换到 fm 页面，而且并没有音频播放，就可以直接播放
             this.pushNewData(data)
             RuntimeManager.specifiedPlay(1)
-            this.setState({current: data[1]})
+            this.setState({
+              current: data[1],
+              isLike: SongManager.has(data[1].id),
+            })
           } else {
             // 否则只是更改页面数据，并不播放
             this.setState({
               data,
               current: data[1],
+              isLike: SongManager.has(data[1].id),
               playing: RuntimeManager.module === 'fm' ?  Hearken.playing() : false,
             })
           }
@@ -110,6 +119,12 @@
         }
       }
 
+      SongManager.on('update', () => {
+        this.setState({
+          isLike: SongManager.has(this.state.current.id),
+        })
+      })
+
       UserManager.on('login', () => {
         if (Router.current.val === 'fm') {
           replaceFMdataAndPlay()
@@ -120,8 +135,8 @@
         this.setState({
           id: 0,
           lyric: '',
-          current: defaultItem,
           playing: false,
+          current: defaultItem,
           data: [defaultItem, defaultItem],
         })
         RuntimeManager.setModule('normal')
@@ -135,7 +150,10 @@
 
       RuntimeManager.on('currentChanged', current => {
         if (current !== this.current && RuntimeManager.module === 'fm') {
-          this.setState({current})
+          this.setState({
+            current,
+            isLike: SongManager.has(current.id),
+          })
         }
       })
 
@@ -157,6 +175,7 @@
             this.setState({
               move: null,
               current: RuntimeManager.current,
+              isLike: SongManager.has(RuntimeManager.current.id),
             })
           }, delay)
         } else {
@@ -176,6 +195,7 @@
               this.setState({
                 move: null,
                 current: RuntimeManager.current,
+                isLike: SongManager.has(RuntimeManager.current.id),
               })
             }, delay)
           })
@@ -298,12 +318,20 @@
         this.setState({
           move: 'right',
           current: RuntimeManager.current,
+          isLike: SongManager.has(RuntimeManager.current.id),
         })
       }
     }
 
     scroll () {
       return scrollEvent('MainHead')
+    }
+
+    // 收藏或者取消收藏歌曲
+    like = () => {
+      if (this.state.current.id !== 0) {
+        SongManager.requestLike(this.state.current.id)
+      }
     }
 
     setCommentLen = total => {

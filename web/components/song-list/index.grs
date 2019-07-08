@@ -62,7 +62,11 @@
       </div>
     </div>
     <div styleName='loading' v-show='loading'><i></i></div>
-    <ListForm styleName='main-content' v-show='!loading' :tracks='tracks'/>
+    <ListForm
+      :tracks='tracks'
+      v-show='!loading'
+      styleName='main-content'
+      :isMyLikeList='this.props.playlist.isMyLikeList'/>
   </div>
 </template>
 
@@ -86,6 +90,7 @@
 <script>
   import Head from 'web/components/head'
   import UserManager from 'web/manager/user'
+  import SongManager from 'web/manager/song'
   import RuntimeManager from 'web/manager/runtime'
   import ListForm from 'web/components/song-list-form'
   import { notice, scrollEvent, timestampToTime, filterCount } from 'web/utils'
@@ -168,6 +173,11 @@
         this.setState(this.defaultState)
         UserManager.getSongListDetail(id).then(({body}) => {
           if (this.props.id === id) {
+            // 如果是我喜欢的音乐歌单，则要更新列表
+            if (this.props.playlist.isMyLikeList) {
+              SongManager.replace(body.playlist.tracks)
+            }
+
             this.setState({
               loading: false,
               tracks: body.playlist.tracks,

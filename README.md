@@ -6,7 +6,7 @@
 1. `yarn` (add dependencies package)
 2. `yarn start` (start http-dev-server)
 3. `yarn dev --dev` (start electron client)
-4. start coding
+4. Enjoy music
 
 ## 用到了一些个人写的库
 + [grass](https://github.com/imtaotao/Grass)<br>
@@ -17,7 +17,7 @@
   一个可以高度自定义 ui 样式的滑动条工具库，本项目所有滑动条都依赖此库
 
 ## 下载
-windows 下体验不是很好，有点小卡。。。请使用 mac 版本，如果想体验最新版本，可以下载本仓库代码，然后运行起来<br>
+windows 下体验不是很好，有点小卡。。。请使用 mac 版本，如果想体验最新版本，可以 clone 本仓库代码，然后运行起来<br>
 安装包[下载地址](https://imtaotao.github.io/rustle-music)
 
 ## 注意事项

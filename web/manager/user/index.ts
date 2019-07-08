@@ -74,7 +74,7 @@ class UserManager extends Event {
   }
 
   private init () {
-    // const id = localStorage.getItem('id')
+    const id = localStorage.getItem('id')
     // if (id) {
     //   this.id = +id
     //   this.logged = true
@@ -175,6 +175,4 @@ class UserManager extends Event {
   }
 }
 
-const a = new UserManager()
-export default a;
-(<any>window).a = a
+export default new UserManager()
