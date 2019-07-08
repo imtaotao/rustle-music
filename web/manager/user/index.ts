@@ -74,7 +74,7 @@ class UserManager extends Event {
   }
 
   private init () {
-    // const id = localStorage.getItem('id')
+    const id = localStorage.getItem('id')
     // if (id) {
     //   this.id = +id
     //   this.logged = true

@@ -3,7 +3,7 @@ import { notice } from 'web/utils'
 class SongManager {
   cached = false
   ids = new Set()
-  cache (fn: (fn: Function) => number[]) {
+  cache (fn: (fn: Function) => Array<number>) {
     if (!this.cached) {
       fn((ids: any[]) => {
         ids.map(val => this.ids.add(val.id))
@@ -16,6 +16,11 @@ class SongManager {
     if (this.cached) {
       this.ids.add(id)
     }
+  }
+
+  replace (list: Array<number>) {
+    this.cleanCache()
+    this.cache(() => list)
   }
 
   removeCacheId (id: number) {

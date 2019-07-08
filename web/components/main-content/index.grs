@@ -29,7 +29,6 @@
   import DailySong from 'web/components/daily-song'
   import SearchResult from 'web/components/search-result'
   import DiscoverMusic from 'web/components/discover-music'
-  window.r = Router
 
   const defaultPlaylist = {
     tags: [],

@@ -15,7 +15,7 @@
           <a :className='this.isPlayingItem(val) ? "icon-playing" : ""'>
             {{ this.getSerialNumber(val, i) }}
           </a>
-          <a :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'></a>
+          <a :className='this.props.isMyLikeList || this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'></a>
           <a className='icon-down'></a>
           <a styleName='song-name'>{{ val.name }}</a>
         </span>
@@ -50,18 +50,18 @@ mmp, 几个接口返回的字段不一样
 */
 
 <script>
-  import { getDuration } from 'web/utils'
   import SongManager from 'web/manager/song'
   import RuntimeManager from 'web/manager/runtime'
+  import { compared, getDuration } from 'web/utils'
 
   const Hearken = RuntimeManager.Hearken
 
   @Grass.CSSModules(style)
   export default class ListForm extends Grass.Component {
     // #temp
-    didReceiveProps () {
-      console.log(this.props.tracks.length && this.props.tracks, 'tt');
-    }
+    // didReceiveProps () {
+    //   console.log(this.props.tracks.length && this.props.tracks, 'playlist');
+    // }
 
     beforeCreate () {
       Hearken.on('start', () => {
@@ -72,12 +72,7 @@ mmp, 几个接口返回的字段不一样
     }
 
     willReceiveProps (newProps) {
-      for (const key in newProps) {
-        if (newProps[key] !== this.props[key]) {
-          return true
-        }
-      }
-      return false
+      return compared(newProps, this.props)
     }
 
     isCollectMusic (id) {

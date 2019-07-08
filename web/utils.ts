@@ -1,6 +1,6 @@
 import Notice from 'web/components/notice/index.grs'
 
-export function enter (e: KeyboardEvent, cb:Function) {
+export function enter (e: KeyboardEvent, cb: Function) {
   (e.key === 'Enter' || e.keyCode === 13) && cb()
 }
 
@@ -53,4 +53,13 @@ export function scrollEvent (id: string) {
       }
     }
   }
+}
+
+export function compared (newProps: Object, oldProps: Object) {
+  for (const key in newProps) {
+    if (newProps[key] !== oldProps[key]) {
+      return true
+    }
+  }
+  return false
 }
