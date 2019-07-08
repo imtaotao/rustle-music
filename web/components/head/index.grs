@@ -1,21 +1,48 @@
 <template>
-  <div styleName='container' className='drag' @click.self='this.hideSuggestBox'>
+  <div
+    className='drag'
+    styleName='container'
+    @click.self='this.hideSuggestBox'
+  >
     <slot></slot>
-    <div :styleName='"btn left " + (this.Router.canBack() ? "" : "none")' @click='this.preRouter' title='后退'><i></i></div>
-    <div :styleName='"btn right " + (this.Router.canForward() ? "" : "none")' @click='this.nextRouter' title='前进'><i></i></div>
+    <div
+      title='后退'
+      @click='this.preRouter'
+      :styleName='"btn left " + (this.Router.canBack() ? "" : "none")'
+    >
+      <i></i>
+    </div>
+    <div
+      title='前进'
+      @click='this.nextRouter'
+      :styleName='"btn right " + (this.Router.canForward() ? "" : "none")'
+    >
+      <i></i>
+    </div>
     <div styleName='search-box'>
       <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
       <input
-        styleName='search-input'
         placeholder='搜索'
         :value='searchValue'
+        styleName='search-input'
         @keydown='this.pressEnter'
         @input='this.changeInputValue'
-        @focus='() => this.setState({showSuggest: true})'/>
-      <i styleName='remove-icon' v-show='searchValue' @click='this.removeInputValue'></i>
+        @focus='() => this.setState({showSuggest: true})'
+      />
+      <i
+        v-show='searchValue'
+        styleName='remove-icon'
+        @click='this.removeInputValue'
+      >
+      </i>
     </div>
     <div styleName='btn set' @click='this.setConfig'><i></i></div>
-    <SearchSuggest v-if='showSuggest' :hide='this.hideSuggestBox' :searchValue='searchValue' :receiveRecommendValue='this.receiveRecommendValue'/>
+    <SearchSuggest
+      v-if='showSuggest'
+      :searchValue='searchValue'
+      :hide='this.hideSuggestBox'
+      :receiveRecommendValue='this.receiveRecommendValue'
+    />
   </div>
 </template>
 

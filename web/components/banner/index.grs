@@ -1,23 +1,32 @@
 <template>
-  <div styleName='container' @mouseenter='this.mouseenter' @mouseleave='this.mouseleave'>
+  <div
+    styleName='container'
+    @mouseenter='this.mouseenter'
+    @mouseleave='this.mouseleave'
+  >
     <div styleName='points'>
       <span
-        :styleName='this.getReverseIndex(i) === active ? "active" : ""'
         v-for='(val, i) of this.props.bannerData')
-        @mouseenter='this.appoint.bind(this, this.getReverseIndex(i))'></span>
+        @mouseenter='this.appoint.bind(this, this.getReverseIndex(i))'
+        :styleName='this.getReverseIndex(i) === active ? "active" : ""'
+      ></span>
     </div>
     <div styleName='click-remove' v-show='showMask'>
       <div styleName='left' @click='this.nextImage'></div>
       <div styleName='right' @click='this.preImage'></div>
     </div>
     <div
-      :styleName='"item " + this.getNextStyleName(i)'
       v-for='(item, i) of this.getData()'
-      @click='this.viewBannerDetailData.bind(this, item)'>
+      :styleName='"item " + this.getNextStyleName(i)'
+      @click='this.viewBannerDetailData.bind(this, item)'
+    >
         <p :style='{backgroundImage: "url("+ item.imageUrl +")"}'>
           <span :styleName='item.titleColor'>{{ item.typeTitle }}</span>
         </p>
-        <a :styleName='this.maskLayer(i)' @click='e => item.url && window.node.openBrowser(item.url)'></a>
+        <a
+          :styleName='this.maskLayer(i)'
+          @click='e => item.url && window.node.openBrowser(item.url)'
+        ></a>
       </div>
   </div>
 </template>

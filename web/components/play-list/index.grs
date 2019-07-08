@@ -3,11 +3,13 @@
     <div styleName='title'>
       <div styleName='btn'>
         <div
+          @click='this.toggle'
           :styleName='showList ? "active" : ""'
-          @click='this.toggle'>播放列表</div>
+        >播放列表</div>
         <div
+          @click='this.toggle'
           :styleName='showList ? "" : "active"'
-          @click='this.toggle'>历史记录</div>
+        >历史记录</div>
       </div>
       <div styleName='info-desc'>
         <span styleName='count'>总{{ count }}首</span>

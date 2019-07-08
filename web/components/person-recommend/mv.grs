@@ -3,8 +3,14 @@
     <div styleName='title'>推荐 MV<i></i></div>
     <div styleName='content'>
       <ul>
-        <li v-for='item of data' @click='this.viewDetail.bind(this, item)'>
-          <div styleName='bg-image' :style='{backgroundImage: "url("+ item.picUrl +")"}'>
+        <li
+          v-for='item of data'
+          @click='this.viewDetail.bind(this, item)'
+        >
+          <div
+            styleName='bg-image'
+            :style='{backgroundImage: "url("+ item.picUrl +")"}'
+          >
             <div styleName='mask'>
               {{ item.copywriter || '' }}
             </div>

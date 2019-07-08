@@ -1,12 +1,29 @@
 <template>
   <div styleName='container'>
-    <div @click='this.clickAccount' styleName='chunk head-pic'>
+    <div
+      @click='this.clickAccount'
+      styleName='chunk head-pic'
+    >
       <span :style='{backgroundImage: "url("+ avatarUrl  +")"}'></span>
     </div>
-    <div @click='this.clickAccount' styleName='chunk'>{{ nickname }}</div>
-    <div @click='this.clickAccount' styleName='chunk prompt'></div>
-    <LoginBox v-if='showLoginBox' :hideLoginBox='this.hideLoginBox' :login='this.login'/>
-    <PersonInfo v-if='showViewInfo' :hideViewInfo='this.hideViewInfo' :logout='this.logout'/>
+    <div
+      styleName='chunk'
+      @click='this.clickAccount'
+    >{{ nickname }}</div>
+    <div
+      styleName='chunk prompt'
+      @click='this.clickAccount'
+    ></div>
+    <LoginBox
+      v-if='showLoginBox'
+      :login='this.login'
+      :hideLoginBox='this.hideLoginBox'
+    />
+    <PersonInfo
+      v-if='showViewInfo'
+      :logout='this.logout'
+      :hideViewInfo='this.hideViewInfo'
+    />
   </div>
 </template>
 

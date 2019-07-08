@@ -1,32 +1,45 @@
 <template>
   <div styleName='container'>
-    <div styleName='loading' v-show='showLoading'><i></i></div>
-    <div styleName='search-result-box' v-show='!showLoading'>
+    <div
+      styleName='loading'
+      v-show='showLoading'
+    >
+      <i></i>
+    </div>
+    <div
+      v-show='!showLoading'
+      styleName='search-result-box'
+    >
       <div styleName='head'>
         <b styleName='search-value'>{{ this.props.searchValue || '' }}</b>
         <span v-show='resultCount'>找到 {{ resultCount }} 个{{ selected.name }}</span>
       </div>
       <div styleName='types'>
         <span
-          :styleName='selected.type === item.type ? "active" : ""'
           v-for='item of searchTypes'
-          @click='this.toggleType.bind(this, item)'>{{ item.name }}</span>
+          @click='this.toggleType.bind(this, item)'
+          :styleName='selected.type === item.type ? "active" : ""'
+        >{{ item.name }}</span>
       </div>
       <div styleName='content-box'>
         <!-- 单曲 -->
         <div>
-          <ListForm v-if='selected.type === "1"' :tracks='resultData'/>
+          <ListForm
+            :tracks='resultData'
+            v-if='selected.type === "1"'
+          />
         </div>
         <!-- 歌手 -->
         <div>
 
         </div>
         <PaginggBar
-          v-show='resultCount > selected.limit'
           :count='resultCount'
-          :offset='selected.offset'
           :limit='selected.limit'
-          :toGetPageingData='this.toGetPageingData' />
+          :offset='selected.offset'
+          v-show='resultCount > selected.limit'
+          :toGetPageingData='this.toGetPageingData'
+        />
       </div>
     </div>
   </div>

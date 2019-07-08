@@ -1,15 +1,30 @@
 <template>
   <div styleName='container'>
-    <div :styleName='"root-box" + (showBgStar ? " show-bg-bar" : "")' v-if='this.song.id !== 0'>
+    <div
+      v-if='this.song.id !== 0'
+      :styleName='"root-box" + (showBgStar ? " show-bg-bar" : "")'
+    >
       <PlayBackground v-show='showBgStar'/>
-      <div styleName='bg' :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></div>
+      <div
+        styleName='bg'
+        :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'
+      ></div>
       <div styleName='bg-mask'></div>
-      <div styleName='content-box' @scroll='this.scroll()'>
+      <div
+        styleName='content-box'
+        @scroll='this.scroll()'
+      >
         <div styleName='left'>
-          <div styleName='needle' id='needle'>
+          <div
+            id='needle'
+            styleName='needle'
+          >
             <div styleName='btn'><i></i></div>
           </div>
-          <div styleName='disc' id='disc'>
+          <div
+            id='disc'
+            styleName='disc'
+          >
             <i styleName='default-img'></i>
             <i :style='{backgroundImage: "url("+ (this.song.al || this.song.album).picUrl +")"}'></i>
           </div>
@@ -35,23 +50,41 @@
           </ul>
           <SongLyric :lyric='lyric'/>
         </div>
-        <div styleName='buttom-content-box' v-show='!showBgStar'>
+        <div
+          v-show='!showBgStar'
+          styleName='buttom-content-box'
+        >
           <div styleName='comment'>
             <div styleName='title'>
               <p><b>听友评论</b><span>（已有{{ commentLen }}条评论）</span></p>
               <p>
                 <span><i className='icon-pen'></i>发表评论</span>
-                <i styleName='expression' className='icon-expression'></i>
+                <i
+                  styleName='expression'
+                  className='icon-expression'
+                ></i>
               </p>
             </div>
-            <Comments type='music' :id='this.song.id' :setCommentLen='this.setCommentLen'/>
+            <Comments
+              type='music'
+              :id='this.song.id'
+              :setCommentLen='this.setCommentLen'
+            />
           </div>
           <div styleName='similar-song-list'>
-            <p styleName='similar-song-title'><b>相似音乐</b></p>
+            <p styleName='similar-song-title'>
+              <b>相似音乐</b>
+            </p>
             <ul>
               <li v-for='val of similarSongs'>
-                <div styleName='song-img' :style='{backgroundImage: "url("+ val.album.picUrl +")"}'>
-                  <div styleName='play-btn' @click='this.playSimilarSong.bind(this, val)'><i></i></div>
+                <div
+                  styleName='song-img'
+                  :style='{backgroundImage: "url("+ val.album.picUrl +")"}'
+                >
+                  <div
+                    styleName='play-btn'
+                    @click='this.playSimilarSong.bind(this, val)'
+                  ><i></i></div>
                 </div>
                 <div styleName='info'>
                   <p>{{ val.name }}</p>
@@ -67,7 +100,11 @@
           </div>
         </div>
       </div>
-      <div styleName='head-box' id='headBox' v-show='!showBgStar'>
+      <div
+        id='headBox'
+        styleName='head-box'
+        v-show='!showBgStar'
+      >
         <Head styleName='head'/>
       </div>
     </div>

@@ -4,7 +4,10 @@
     <div styleName='content'>
       <ul>
         <li v-for='item of data'>
-          <div styleName='img' :style='{backgroundImage: "url(" + item.picUrl + ")"}'></div>
+          <div
+            styleName='img'
+            :style='{backgroundImage: "url(" + item.picUrl + ")"}'
+            ></div>
           <div styleName='desc'>
             <div styleName='name'>{{ item.copywriter }}</div>
             <div styleName='auth'>{{ item.name }}</div>

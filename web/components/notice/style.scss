@@ -28,7 +28,8 @@
 .icon {
   @include img(40, 0);
   margin-right: 10px;
-  margin-left: -10px
+  margin-left: -10px;
+  flex-shrink: 0;
 }
 
 .crying {

@@ -9,15 +9,17 @@
       </li>
       <li
         v-for='(val, i) of this.props.tracks'
+        @dblclick='this.play.bind(this, val)'
         :styleName='this.isPlayingItem(val) ? "active" : ""'
-        @dblclick='this.play.bind(this, val)'>
+      >
         <span styleName='title'>
           <a :className='this.isPlayingItem(val) ? "icon-playing" : ""'>
             {{ this.getSerialNumber(val, i) }}
           </a>
           <a
             @click='this.like.bind(this, val)'
-            :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'>
+            :className='this.isCollectMusic(val.id) ? "icon-like2" : "icon-like1"'
+          >
           </a>
           <a className='icon-down'></a>
           <a styleName='song-name'>{{ val.name }}</a>
@@ -28,8 +30,12 @@
             {{ item.name }}
           </a>
         </span>
-        <span styleName='album'><a>{{ (val.al || val.album).name }}</a></span>
-        <span styleName='duration'><a>{{ this.getDuration(val.dt || val.duration) }}</a></span>
+        <span styleName='album'>
+          <a>{{ (val.al || val.album).name }}</a>
+        </span>
+        <span styleName='duration'>
+          <a>{{ this.getDuration(val.dt || val.duration) }}</a>
+        </span>
       </li>
     </ul>
   </main>

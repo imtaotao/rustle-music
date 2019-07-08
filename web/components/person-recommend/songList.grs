@@ -4,9 +4,15 @@
     <div styleName='content'>
       <ul styleName='list'>
         <li>
-          <div styleName='image daily-update' @click='this.toSongRecommendPage'>
+          <div
+            styleName='image daily-update'
+            @click='this.toSongRecommendPage'
+          >
             <div styleName='bg'></div>
-            <div styleName='calendar' className='icon-calendar'>
+            <div
+              styleName='calendar'
+              className='icon-calendar'
+            >
               <span>{{ this.getDate() }}</span>
             </div>
             <div styleName='mask'>根据您的音乐口味生成每日更新</div>
@@ -18,7 +24,10 @@
             :style='{backgroundImage: "url("+ val.picUrl +"）"}'
             @click.self='this.viewDetailSongList.bind(this, val)'>
             <div styleName='play-count'><i></i>{{ this.getPlayCount(val) }}</div>
-            <span styleName='play-btn' @click='this.replaceSongList.bind(this, val)'><i></i></span>
+            <span
+              styleName='play-btn'
+              @click='this.replaceSongList.bind(this, val)'
+            ><i></i></span>
           </div>
           <div styleName='name'>{{ val.name }}</div>
         </li>

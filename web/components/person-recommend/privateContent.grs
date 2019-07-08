@@ -3,8 +3,13 @@
     <div styleName='title'>独家放送<i></i></div>
     <div styleName='content'>
       <ul>
-        <li v-for='item of data' @click='this.viewDetail.bind(this, item)'>
-          <div styleName='bg-image' :style='{backgroundImage: "url("+ item.picUrl +")"}'></div>
+        <li
+          v-for='item of data'
+          @click='this.viewDetail.bind(this, item)'
+        >
+          <div styleName='bg-image'
+            :style='{backgroundImage: "url("+ item.picUrl +")"}'
+          ></div>
           <div styleName='name'>{{ item.name }}</div>
         </li>
       </ul>

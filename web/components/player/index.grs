@@ -1,18 +1,31 @@
 <template>
   <div :styleName='"container" + (showSongDetail ? " detail" : "")'>
-    <div styleName='player-box' id='Player'>
+    <div
+      id='Player'
+      styleName='player-box'
+    >
       <Progress :showSongDetail='showSongDetail'/>
       <div styleName='blur-bg'></div>
       <div styleName='content'>
         <div styleName='left'>
-          <div styleName='song-img' v-show='showDesc'>
-            <div styleName='img-content' :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'></div>
+          <div
+            v-show='showDesc'
+            styleName='song-img'
+          >
+            <div
+              styleName='img-content'
+              :style='{backgroundImage: "url("+ (current.al || current.album).picUrl +")"}'
+            ></div>
             <div
               styleName='zoom'
+              @click='this.showSongDetail'
               :className='"icon-zoom" + (showSongDetail ? "-out" : "")'
-              @click='this.showSongDetail'></div>
+            ></div>
           </div>
-          <div styleName='desc' v-show='showDesc'>
+          <div
+            styleName='desc'
+            v-show='showDesc'
+          >
             <div styleName='name'>{{ current.name || '' }}</div>
               <div styleName='auth'>
                 <span v-for='(val, i) of current.ar || current.artists'>
@@ -28,22 +41,57 @@
               title='收藏'
               styleName='icon' 
               @click='this.like'
-              :className='isLike ? "icon-like2" : "icon-like1"'></li>
-            <li styleName='icon play-order' :className='"icon-" + mode' @click='this.setMode' v-show='!isFMModule'>
+              :className='isLike ? "icon-like2" : "icon-like1"'
+            ></li>
+            <li
+              styleName='icon play-order'
+              :className='"icon-" + mode'
+              @click='this.setMode' v-show='!isFMModule'
+            >
               <div>{{ playOrderDesc }}</div>
             </li>
-            <li styleName='time'>{{ this.getDuration() }}</li>
-            <li styleName='icon' className='icon-pre' v-show='!isFMModule' @click='this.preSong' title='上一首'></li>
-            <li
-              styleName='play'
-              :className='"icon-" + (playing ? "pause" : "play")'
-              @click='this.togglePlay'>
+            <li styleName='time'>
+              {{ this.getDuration() }}
             </li>
-            <li styleName='icon' className='icon-next' @click='this.nextSong' title='下一首'></li>
-            <li styleName='time' id='CurrentTime'>00:00</li>
-            <li styleName='icon big' className='icon-lyrics' title='歌词'></li>
-            <li styleName='icon share' title='分享' className='icon-share' @click='() => this.setState({showCopyLink: !showCopyLink})'>
-              <div styleName='share-box' v-show='showCopyLink'>
+            <li
+              title='上一首'
+              styleName='icon'
+              className='icon-pre'
+              v-show='!isFMModule'
+              @click='this.preSong'
+            ></li>
+            <li
+              title='播放/暂停'
+              styleName='play'
+              @click='this.togglePlay'
+              :className='"icon-" + (playing ? "pause" : "play")'
+            >
+            </li>
+            <li
+              title='下一首'
+              styleName='icon'
+              className='icon-next'
+              @click='this.nextSong'
+            ></li>
+            <li
+              styleName='time'
+              id='CurrentTime'
+            >00:00</li>
+            <li
+              title='歌词'
+              styleName='icon big'
+              className='icon-lyrics'
+            ></li>
+            <li
+              title='分享'
+              styleName='icon share'
+              className='icon-share'
+              @click='() => this.setState({showCopyLink: !showCopyLink})'
+            >
+              <div
+                styleName='share-box'
+                v-show='showCopyLink'
+              >
                 <div @click='this.copyLink'><i></i>复制链接</div>
                 <span></span>
               </div>
@@ -56,16 +104,22 @@
             title='播放列表'
             v-show='!isFMModule'
             className='icon-list'
-            @click='() => this.setState({showPlayList: !showPlayList})'>
+            @click='() => this.setState({showPlayList: !showPlayList})'
+          >
           </div>
           <div
             styleName='icon volume'
             @click.self='this.mute'
-            :className='"icon-" + (mute ? "mute" : "volume")'>
+            :className='"icon-" + (mute ? "mute" : "volume")'
+          >
             <div styleName='volume-box'>
               <div styleName='volume-bar-container'>
                 <div></div>
-                <div styleName='bar' @change='this.volumeChange' @input='this.volumeChange'>
+                <div
+                  styleName='bar'
+                  @input='this.volumeChange'
+                  @change='this.volumeChange'
+                >
                   <i v-progress='options'></i>
                 </div>
               </div>
@@ -75,11 +129,22 @@
         </div>
       </div>
     </div>
-    <div styleName='play-list' v-show='showPlayList' @click.self='this.hidePlayList'>
+    <div
+      styleName='play-list'
+      v-show='showPlayList'
+      @click.self='this.hidePlayList'
+    >
       <PlayList/>
     </div>
-    <div styleName='song-detail-box' v-show='showSongDetail' v-transition='"zoom"'>
-      <SongDeatil :song='current' :playing='playing'/>
+    <div
+      v-transition='"zoom"'
+      v-show='showSongDetail'
+      styleName='song-detail-box'
+    >
+      <SongDeatil
+        :song='current'
+        :playing='playing'
+      />
     </div>
   </div>
 </template>

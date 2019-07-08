@@ -1,7 +1,10 @@
 <template>
   <div styleName='container'>
     <div styleName='hight-list-enter'>
-      <div styleName='backdrop' :style='{backgroundImage: "url("+ hightList.coverImgUrl + ")"}'></div>
+      <div
+        styleName='backdrop'
+        :style='{backgroundImage: "url("+ hightList.coverImgUrl + ")"}'
+      ></div>
       <div styleName='hight-description'>
         <img :src='hightList.coverImgUrl'/>
         <div>
@@ -21,21 +24,28 @@
       <div styleName='song-list'>
         <ul>
           <li v-for='list of songlist'>
-            <div styleName='list-info' @click.self='this.viewDetailSongList.bind(this, list)'>
+            <div
+              styleName='list-info'
+              @click.self='this.viewDetailSongList.bind(this, list)'
+            >
               <p><i></i>{{ this.getPlayCount(list) }}</p>
               <div><i className='icon-artists'></i>{{ list.creator.nickname }}</div>
-              <div styleName='play-btn' @click='this.replaceSongList.bind(this, list)'><i></i></div>
+              <div
+                styleName='play-btn'
+                @click='this.replaceSongList.bind(this, list)'
+              ><i></i></div>
             </div>
             <img :src='list.coverImgUrl'/>
             <div styleName='list-name'>{{ list.name }}</div>
           </li>
         </ul>
          <PaginggBar
-            v-show='total > limit'
             :count='total'
-            :offset='offset'
             :limit='limit'
-            :toGetPageingData='this.toGetPageingData'/>
+            :offset='offset'
+            v-show='total > limit'
+            :toGetPageingData='this.toGetPageingData'
+          />
       </div>
     </div>
   </div>

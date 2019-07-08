@@ -1,21 +1,44 @@
 <template>
   <div>
-    <div id='MainHead' styleName='head-box' v-show='!showSongList'>
+    <div
+      id='MainHead'
+      styleName='head-box'
+      v-show='!showSongList'
+    >
       <Head styleName='head'>
         <div styleName='placeholder' slot='placeholder'></div>
       </Head>
     </div>
-    <div styleName='content no-padding' v-show='showPrivateFM'>
+    <div
+      v-show='showPrivateFM'
+      styleName='content no-padding'
+    >
       <PrivateFM/>
     </div>
-    <div styleName='content' v-show='showSongList'>
-      <SongList :id='songListId' :playlist='playlist'/>
+    <div
+      styleName='content'
+      v-show='showSongList'
+    >
+      <SongList
+        :id='songListId'
+        :playlist='playlist'
+      />
     </div>
-    <div styleName='content' v-show='showDailySong'>
+    <div
+      styleName='content'
+      v-show='showDailySong'
+    >
       <DailySong/>
     </div>
-    <SearchResult styleName='content' v-show='showSearchResult' :searchValue='this.searchValue'/>
-    <DiscoverMusic styleName='fill-content ' v-show='showDiscoverMusic'/>
+    <SearchResult
+      styleName='content'
+      v-show='showSearchResult'
+      :searchValue='this.searchValue'
+    />
+    <DiscoverMusic
+      styleName='fill-content '
+      v-show='showDiscoverMusic'
+    />
   </div>
 </template>
 

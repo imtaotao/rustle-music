@@ -1,18 +1,22 @@
 <template>
   <div styleName='container'>
-    <div styleName='loading' v-show='showLoading'><i></i></div>
+    <div
+      styleName='loading'
+      v-show='showLoading'
+    ><i></i></div>
     <div styleName='head'>
       <span
-        :styleName='item.val === active.val && "active"'
+        v-for='item of types'
         @click='this.toggleTabTag.bind(this, item)'
-        v-for='item of types'>{{ item.name }}</span>
+        :styleName='item.val === active.val && "active"'
+      >{{ item.name }}</span>
     </div>
     <div styleName='content-box'>
       <PersonRecommend
         styleName='content'
+        :showLoading='this.showLoading'
         v-show='active.val === "recommend"'
-        :showLoading='this.showLoading'/>
-
+      />
       <div
         styleName='content'
         v-show='active.val === "songList"'>
