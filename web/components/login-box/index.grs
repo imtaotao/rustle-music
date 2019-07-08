@@ -17,18 +17,18 @@
           type='text'
           styleName='input'
           :value='account'
-          @change='this.accountChanged'
           @focus='this.clearErrorInfo'
+          @change='this.accountChanged'
           :placeholder='"请输入" + (phoneMode ? "手机号" : "邮箱")'
         />
         <input
           type='password'
           styleName='input'
           :value='password'
-          @change='this.passwordChanged'
-          @focus='this.clearErrorInfo'
-          @keydown='this.pressEnter'
           placeholder='请输入密码'
+          @keydown='this.pressEnter'
+          @focus='this.clearErrorInfo'
+          @change='this.passwordChanged'
         />
       </div>
       <div styleName='button-container'>
@@ -43,14 +43,18 @@
           <label
             for='AutoLogin'
             className='black'
-          >自动登录</label>
+          >
+            自动登录
+          </label>
           <span v-show='errorInfo'>{{ errorInfo }}</span>
         </div>
         <button
           styleName='button'
           @click='this.login'
           :style='{background: logining ? "#ddd" : ""}'
-        >登录</button>
+        >
+          登录
+        </button>
         <div
           styleName='toogle'
           @click='this.toggle'
@@ -105,7 +109,8 @@
     }
 
     pressEnter = e => {
-      enter(e, this.login)
+      // 等待 state 已经填充完成后再登录
+      enter(e, () => setTimeout(this.login))
     }
 
     checkboxChanged = e => {
