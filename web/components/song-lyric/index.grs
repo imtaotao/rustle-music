@@ -40,6 +40,10 @@
       this.moveLyric()
     }
 
+    destroy () {
+      this.clearTimer()
+    }
+
     clearTimer () {
       if (this.timer) {
         clearTimeout(this.timer)
@@ -62,9 +66,9 @@
     moveLyric () {
       setTimeout(() => {
         const limit = 3
-        const type = this.props.type || ''
         const lines = this.state.lines
-        
+        const type = this.props.type || ''
+        console.log(lines);
         if (lines.length > 1) {
           const node = document.getElementById(type + '_lyircBox')
           const fn = () => {
@@ -77,9 +81,15 @@
                   const currentLine = lines.find(({time}) => time > currentTime)
                   const active = lines.indexOf(currentLine) - 1
 
+                  if (!lines[active].txt.trim()) {
+                    return fn()
+                  }
+
                   // 如果scrolltop 不应该在顶层但是却在顶层，就需要修正
-                  if (active !== this.state.active ||
-                    this.state.active > limit && node.scrollTop === 0) {
+                  if (
+                    active !== this.state.active ||
+                    this.state.active > limit && node.scrollTop === 0
+                  ) {
                     this.setState({active})
                     if (node) {
                       this.setContainerScrollTop(node, active, limit)
@@ -88,7 +98,7 @@
                 }
               }
               fn()
-            }, 200)
+            }, 250)
           }
           fn()
         }

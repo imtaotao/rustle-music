@@ -576,10 +576,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@rustle/grass@^0.0.1-alpha.7":
-  version "0.0.1-alpha.7"
-  resolved "https://registry.npm.taobao.org/@rustle/grass/download/@rustle/grass-0.0.1-alpha.7.tgz#1e251666be3cf5c212095c423cb1d0af4961cb93"
-  integrity sha1-HiUWZr489cISCVxCPLHQr0lhy5M=
+"@rustle/grass@^0.0.1-alpha.8":
+  version "0.0.1-alpha.8"
+  resolved "https://registry.npm.taobao.org/@rustle/grass/download/@rustle/grass-0.0.1-alpha.8.tgz?cache=0&sync_timestamp=1562674799647&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40rustle%2Fgrass%2Fdownload%2F%40rustle%2Fgrass-0.0.1-alpha.8.tgz#7d4244e5f63473ccd22f4e7549d04c4ca1f02627"
+  integrity sha1-fUJE5fY0c8zSL051SdBMTKHwJic=
 
 "@rustle/hearken@^0.0.1-alpha.4":
   version "0.0.1-alpha.4"
