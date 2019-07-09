@@ -148,6 +148,13 @@
       this.setAnimation(node)
     }
 
+    destroy () {
+      if (this.timer) {
+        cancelAnimationFrame(this.timer)
+        this.timer = null
+      }
+    }
+
     willReceiveProps (newProps) {
       if (newProps.song.id !== this.props.song.id || 
         newProps.playing !== this.props.playing) {
