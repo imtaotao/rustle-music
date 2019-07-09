@@ -5,11 +5,6 @@
   height: 350px;
   position: relative;
   overflow-x: hidden;
-  &::before {
-    @include halfPX(#868686);
-    position: absolute;
-    right: 0;
-  }
 }
 
 .lyric-box {

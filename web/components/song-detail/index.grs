@@ -137,9 +137,15 @@
         similarSongs: [],
         showBgStar: false,
       }
-      this.setAnimation()
+      
       this.getSongLyric()
       this.getSimilarSong()
+    }
+
+    created (dom) {
+      // 需要在获取到 dom 才能开始动画
+      const node = dom.querySelector('#disc')
+      this.setAnimation(node)
     }
 
     willReceiveProps (newProps) {
@@ -230,8 +236,8 @@
       }
     }
 
-    setAnimation () {
-      const node = document.getElementById('disc')
+    setAnimation (node) {
+      node = node || document.getElementById('disc')
       if (!node || !this.props.playing) return
 
       let oldReg
