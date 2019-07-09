@@ -112,12 +112,12 @@
 </template>
 
 <script>
-  import { notice, scrollEvent } from 'web/utils'
   import Head from 'web/components/head'
+  import { notice, scrollEvent } from 'web/utils'
+  import RuntimeManager from 'web/manager/runtime'
   import SongLyric from 'web/components/song-lyric'
   import Comments from 'web/components/comment-form'
   import PlayBackground from 'web/components/play-background'
-  import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
