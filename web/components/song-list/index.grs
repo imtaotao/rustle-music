@@ -92,8 +92,8 @@
       </div>
     </div>
     <div
-      styleName='loading'
       v-show='loading'
+      styleName='loading'
     >
       <i></i>
     </div>
