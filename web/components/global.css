@@ -126,12 +126,12 @@ body {
 }
 
 /*slide-top*/
-.slide-top-enter-active, .slide-top-leave-active {
- transition: all 1s;
+.slide-bottom-enter-active, .slide-bottom-leave-active {
+ transition: all 0.25s;
 }
-.slide-top-enter, .slide-top-leave-to {
+.slide-bottom-enter, .slide-bottom-leave-to {
   opacity: 0;
-  transform: translateY(-50%);
+  transform: translateY(50%);
 }
 
 /*width*/
