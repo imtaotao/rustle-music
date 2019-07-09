@@ -137,9 +137,9 @@
       <PlayList/>
     </div>
     <div
-      v-show='showSongDetail'
+      v-if='showSongDetail'
+      v-transition='"zoom"'
       styleName='song-detail-box'
-      v-transition='"slide-bottom"'
     >
       <SongDeatil
         :song='current'
