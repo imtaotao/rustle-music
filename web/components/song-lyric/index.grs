@@ -68,7 +68,7 @@
         const limit = 3
         const lines = this.state.lines
         const type = this.props.type || ''
-        console.log(lines);
+
         if (lines.length > 1) {
           const node = document.getElementById(type + '_lyircBox')
           const fn = () => {
