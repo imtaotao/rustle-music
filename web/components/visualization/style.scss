@@ -3,7 +3,14 @@
 .container {
   z-index: 10;
   overflow: hidden;
+  position: fixed;
+  bottom: 68px;
+  left: 0;
   canvas {
     margin-left: 150px;
   }
+}
+
+.animate {
+  transition: bottom ease 1s;
 }

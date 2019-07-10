@@ -119,6 +119,7 @@
   import Comments from 'web/components/comment-form'
   import PlayBackground from 'web/components/play-background'
 
+  @Grass.event
   @Grass.CSSModules(style)
   export default class SongDeatil extends Grass.Component {
     // #temp
@@ -236,7 +237,11 @@
     }
 
     toggleShowBgStar = e => {
-      this.setState({showBgStar: !this.state.showBgStar})
+      const showBgStar = !this.state.showBgStar
+      // 发送是否切换到背景的事件，可视化需要
+      this.next(showBgStar)
+      this.setState({showBgStar})
+
       const player = document.getElementById('Player')
       if (player) {
         player.style.display = !this.state.showBgStar ? 'none' : ''
