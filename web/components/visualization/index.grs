@@ -1,18 +1,28 @@
 <template>
-  <div styleName='container'>
+  <div
+    styleName='container animate'
+    :style='{bottom: showBg ? "-4px" : "68px"}'
+  >
     <canvas id='PlayerVisualization' width='700' height='80'></canvas>
   </div>
 </template>
 
 <script>
   import RuntimeManager from 'web/manager/runtime'
+  import SongDeatil from 'web/components/song-detail'
 
   @Grass.CSSModules(style)
   export default class Visualization extends Grass.Component {
     // #temp
     timer = null
 
+    state = {
+      showBg: false,
+    }
+
     created (dom) {
+      // 是否显示背景
+      SongDeatil.on(showBg => this.setState({showBg}))
       const canvas = dom.querySelector('#PlayerVisualization')
       if (canvas) {
         this.start(canvas.getContext('2d'))
@@ -21,6 +31,7 @@
 
     destroy () {
       this.clearTimer()
+      SongDeatil.remove()
     }
 
     clearTimer () {
