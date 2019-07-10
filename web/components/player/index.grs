@@ -145,6 +145,10 @@
         :song='current'
         :playing='playing'
       />
+      <Visualization
+        v-if='playing'
+        styleName='visualization'
+      />
     </div>
   </div>
 </template>
@@ -157,6 +161,7 @@
   import RuntimeManager from 'web/manager/runtime'
   import SongDeatil from 'web/components/song-detail'
   import Progress from 'web/components/player-progress'
+  import Visualization from 'web/components/visualization'
 
   const Hearken = RuntimeManager.Hearken
   const playOrderDesc = {
@@ -169,7 +174,7 @@
   export default class Player extends Grass.Component {
     // #temp
     Slide = null
-    component = { Progress, PlayList, SongDeatil }
+    component = { Progress, PlayList, SongDeatil, Visualization }
 
     beforeCreate () {
       const comp = this

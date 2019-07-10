@@ -1,0 +1,9 @@
+@import 'web/components/common.scss';
+
+.container {
+  z-index: 10;
+  overflow: hidden;
+  canvas {
+    margin-left: 150px;
+  }
+}

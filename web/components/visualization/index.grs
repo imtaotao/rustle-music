@@ -1,0 +1,77 @@
+<template>
+  <div styleName='container'>
+    <canvas id='PlayerVisualization' width='700' height='80'></canvas>
+  </div>
+</template>
+
+<script>
+  import RuntimeManager from 'web/manager/runtime'
+
+  @Grass.CSSModules(style)
+  export default class Visualization extends Grass.Component {
+    // #temp
+    timer = null
+
+    created (dom) {
+      const canvas = dom.querySelector('#PlayerVisualization')
+      if (canvas) {
+        this.start(canvas.getContext('2d'))
+      }
+    }
+
+    destroy () {
+      this.clearTimer()
+    }
+
+    clearTimer () {
+      if (this.timer) {
+        cancelAnimationFrame(this.timer)
+        this.timer = null
+      }
+    }
+
+    start (ctx) {
+      const animate = () => {
+        this.clearTimer()
+        this.timer = requestAnimationFrame(() => {
+          const data = RuntimeManager.Hearken.getVisualizerData()
+          data && this.draw(ctx, data)
+          animate()
+        })
+      }
+      animate()
+    }
+
+    draw (ctx, data) {
+      let i = 0
+      let j = 0
+      const margin = 20
+      const len = data.length
+      const startDistance = -300
+      const leftData = data.slice().reverse()
+      ctx.clearRect(0, 0, 900, 100)
+
+      // 左边
+      for (; i < len; i++) {
+        const h = leftData[i] / 10
+        this.drawSingle(ctx, margin * i + startDistance, h)
+      }
+
+      // 右边
+      for (; j < len; j++) {
+        const h = data[j] / 10
+        this.drawSingle(ctx, margin * i++ + startDistance, h)
+      }
+    }
+
+    drawSingle (ctx, x, h) {
+		  ctx.shadowBlur = 20
+      ctx.fillStyle = 'rgba(214, 106, 94, 0.8)'
+      ctx.shadowColor = 'rgba(214, 106, 94, 1)'
+
+      ctx.beginPath()
+      ctx.ellipse(x, 90 - h, 3, h, 0, 0, 2 * Math.PI)
+      ctx.fill()
+    }
+  }
+</script>
