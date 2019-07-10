@@ -12,14 +12,16 @@ const defaultCurrent:I.Song = {
 }
 
 class RuntimeManager extends Event {
-  playlist: I.Song[] = []
-  current: I.Song = defaultCurrent
   addlist = new Set()
+  playlist: I.Song[] = []
   mode: I.PlayMode = 'cycle'
-  DisableSwitch: boolean = false
   module: I.Moudles = 'normal'
-
-  Hearken = new Media({volume: 0.5})
+  DisableSwitch: boolean = false
+  current: I.Song = defaultCurrent
+  Hearken = new Media({
+    volume: 0.5,
+    fftSize: 32,
+  })
 
   public push (item: I.Song) {
     this.playlist.push(item)

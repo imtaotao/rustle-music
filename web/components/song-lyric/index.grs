@@ -81,7 +81,8 @@
                   const currentLine = lines.find(({time}) => time > currentTime)
                   const active = lines.indexOf(currentLine) - 1
 
-                  if (!lines[active].txt.trim()) {
+                  // 当歌词为空的时候，停留在上一句歌词
+                  if (lines[active] && !lines[active].txt.trim()) {
                     return fn()
                   }
 
