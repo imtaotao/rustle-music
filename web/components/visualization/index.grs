@@ -3,7 +3,7 @@
     styleName='container animate'
     :style='{bottom: showBg ? "-4px" : "68px"}'
   >
-    <canvas id='PlayerVisualization' width='700' height='80'></canvas>
+    <canvas id='PlayerVisualization' width='720' height='80'></canvas>
   </div>
 </template>
 
@@ -58,7 +58,7 @@
       let j = 0
       const margin = 20
       const len = data.length
-      const startDistance = -300
+      const startDistance = -295
       const leftData = data.slice().reverse()
       ctx.clearRect(0, 0, 900, 100)
 
