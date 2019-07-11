@@ -11,6 +11,16 @@
   import RuntimeManager from 'web/manager/runtime'
   import SongDeatil from 'web/components/song-detail'
 
+  const colors = [
+    '#0288D1',
+    '#cf4b3d',
+    '#43A047',
+    '#455A64',
+    '#6A1B9A',
+    '#1B5E20',
+    '#D81B60',
+  ]
+
   @Grass.CSSModules(style)
   export default class Visualization extends Grass.Component {
     // #temp
@@ -42,6 +52,8 @@
     }
 
     start (ctx) {
+      this.setCtxStyle(ctx)
+
       const animate = () => {
         this.clearTimer()
         this.timer = requestAnimationFrame(() => {
@@ -51,6 +63,13 @@
         })
       }
       animate()
+    }
+
+    setCtxStyle (ctx) {
+      const color = colors[Math.floor(Math.random() * colors.length)]
+      ctx.shadowBlur = 20
+      ctx.fillStyle = color
+      ctx.shadowColor = color
     }
 
     draw (ctx, data) {
@@ -64,22 +83,18 @@
 
       // 左边
       for (; i < len; i++) {
-        const h = leftData[i] / 10
+        const h = leftData[i] / 15
         this.drawSingle(ctx, margin * i + startDistance, h)
       }
 
       // 右边
       for (; j < len; j++) {
-        const h = data[j] / 10
+        const h = data[j] / 15
         this.drawSingle(ctx, margin * i++ + startDistance, h)
       }
     }
 
     drawSingle (ctx, x, h) {
-		  ctx.shadowBlur = 20
-      ctx.fillStyle = 'rgba(214, 106, 94, 0.8)'
-      ctx.shadowColor = 'rgba(214, 106, 94, 1)'
-
       ctx.beginPath()
       ctx.ellipse(x, 90 - h, 3, h, 0, 0, 2 * Math.PI)
       ctx.fill()
