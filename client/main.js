@@ -1,5 +1,6 @@
 const path = require('path')
 const yarn = require('yargs')
+const appTray = require('./app-tray')
 const shortcut = require('./shortcut-register')
 const { app, Menu, BrowserWindow } = require('electron')
 
@@ -30,6 +31,9 @@ function createWindow () {
       preload: path.join(__dirname, './preload.js'),
     }
   })
+
+  // 托盘对象
+  appTray(mainWindow)
 
   // 注册快捷键
   shortcut(isDev, mainWindow)

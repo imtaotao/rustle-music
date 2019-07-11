@@ -1,5 +1,5 @@
-const { macOs, windows } = require('../platform/utils')
 const { app, globalShortcut } = require('electron')
+const { macOs, windows } = require('../platform/utils')
 
 module.exports = function (isDev, mainWindow) {
   if (windows()) {
