@@ -3,6 +3,7 @@ declare module "*.grs" {
   export default Grass.Component
 }
 
+
 type Cookie = {
   Expires: number
   MUSIC_U: string
@@ -22,7 +23,8 @@ type Update = {
 
 interface Window {
   onNetworkError: () => void
-  clipboard: (text: string) => void;
+  require: (Module: string) => any
+  clipboard: (text: string) => void
   node: {
     update: Update
     macOs: () => boolean

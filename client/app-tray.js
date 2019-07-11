@@ -1,8 +1,8 @@
 const path = require('path')
-const { macOs, windows } = require('../platform/utils')
+const { windows } = require('../platform/utils')
 const { app, Menu, Tray} = require('electron')
 
-const trayMenuTemplate = [
+const trayMenuTemplate = win => [
   {
     label: '退出',
     click () {
@@ -14,9 +14,9 @@ const trayMenuTemplate = [
 module.exports = function (win) {
   if (windows()) {
     const appTray = new Tray(path.join(__dirname, './res/favicon.ico'))
-    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate)
+    const contextMenu = Menu.buildFromTemplate(trayMenuTemplate(win))
 
-    appTray.setToolTip('rustle')
+    appTray.setToolTip('rustle music')
     appTray.setContextMenu(contextMenu)
 
     appTray.on('click', () => {

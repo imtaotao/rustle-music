@@ -9,6 +9,11 @@ const {
   clearCookie,
 } = require('./interface')
 
+// 渲染进程的 api
+renderModule = {
+  RuntimeManager: null
+}
+
 // 暴露给渲染进程的 node api
 process.once('loaded', function () {
   global.node = {
@@ -31,6 +36,6 @@ process.once('loaded', function () {
     },
     clipboard (text) {
       return clipboard.writeText(text)
-    }
+    },
   }
 })

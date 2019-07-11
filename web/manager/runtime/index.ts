@@ -3,6 +3,8 @@ import Event from 'web/share/event'
 import { random, notice } from 'web/utils'
 import { Media } from '@rustle/hearken'
 
+const ipcRenderer = window.require('electron').ipcRenderer
+
 const defaultCurrent:I.Song = {
   id: 0,
   name: '-',
@@ -248,7 +250,5 @@ class RuntimeManager extends Event {
 }
 
 const Runtime = new RuntimeManager()
-export default Runtime;
-
-(window as any).run = Runtime;
-(window as any).hh = Runtime.Hearken
+ipcRenderer.send('setRuntimeManager', Runtime)
+export default Runtime
