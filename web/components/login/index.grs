@@ -32,8 +32,8 @@
   import LoginBox from 'web/components/login-box'
   import PersonInfo from 'web/components/information'
   
-  const defaultAvatarUrl = require('../../assets/no-login.svg')
   const defaultNickname = '未登录' 
+  const defaultAvatarUrl = require('../../assets/no-login.svg')
 
   @Grass.CSSModules(style)
   export default class Sidebar extends Grass.Component {
@@ -43,8 +43,8 @@
       this.state = {
         showLoginBox: false,
         showViewInfo: false,
-        avatarUrl: userManager.avatarUrl || defaultAvatarUrl,
         nickname: userManager.nickname || defaultNickname,
+        avatarUrl: userManager.avatarUrl || defaultAvatarUrl,
       }
       // 如果自动登录或别的地方登录成功，隐藏登录框
       userManager.on('login', () => {

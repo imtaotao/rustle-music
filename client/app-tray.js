@@ -1,8 +1,14 @@
 const path = require('path')
-const { windows } = require('../platform/utils')
 const { app, Menu, Tray} = require('electron')
+const { windows } = require('../platform/utils')
 
 const trayMenuTemplate = win => [
+  {
+    label: '下一首',
+    click () {
+      console.log(win.webContents.store)
+    }
+  },
   {
     label: '退出',
     click () {

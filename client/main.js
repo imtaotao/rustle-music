@@ -1,3 +1,4 @@
+require('./store')
 const path = require('path')
 const yarn = require('yargs')
 const appTray = require('./app-tray')
