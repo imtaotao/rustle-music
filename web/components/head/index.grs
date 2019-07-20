@@ -20,7 +20,11 @@
       <i></i>
     </div>
     <div styleName='search-box'>
-      <i styleName='search-icon' @click='this.receiveRecommendValue'></i>
+      <i
+        styleName='search-icon'
+        @click='this.receiveRecommendValue'
+      >
+      </i>
       <input
         placeholder='搜索'
         :value='searchValue'
@@ -36,7 +40,12 @@
       >
       </i>
     </div>
-    <div styleName='btn set' @click='this.setConfig'><i></i></div>
+    <div
+      styleName='btn set'
+      @click='this.setConfig'
+    >
+      <i></i>
+    </div>
     <SearchSuggest
       v-if='showSuggest'
       :searchValue='searchValue'

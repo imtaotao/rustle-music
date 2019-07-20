@@ -1,9 +1,8 @@
 import * as I from './type'
 import Event from 'web/share/event'
-import { random, notice } from 'web/utils'
 import { Media } from '@rustle/hearken'
-
-const ipcRenderer = window.require('electron').ipcRenderer
+import { random, notice } from 'web/utils'
+import { setRuntimeManager } from '../main-store'
 
 const defaultCurrent:I.Song = {
   id: 0,
@@ -13,7 +12,7 @@ const defaultCurrent:I.Song = {
   al: { name: '' },
 }
 
-class RuntimeManager extends Event {
+export class RuntimeManager extends Event {
   addlist = new Set()
   playlist: I.Song[] = []
   mode: I.PlayMode = 'cycle'
@@ -249,6 +248,4 @@ class RuntimeManager extends Event {
   }
 }
 
-const Runtime = new RuntimeManager()
-ipcRenderer.send('setRuntimeManager', Runtime)
-export default Runtime
+export default new RuntimeManager()

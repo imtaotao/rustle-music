@@ -1,11 +1,3 @@
-const { ipcMain } = require('electron')
-
-const store = {
+global.store = {
   RuntimeManager: null,
 }
-
-ipcMain.on('setRuntimeManager', (e, rm) => {
-  console.log(rm);
-})
-
-module.exports = store
