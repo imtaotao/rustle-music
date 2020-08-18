@@ -109,10 +109,13 @@
 
           if (body.result) {
             Object.getOwnPropertyNames(body.result).forEach(name => {
+              // 只保留这俩字段
               const val = body.result[name]
-              typeof val === 'number'
-                ? resultCount = val || 0
-                : resultData = val || []
+              if (name === 'songCount') {
+                resultCount = val || 0
+              } else if(name === 'songs') {
+                resultData = val || []
+              }
             })
           }
 

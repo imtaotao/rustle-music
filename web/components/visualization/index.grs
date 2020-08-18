@@ -12,13 +12,12 @@
   import SongDeatil from 'web/components/song-detail'
 
   const colors = [
-    '#0288D1',
-    '#cf4b3d',
-    '#43A047',
-    '#455A64',
-    '#6A1B9A',
-    '#1B5E20',
-    '#D81B60',
+    '#0288D1', // 蓝色
+    '#cf4b3d', // 红色
+    '#455A64', // 蓝灰
+    '#6A1B9A', // 紫色
+    '#1B5E20', // 深绿
+    '#D81B60', // 粉红
   ]
 
   @Grass.CSSModules(style)
