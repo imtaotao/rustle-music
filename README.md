@@ -3,7 +3,7 @@
 暂时只完成了部分功能，每天陆续更新增加模块
 
 # start
-1. `yarn` (add dependencies package)
+1. `yarn` (add dependencies package, node version is v10)
 2. `yarn start` (start http-dev-server)
 3. `yarn dev --dev` (start electron client)
 4. Enjoy music
@@ -24,4 +24,5 @@ windows 下体验不是很好，有点小卡。。。请使用 mac 版本，如�
 开了 `vpn` 可能导致无法从服务器获取音频资源，从而无法播放
 
 ## 问题
-web 层与 node 层的依赖在同一个 node_modules 里面导致有重复的代码，因为 web 层的代码会打包成静态文件，从而使得 node_modules 冗余，但我比较懒，不想分开成两个项目，先就这样吧
+1. web 层与 node 层的依赖在同一个 node_modules 里面导致有重复的代码，因为 web 层的代码会打包成静态文件，从而使得 node_modules 冗余，但我比较懒，不想分开成两个项目，先就这样吧
+2. 现在过了两年，开发的环境有些变化
