@@ -157,8 +157,11 @@
     }
 
     willReceiveProps (newProps) {
-      if (newProps.song.id !== this.props.song.id || 
-        newProps.playing !== this.props.playing) {
+      if (
+        newProps.song.id !== this.props.song.id || 
+        newProps.playing !== this.props.playing
+      ) {
+        this.next(this.state.showBgStar)
         return true
       }
       return false

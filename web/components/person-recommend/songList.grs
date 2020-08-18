@@ -21,7 +21,7 @@
         <li v-for='val of data'>
           <div
             styleName='image'
-            :style='{backgroundImage: "url("+ val.picUrl +"）"}'
+            :style='{backgroundImage: "url("+ val.picUrl +")"}'
             @click.self='this.viewDetailSongList.bind(this, val)'>
             <div styleName='play-count'><i></i>{{ this.getPlayCount(val) }}</div>
             <span
