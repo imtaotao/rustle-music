@@ -1,6 +1,11 @@
 # rustle-music
-好看，好玩，好用  --  来自一个帅气的小伙子<br>
-暂时只完成了部分功能，每天陆续更新增加模块
+
+<center>
+  <img src="./docs/home.png" width="404" height="269"/>
+  <img src="./docs/playing.png" width="404" height="269"/>
+  <img src="./docs/star.png" width="404" height="269" />
+</center>
+
 
 # start
 1. `yarn` (add dependencies package, node version is v10)

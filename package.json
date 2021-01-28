@@ -16,7 +16,7 @@
     "package:win": "yarn build:rm && cross-env electron-builder --win --ia32",
     "package:purewin": "cross-env electron-builder --win --ia32"
   },
-  "author": "",
+  "author": "imtaotao",
   "license": "MIT",
   "dependencies": {
     "@rustle/grass": "^0.0.1-alpha.8",
