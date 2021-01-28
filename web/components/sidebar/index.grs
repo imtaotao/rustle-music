@@ -94,7 +94,7 @@
       const res = list.find(val => val.creator.userId === UserManager.id)
       SongManager.cache(send => {
          UserManager.getSongListDetail(res.id).then(({body}) => {
-           send(body.playlist.trackIds)
+            send(body.playlist.trackIds)
          })
       })
     }
