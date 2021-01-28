@@ -1,10 +1,9 @@
 # rustle-music
-
-<center>
+<p align="center">
   <img src="./docs/home.png" width="404" height="269"/>
   <img src="./docs/playing.png" width="404" height="269"/>
   <img src="./docs/star.png" width="404" height="269" />
-</center>
+</p>
 
 
 # start
