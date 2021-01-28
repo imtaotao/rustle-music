@@ -23,7 +23,8 @@
     "web": [ "web" ]
   },
   "include": [
-    "./web"
+    "./web",
+    "./web/global.d.ts"
   ],
   "exclude": [
     "node_modules",

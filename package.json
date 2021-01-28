@@ -17,7 +17,7 @@
     "package:purewin": "cross-env electron-builder --win --ia32"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@rustle/grass": "^0.0.1-alpha.8",
     "@rustle/hearken": "^0.0.1-alpha.4",
