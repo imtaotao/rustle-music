@@ -3,6 +3,8 @@
 module.exports = (query, request) => {
   const data = {
     type: 'recommend',
+    limit: query.limit || 10,
+    areaId: query.areaId || 0,
   }
   return request(
     'POST',
@@ -13,6 +15,6 @@ module.exports = (query, request) => {
       cookie: query.cookie,
       proxy: query.proxy,
       realIP: query.realIP,
-    }
+    },
   )
 }

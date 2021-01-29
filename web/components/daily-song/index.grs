@@ -90,7 +90,8 @@
         return set(cacheTracks, false)  
       }
       const sfn = ({body}) => {
-        const tracks = body.recommend || []
+        const data = body.data || body // 兼容旧的接口逻辑
+        const tracks = data.recommend || data.dailySongs || []
         set(tracks, tracks.length === 0)
         cacheTracks = tracks
       }

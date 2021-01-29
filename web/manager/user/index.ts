@@ -73,17 +73,22 @@ class UserManager extends Event {
     this.init()
   }
 
-  private init () {
+  private mockLogin() {
     const id = localStorage.getItem('id')
-    // if (id) {
-    //   this.id = +id
-    //   this.logged = true
-    //   this.nickname = '和声_伴奏'
-    //   return
-    // }
+    if (process.env)
+    if (id) {
+      this.id = +id
+      this.logged = true
+      this.nickname = '*_和声_伴奏'
+    }
+  }
+
+  private init () {
+    // this.mockLogin() // 测试时使用
+    // return
     const data = localStorage.getItem('userAccount')
     if (!data) return
-    const { type, account, password, preTime } = JSON.parse(data)
+    const { type, account, password, preTime } = JSON.parse(data as string)
     // 30s 之内避免连续自动登录，防止 ip 高频错误
     if (Date.now() - preTime < 30000) {
       notice('登录频率过高')

@@ -7,7 +7,7 @@ module.exports = (query, request) => {
   }
   return request(
     'POST',
-    `http://interface3.music.163.com/eapi/playlist/desc/update`,
+    `https://interface3.music.163.com/eapi/playlist/desc/update`,
     data,
     {
       crypto: 'eapi',
@@ -15,6 +15,6 @@ module.exports = (query, request) => {
       proxy: query.proxy,
       url: '/api/playlist/desc/update',
       realIP: query.realIP,
-    }
+    },
   )
 }

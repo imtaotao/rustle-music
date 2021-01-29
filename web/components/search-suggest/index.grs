@@ -57,15 +57,13 @@
 </template>
 
 <script>
-  import { notice } from 'web/utils'
+  import { notice, throttle } from 'web/utils'
   import RuntimeManager from 'web/manager/runtime'
 
   @Grass.CSSModules(style)
   export default class SearchSuggest extends Grass.Component {
     // #temp
     efn = err => notice(err.msg)
-
-    didReceiveProps = this.updateSearchResult
 
     beforeCreate () {
       this.state = {
@@ -81,14 +79,19 @@
           playlists: '歌单',
         },
       }
+
+      // 根据输入的值判断搜索哪种结果
+      this.updateSearchResult = throttle(() => {
+        this.props.searchValue
+          ? this.getSearchSuggest()
+          : this.getDefaultRecommend()
+      }, 500)
+
       this.updateSearchResult()
     }
 
-    // 根据输入的值判断搜索哪种结果
-    updateSearchResult () {
-      this.props.searchValue
-        ? this.getSearchSuggest()
-        : this.getDefaultRecommend()
+    didReceiveProps(...args) {
+      return this.updateSearchResult(...args)
     }
 
     didUpdate () {

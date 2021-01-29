@@ -6,13 +6,13 @@ module.exports = (query, request) => {
   }
   return request(
     'POST',
-    `http://music.163.com/weapi/djradio/home/today/perfered`,
+    `https://music.163.com/weapi/djradio/home/today/perfered`,
     data,
     {
       crypto: 'weapi',
       cookie: query.cookie,
       proxy: query.proxy,
       realIP: query.realIP,
-    }
+    },
   )
 }

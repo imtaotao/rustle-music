@@ -6,10 +6,10 @@ module.exports = (query, request) => {
     `https://music.163.com/api/toplist`,
     {},
     {
-      crypto: 'linuxapi',
+      crypto: 'api',
       cookie: query.cookie,
       proxy: query.proxy,
       realIP: query.realIP,
-    }
+    },
   )
 }

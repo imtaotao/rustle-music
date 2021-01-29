@@ -84,7 +84,6 @@
       }
       // 监听 router 变换事件，更新组件，避免 icon 标明不准的情况
       this.Router.on('changed', val => {
-        console.log(val);
         this.forceUpdate()
       })
     }

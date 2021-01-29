@@ -13,14 +13,14 @@ module.exports = async (query, request) => {
   try {
     const res = await request(
       'POST',
-      `http://music.163.com/api/playlist/manipulate/tracks`,
+      `https://music.163.com/api/playlist/manipulate/tracks`,
       data,
       {
         crypto: 'weapi',
         cookie: query.cookie,
         proxy: query.proxy,
         realIP: query.realIP,
-      }
+      },
     )
     return {
       status: 200,
@@ -32,7 +32,7 @@ module.exports = async (query, request) => {
     if (error.body.code === 512) {
       return request(
         'POST',
-        `http://music.163.com/api/playlist/manipulate/tracks`,
+        `https://music.163.com/api/playlist/manipulate/tracks`,
         {
           op: query.op, // del,add
           pid: query.pid, // 歌单id
@@ -44,8 +44,13 @@ module.exports = async (query, request) => {
           cookie: query.cookie,
           proxy: query.proxy,
           realIP: query.realIP,
-        }
+        },
       )
+    } else if (error.body.code === 521) {
+      return {
+        status: 200,
+        body: error.body,
+      }
     }
   }
 }

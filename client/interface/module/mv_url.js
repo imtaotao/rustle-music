@@ -3,7 +3,7 @@
 module.exports = (query, request) => {
   const data = {
     id: query.id,
-    r: query.res || 1080,
+    r: query.r || 1080,
   }
   return request(
     'POST',
@@ -14,6 +14,6 @@ module.exports = (query, request) => {
       cookie: query.cookie,
       proxy: query.proxy,
       realIP: query.realIP,
-    }
+    },
   )
 }

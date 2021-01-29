@@ -55,6 +55,17 @@ export function scrollEvent (id: string) {
   }
 }
 
+export function throttle(fn: (...args: []) => void, gapTime = 50) {
+  let lastTime = 0;
+  return function () {
+    let nowTime = Date.now()
+    if ((nowTime - lastTime) > gapTime || !lastTime) {
+      fn()
+      lastTime = nowTime
+    }
+  }
+}
+
 export function compared (newProps: Object, oldProps: Object) {
   for (const key in newProps) {
     if (newProps[key] !== oldProps[key]) {

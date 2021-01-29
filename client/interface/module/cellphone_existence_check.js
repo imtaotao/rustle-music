@@ -7,7 +7,7 @@ module.exports = (query, request) => {
   }
   return request(
     'POST',
-    `http://music.163.com/eapi/cellphone/existence/check`,
+    `https://music.163.com/eapi/cellphone/existence/check`,
     data,
     {
       crypto: 'eapi',
@@ -15,6 +15,6 @@ module.exports = (query, request) => {
       proxy: query.proxy,
       url: '/api/cellphone/existence/check',
       realIP: query.realIP,
-    }
+    },
   )
 }
