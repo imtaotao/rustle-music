@@ -3,8 +3,8 @@
 // query.refresh 是否刷新数据
 module.exports = (query, request) => {
   query.cookie.os = 'ios'
-  query.cookie.appver = '8.0.00'
-  const data = { refresh: query.refresh || true }
+  query.cookie.appver = '8.1.20'
+  const data = { refresh: query.refresh || false, cursor: query.cursor }
   return request(
     'POST',
     `https://music.163.com/api/homepage/block/page`,

@@ -3,7 +3,6 @@ import 'web/components/global'
 import { notice } from 'web/utils'
 import 'web/assets/icon-font/icomoon/style'
 
-
 declare global {
   interface Window {
     onNetworkError: () => void
