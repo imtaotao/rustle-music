@@ -34,7 +34,7 @@
     "input-range": "^1.2.8",
     "opn": "^5.4.0",
     "request": "^2.85.0",
-    "three": "^0.101.1",
+    "three": "^0.137.0",
     "yargs": "^13.2.1"
   },
   "devDependencies": {
